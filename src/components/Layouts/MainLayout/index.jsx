@@ -1,12 +1,13 @@
+import { Box } from "@mui/material";
 import React, { Children } from "react";
 import { Footer, Header } from "../components";
 
 const MainLayout = ({ children }) => {
   return (
     <div>
-      <div>
+      <Box sx={header}>
         <Header />
-      </div>
+      </Box>
       <div>{children}</div>
       <div>
         <Footer />
@@ -15,4 +16,7 @@ const MainLayout = ({ children }) => {
   );
 };
 
+const header = {
+  color: "green",
+};
 export default MainLayout;

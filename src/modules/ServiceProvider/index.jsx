@@ -1,13 +1,8 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 
 const ServiceProvider = () => {
-  return (
-    <div>
-      ServiceProvider
-      <Routes></Routes>
-    </div>
-  );
+  return <div>ServiceProvider</div>;
 };
 
 export default ServiceProvider;

@@ -1,0 +1,8 @@
+.sidebar__item {
+  color          : inherit;
+  text-decoration: none;
+
+  &.active>li {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+}
