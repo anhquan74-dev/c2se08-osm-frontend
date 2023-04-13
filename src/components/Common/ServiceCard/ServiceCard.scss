@@ -1,0 +1,41 @@
+.service-card {
+  padding: 14px;
+  border: 1px solid #f3f3f3;
+  border-radius: 16px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  h3 {
+    font-size: 14px;
+    color: #0075ff;
+    font-weight: 800;
+  }
+  h4 {
+    font-size: 12px;
+    color: #b4b4b4;
+    font-weight: 700;
+  }
+  > div {
+    color: #ff8a00;
+    font-size: 20px;
+    font-weight: 800;
+  }
+}
+
+.service-card-btn {
+  align-items: center;
+  background: #0075ff;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  font-size: 0.875rem;
+  font-weight: 700;
+  height: 26px;
+  justify-content: center;
+  padding: 0 10px;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+}

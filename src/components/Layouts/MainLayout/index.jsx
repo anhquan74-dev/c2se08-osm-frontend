@@ -1,22 +1,19 @@
-import { Box } from "@mui/material";
-import React, { Children } from "react";
-import { Footer, Header } from "../components";
+import React from 'react';
+import { Footer, Header } from '../components';
+import './MainLayout.scss';
 
 const MainLayout = ({ children }) => {
   return (
-    <div>
-      <Box sx={header}>
+    <div className="main-layout">
+      <div className="main-header">
         <Header />
-      </Box>
-      <div>{children}</div>
-      <div>
+      </div>
+      <div className="customer-content">{children}</div>
+      <div className="main-footer">
         <Footer />
       </div>
     </div>
   );
 };
 
-const header = {
-  color: "green",
-};
 export default MainLayout;

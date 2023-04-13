@@ -70,7 +70,7 @@ export default function CustomerTable({ customerList, onEdit, onRemove }) {
                   </Button>
                   <Button
                     size="small"
-                    variant="outlined"
+                    // variant="outlined"
                     color="error"
                     onClick={() => {
                       handleRemoveClick(customer);
@@ -85,6 +85,7 @@ export default function CustomerTable({ customerList, onEdit, onRemove }) {
         </Table>
       </TableContainer>
 
+      {/* remove dialog */}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -94,7 +95,7 @@ export default function CustomerTable({ customerList, onEdit, onRemove }) {
         <DialogTitle id="alert-dialog-title">Xoá khách hàng này?</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Bạn có chắc chắn muốn xoá tài khoản này! <br />
+            Bạn có chắc chắn muốn xoá tài khoản có tên <strong>{selectedCustomer?.full_name}</strong>! <br />
             Hành động này không thể khôi phục
           </DialogContentText>
         </DialogContent>

@@ -1,14 +1,21 @@
-import { Button, Pagination, Typography } from '@mui/material';
+import { Button, LinearProgress, Pagination, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useResolvedPath } from 'react-router-dom';
 import CustomerFilters from '../components/CustomerFilters';
 import CustomerTable from '../components/CustomerTable';
-import { customerList } from '../customerList';
+import { getCustomers } from '../customerSlice';
 
 const CustomerListPage = () => {
   const url = useResolvedPath('').pathname;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { customers, loading } = useSelector((state) => state.customer);
+
+  useEffect(() => {
+    dispatch(getCustomers());
+  }, []);
 
   const handlePageChange = () => {};
 
@@ -18,7 +25,7 @@ const CustomerListPage = () => {
   };
 
   const handleRemoveCustomer = (customer) => {
-    console.log(customer);
+    console.log('handleRemoveCustomer: ', customer);
   };
 
   const handleEditCustomer = (customer) => {
@@ -27,6 +34,7 @@ const CustomerListPage = () => {
 
   return (
     <Box sx={root}>
+      {loading && <LinearProgress sx={isLoading} />}
       <Box sx={titleContainer}>
         <Typography variant="h4">Khách hàng</Typography>
 
@@ -41,7 +49,7 @@ const CustomerListPage = () => {
         <CustomerFilters onSearchChange={handleSearchChange} />
       </Box>
 
-      <CustomerTable customerList={customerList} onRemove={handleRemoveCustomer} onEdit={handleEditCustomer} />
+      <CustomerTable customerList={customers} onRemove={handleRemoveCustomer} onEdit={handleEditCustomer} />
 
       <Box sx={{ my: '16px', display: 'flex', justifyContent: 'center' }}>
         <Pagination color="primary" count={10} page={1} onChange={handlePageChange} />
@@ -56,13 +64,22 @@ const CustomerListPage = () => {
   );
 };
 
-const root = {};
+const root = {
+  position: 'relative',
+  paddingTop: '8px',
+};
 
 const titleContainer = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   mb: '20px',
+};
+
+const isLoading = {
+  position: 'absolute',
+  width: '100%',
+  top: '-8px',
 };
 
 export default CustomerListPage;

@@ -1,0 +1,17 @@
+.star-pick {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  gap: 5px;
+  height: 44px;
+  margin: 0 10px 10px 0;
+  padding: 0 10px;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  display: flex;
+  align-items: center;
+  &.active {
+    border: 2px solid var(--primary);
+  }
+}
