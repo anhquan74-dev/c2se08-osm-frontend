@@ -1,14 +1,14 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import FindingProviderPage from './pages/FindingProviderPage';
-import ProviderDetail from './pages/ProviderDetail';
+import ProviderDetailPage from './pages/ProviderDetailPage';
 
 const FindingProvider = () => {
   return (
     <>
       <Routes>
         <Route path="" element={<FindingProviderPage />} />
-        <Route path=":providerId" element={<ProviderDetail />} />
+        <Route path=":providerId" element={<ProviderDetailPage />} />
       </Routes>
     </>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { categoryList } from '../../Home/categoryList';
-import Star from './Star';
+import { categoryList } from '../../../Home/categoryList';
+import Star from '../Star';
 import './ProviderFilter.scss';
 
 const ProviderFilter = () => {

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import ProviderFilter from '../components/ProviderFilter';
-import ProviderSort from '../components/ProviderSort';
+import ProviderFilter from '../../components/ProviderFilter';
+import ProviderSort from '../../components/ProviderSort';
 import './FindingProviderPage.scss';
 import { LocationOn, FormatListBulleted } from '@mui/icons-material';
-import ProviderServiceList from '../components/ProviderServiceList';
+import ProviderServiceList from '../../components/ProviderServiceList';
 
 const FindingProviderPage = () => {
   const [type, setType] = useState('service');

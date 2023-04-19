@@ -1,6 +1,6 @@
 import React from 'react';
-import ProviderCard from '../../../../components/Common/ProviderCard';
-import ServiceCard from '../../../../components/Common/ServiceCard';
+import ProviderCard from '../../../../../components/Common/ProviderCard';
+import ServiceCard from '../../../../../components/Common/ServiceCard';
 import './ProviderServiceList.scss';
 
 const ProviderServiceList = ({ type, list }) => {
