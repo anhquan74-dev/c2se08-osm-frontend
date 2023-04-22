@@ -1,5 +1,6 @@
 import React from 'react';
 import './ProviderCard.scss';
+import Rating from '../Rating';
 
 const ProviderCard = ({ ...props }) => {
   const { id, avatar, star, name, price, services } = props;
@@ -14,15 +15,7 @@ const ProviderCard = ({ ...props }) => {
         <div className="avatar">
           <img src={avatar} alt="avatar" />
         </div>
-        <div>
-          {starArr?.map((item, index) => {
-            console.log(index);
-            if (index <= 3) {
-              return <img src="https://oddjob.vn/assets/images/yellow_star.svg" style={{ width: 14, height: 14 }} />;
-            }
-            return <img src="https://oddjob.vn/assets/images/white_star.svg" style={{ width: 14, height: 14 }} />;
-          })}
-        </div>
+        <Rating starNumber={4} size="small" />
         <div>
           <img src="https://oddjob.vn/assets/images/empty_heart.svg" className="favorite-btn" />
         </div>

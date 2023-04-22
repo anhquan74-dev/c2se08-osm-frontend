@@ -3,6 +3,10 @@ import { categoryList } from './categoryList';
 import { Category } from '../../../components/Common';
 import './Home.scss';
 import HomeContent from '../../../components/Common/HomeContent';
+import SearchBar from '../../../components/Common/SearchBar';
+import banner1 from '../../../assets/images/banner1.jpg';
+import banner2 from '../../../assets/images/banner2.png';
+import dangkytho from '../../../assets/images/dangkytho.jpeg';
 
 const Home = () => {
   function getLocation() {
@@ -29,8 +33,18 @@ const Home = () => {
   ];
   return (
     <div className="home-container container">
-      <div>Search</div>
-      <div>Image information</div>
+      <SearchBar />
+      <div className="banner">
+        <div>
+          <img src={banner1} alt="" />
+        </div>
+        <div>
+          <img src={banner2} alt="" />
+        </div>
+        <div>
+          <img src={dangkytho} alt="" />
+        </div>
+      </div>
       <div className="home-category">
         <h3>Danh mục dịch vụ OSM System</h3>
         <div className="category-content">

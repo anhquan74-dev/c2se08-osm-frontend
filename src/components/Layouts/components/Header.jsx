@@ -24,16 +24,24 @@ const Header = () => {
       <div className="header-logo">OSM System</div>
       <ul className="header-link">
         <li>
-          <NavLink to="/">Trang chủ</NavLink>
+          <NavLink to="/" label="Trang chủ">
+            Trang chủ
+          </NavLink>
         </li>
         <li>
-          <NavLink to="/finding-provider">Tìm thợ</NavLink>
+          <NavLink to="/finding-provider" label="Tìm thợ">
+            Tìm thợ
+          </NavLink>
         </li>
         <li>
-          <NavLink to="/about">Về OSM System</NavLink>
+          <NavLink to="/about" label="Về OSM System">
+            Về OSM System
+          </NavLink>
         </li>
         <li>
-          <NavLink to="/blog">Blog</NavLink>
+          <NavLink to="/blog" label="Blog">
+            Blog
+          </NavLink>
         </li>
         <li>
           <div onClick={handleClick}>
@@ -67,10 +75,10 @@ const Header = () => {
           >
             <ul className="profile-popover">
               <li>
-                <NavLink to="/profile">Tài khoản</NavLink>
+                <NavLink to="/me">Tài khoản</NavLink>
               </li>
               <li>
-                <NavLink to="/appointment">Quản lý lịch hẹn</NavLink>
+                <NavLink to="/me/appoitment">Quản lý lịch hẹn</NavLink>
               </li>
               <li>
                 <NavLink to="/login">Đăng xuất</NavLink>

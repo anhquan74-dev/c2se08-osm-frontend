@@ -1,0 +1,16 @@
+.rating-star {
+  display: flex;
+  gap: 4px;
+  margin: 3px 0;
+  &.small-star {
+    gap: 2px;
+  }
+  .star {
+    width: 14px;
+    height: 14px;
+  }
+  .large-star {
+    width: 20px;
+    height: 20px;
+  }
+}

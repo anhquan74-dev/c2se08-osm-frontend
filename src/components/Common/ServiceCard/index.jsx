@@ -1,6 +1,7 @@
 import React from 'react';
 import './ServiceCard.scss';
 import { NavLink } from 'react-router-dom';
+import Rating from '../Rating';
 
 const ServiceCard = ({ ...props }) => {
   const { name, provider, star, price } = props;
@@ -11,14 +12,7 @@ const ServiceCard = ({ ...props }) => {
     <div className="service-card">
       <h3>{name}</h3>
       <h4>{provider}</h4>
-      <div>
-        {starArr?.map((item, index) => {
-          if (index <= 4) {
-            return <img src="https://oddjob.vn/assets/images/yellow_star.svg" style={{ width: 14, height: 14 }} />;
-          }
-          return <img src="https://oddjob.vn/assets/images/white_star.svg" style={{ width: 14, height: 14 }} />;
-        })}
-      </div>
+      <Rating starNumber={4} size="small" />
       <div>{price === 'negotiate' ? <span>Giá thương lượng </span> : <span>{price}</span>}</div>
       <NavLink className="service-card-btn">Lấy báo giá</NavLink>
     </div>
