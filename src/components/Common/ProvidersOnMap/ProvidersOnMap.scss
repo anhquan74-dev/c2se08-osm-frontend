@@ -1,0 +1,85 @@
+.provider-on-map {
+  border-radius: 20px;
+  overflow: hidden;
+  height: 90%;
+  .gm-style .gm-style-iw-c {
+    border-radius: 20px;
+    box-shadow: 0 11px 15px rgba(0, 0, 0, 0.2);
+    left: 115px;
+    max-width: 280px !important;
+    padding: 0;
+    top: 140px;
+  }
+  .gm-style .gm-style-iw-c .gm-style-iw-d {
+    overflow: hidden !important;
+    max-height: 451px;
+  }
+  .gm-style .gm-style-iw-c .gm-ui-hover-effect {
+    display: none !important;
+  }
+  > div {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .gmap-infowindow {
+    background: #fff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    width: 280px;
+  }
+
+  .gmap-image {
+    div {
+      height: 60px;
+      width: 60px;
+      border-radius: 18px;
+      overflow: hidden;
+      img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+
+  .gmap-detail {
+    max-width: 300px;
+    min-width: 170px;
+    padding: 0 5px 0 10px;
+
+    .marker-name {
+      font-size: 14px;
+      font-weight: 700;
+      margin: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .marker-des {
+      align-items: center;
+      display: flex;
+      font-size: 10px;
+      font-weight: 400;
+    }
+    .marker-view-detail {
+      font-size: 14px;
+      font-weight: 700;
+      color: #007bff;
+      text-decoration: none;
+      background-color: transparent;
+    }
+  }
+  .pt-1 {
+    padding-top: 0.25rem !important;
+  }
+  .mb-1 {
+    margin-bottom: 0.25rem !important;
+  }
+  .mr-2 {
+    margin-right: 0.5rem !important;
+  }
+}

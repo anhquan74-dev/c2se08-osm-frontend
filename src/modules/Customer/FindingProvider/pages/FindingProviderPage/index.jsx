@@ -4,6 +4,7 @@ import ProviderSort from '../../components/ProviderSort';
 import './FindingProviderPage.scss';
 import { LocationOn, FormatListBulleted } from '@mui/icons-material';
 import ProviderServiceList from '../../components/ProviderServiceList';
+import ProvidersOnMap from '../../../../../components/Common/ProvidersOnMap';
 
 const FindingProviderPage = () => {
   const [type, setType] = useState('service');
@@ -48,7 +49,7 @@ const FindingProviderPage = () => {
           </button>
         </div>
         <div className="list-show">
-          <ProviderServiceList type={type} />
+          {searchMap ? <ProvidersOnMap providerList={[]} /> : <ProviderServiceList type={type} />}
         </div>
       </div>
     </div>

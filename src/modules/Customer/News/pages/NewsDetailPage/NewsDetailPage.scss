@@ -1,32 +1,87 @@
 .news-detail {
   margin: 60px 0;
   .news-content {
-    width: 65%;
+    width: 90%;
     margin: 0 auto;
-    .break-crum {
-      margin-bottom: 20px;
+    display: flex;
+    .left {
+      flex: 0 0 16.666667%;
+      max-width: 16.666667%;
+      position: relative;
+      .social-network-fixed {
+        position: fixed;
+        text-align: center;
+        .social-title {
+          font-size: 17px;
+          color: #888;
+          font-weight: lighter;
+          padding-bottom: 10px;
+        }
+        .social-network-group {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          .social-network-item {
+            .social-network-link {
+              display: block;
+              cursor: pointer;
+              padding: 10px;
+              margin-bottom: 10px;
+              background-color: #f5f5f5;
+              border-radius: 50%;
+              height: 50px;
+              width: 50px;
+              img {
+                width: 25px;
+                height: 25px;
+              }
+            }
+          }
+        }
+      }
+      .d-none {
+        display: none;
+      }
+      .d-lg-block {
+        display: block;
+      }
     }
-    .main {
-      .category {
-        color: #555;
-        font-size: 0.9em;
+    .right {
+      flex: 0 0 66.666667%;
+      max-width: 66.666667%;
+      .break-crum {
+        margin-bottom: 20px;
       }
-      .title {
-        font-size: 27px;
-        font-weight: bold;
-        font-style: normal;
-        color: #000;
-        margin: 8px 0;
-      }
-      .time {
-        font-size: 14px;
-        color: #888;
-        align-items: center;
-        display: flex;
-        margin-bottom: 30px;
-      }
-      .content {
-        color: #7a7a7a;
+      .main {
+        .category {
+          color: #555;
+          font-size: 0.9em;
+        }
+        .title {
+          font-size: 27px;
+          font-weight: bold;
+          font-style: normal;
+          color: #000;
+          margin: 8px 0;
+        }
+        .image {
+          height: 300px;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+        .time {
+          font-size: 14px;
+          color: #888;
+          align-items: center;
+          display: flex;
+          margin-bottom: 30px;
+        }
+        .content {
+          color: #7a7a7a;
+        }
       }
     }
   }

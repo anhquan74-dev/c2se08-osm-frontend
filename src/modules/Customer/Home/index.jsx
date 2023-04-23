@@ -9,18 +9,6 @@ import banner2 from '../../../assets/images/banner2.png';
 import dangkytho from '../../../assets/images/dangkytho.jpeg';
 
 const Home = () => {
-  function getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-      console.log('Geolocation is not supported by this browser.');
-    }
-  }
-
-  function showPosition(position) {
-    console.log('Latitude: ' + position.coords.latitude + ' Longitude: ' + position.coords.longitude);
-  }
-  getLocation();
   const contentArr = [
     {
       title: 'Nhà cung cấp dịch vụ dành cho bạn',

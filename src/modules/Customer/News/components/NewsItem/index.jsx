@@ -7,7 +7,10 @@ const NewsItem = ({ news }) => {
     <div className="news-item">
       <div className="wrapper">
         <div className="image">
-          <img src="https://oddjob.vn/blog/wp-content/uploads/2022/06/don-dep-nha-cua-14.jpg" alt="image" />
+          <img
+            src="https://oddjob.vn/blog/wp-content/uploads/2022/06/thiet-ke-va-thi-cong-nha-ve-sinh-2-300x212.png"
+            alt="image"
+          />
         </div>
         <div className="content">
           <p className="category">Dọn dẹp nhà cửa</p>

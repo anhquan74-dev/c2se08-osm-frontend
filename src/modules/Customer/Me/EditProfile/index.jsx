@@ -1,8 +1,14 @@
 import { LocationOn } from '@mui/icons-material';
 import './EditProfile.scss';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import LocationPickDialog from '../../../../components/Common/LocationPickDialog';
+import { useState } from 'react';
 
 const EditProfile = () => {
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <div className="customer-edit-profile">
       <h3>Chỉnh sửa tài khoản</h3>
@@ -36,7 +42,8 @@ const EditProfile = () => {
       <div className="customer-address">
         <div className="information-item">
           <h5>Địa chỉ</h5>
-          <input type="text" />
+          <input type="text" onClick={() => setOpen(true)} />
+          <LocationPickDialog onClose={handleClose} open={open} />
         </div>
         <span className="address-icon">
           <LocationOn />
