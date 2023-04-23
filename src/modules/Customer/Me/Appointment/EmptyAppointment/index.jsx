@@ -1,6 +1,9 @@
 import React from 'react';
+import './EmptyAppointment.scss';
 
-const EmptyAppointment = ({ status }) => {
+const EmptyAppointment = (props) => {
+  const { status } = props;
+
   let titleName = '';
   let desc = '';
   switch (status) {
@@ -25,7 +28,7 @@ const EmptyAppointment = ({ status }) => {
       break;
   }
   return (
-    <div className="empty-appoinment">
+    <div className="empty-appointment">
       <img src="https://oddjob.vn/assets/images/trash.svg" alt="no-appointment" />
       <div className="empty-tab">
         <p>{titleName}</p>

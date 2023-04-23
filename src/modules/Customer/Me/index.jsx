@@ -1,12 +1,17 @@
-import { NavLink, Route, Routes } from 'react-router-dom';
+import { NavLink, Route, Routes, useResolvedPath } from 'react-router-dom';
 import EditProfile from './EditProfile';
 import Appointment from './Appointment';
 import Notification from './Notification';
 import Favorite from './Favorite';
 import { SearchBar } from '../../../components/Common';
 import './Me.scss';
+import { useEffect, useState } from 'react';
 
 const Me = () => {
+  const url = useResolvedPath('').pathname;
+  console.log(url);
+  const [tabPicker, setTabPicker] = useState();
+
   return (
     <div className="customer-profile container">
       <SearchBar />
@@ -18,23 +23,43 @@ const Me = () => {
               <div className="profile-name">
                 <div className="name">TRAN ANH QUAN</div>
                 <div className="edit-link">
-                  <NavLink to="/me">Chỉnh sửa tài khoản &gt;</NavLink>
+                  <NavLink to="/me" onClick={() => setTabPicker(3)}>
+                    Chỉnh sửa tài khoản &gt;
+                  </NavLink>
                 </div>
               </div>
             </div>
             <div className="profile-tab">
               <div className="appointment">
-                <NavLink className="tab" to="/me/appointment">
+                <NavLink
+                  className={`tab ${tabPicker === 0 ? 'active' : ''}`}
+                  to="/me/appointment"
+                  onClick={() => {
+                    setTabPicker(0);
+                  }}
+                >
                   Quản lý lịch hẹn
                 </NavLink>
               </div>
               <div className="notification">
-                <NavLink className="tab" to="/me/notification">
+                <NavLink
+                  className={`tab ${tabPicker === 1 ? 'active' : ''}`}
+                  to="/me/notification"
+                  onClick={() => {
+                    setTabPicker(1);
+                  }}
+                >
                   Thông báo
                 </NavLink>
               </div>
               <div className="saved-sp">
-                <NavLink className="tab" to="/me/saved-service-providers">
+                <NavLink
+                  className={`tab ${tabPicker === 2 ? 'active' : ''}`}
+                  to="/me/saved-service-providers"
+                  onClick={() => {
+                    setTabPicker(2);
+                  }}
+                >
                   Danh sách yêu thích
                 </NavLink>
               </div>

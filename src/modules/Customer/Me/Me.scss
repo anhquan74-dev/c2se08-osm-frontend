@@ -66,6 +66,10 @@
             padding: 10px;
             text-decoration: none;
             background-color: transparent;
+            &.active {
+              background-color: var(--primary);
+              font-weight: 700;
+            }
           }
         }
       }

@@ -1,7 +1,15 @@
 import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import NewsDetailPage from './pages/NewsDetailPage';
+import NewsListPage from './pages/NewsListPage';
 
 const News = () => {
-  return <div>News</div>;
+  return (
+    <Routes>
+      <Route path="" element={<NewsListPage />} />
+      <Route path=":id" element={<NewsDetailPage />} />
+    </Routes>
+  );
 };
 
 export default News;

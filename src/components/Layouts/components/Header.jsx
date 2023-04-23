@@ -78,7 +78,7 @@ const Header = () => {
                 <NavLink to="/me">Tài khoản</NavLink>
               </li>
               <li>
-                <NavLink to="/me/appoitment">Quản lý lịch hẹn</NavLink>
+                <NavLink to="/me/appointment">Quản lý lịch hẹn</NavLink>
               </li>
               <li>
                 <NavLink to="/login">Đăng xuất</NavLink>
