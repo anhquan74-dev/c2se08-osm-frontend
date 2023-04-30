@@ -46,10 +46,10 @@ body {
 }
 
 .MuiDialog-paper {
-  height: 620px !important;
-  overflow: hidden !important;
+  // height: 620px !important;
+  // overflow: hidden !important;
   border-radius: 20px !important;
-  max-height: none !important;
+  // max-height: none !important;
 }
 
 ::-webkit-scrollbar {
@@ -63,4 +63,12 @@ body {
 
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
+}
+
+.select-dashboard {
+  color: rgba(0, 0, 0, 0.87);
+  border-radius: 4px;
+  padding: 7px 14px;
+  outline: none;
+  border-color: rgba(0, 0, 0, 0.23);
 }

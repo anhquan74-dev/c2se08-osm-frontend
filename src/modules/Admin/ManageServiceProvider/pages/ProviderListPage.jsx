@@ -1,24 +1,43 @@
-import { Button, Pagination, Typography } from '@mui/material';
+import { Button, LinearProgress, Pagination, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useResolvedPath } from 'react-router-dom';
 import ProviderFilters from '../components/ProviderFilters';
 import ProviderTable from '../components/ProviderTable';
-import { providerList } from '../providerList';
+import { getProviders, postDeleteProvider, providerActions } from '../providerSlice';
 
 const ProviderListPage = () => {
   const url = useResolvedPath('').pathname;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const providerResponse = useSelector((state) => state.provider.list);
+  const conditions = useSelector((state) => state.provider.conditions);
+  const loading = useSelector((state) => state.provider.loading);
 
-  const handlePageChange = () => {};
+  useEffect(() => {
+    dispatch(getProviders(conditions));
+  }, [dispatch, conditions]);
 
-  const handleSearchChange = (filter) => {
-    console.log('Search Change: ', filter);
-    // call API
+  const handlePageChange = (e, page) => {
+    dispatch(
+      providerActions.setConditions({
+        ...conditions,
+        page: page,
+      })
+    );
+  };
+
+  const handleFilterChange = (conditions) => {
+    dispatch(providerActions.setConditions(conditions));
   };
 
   const handleRemoveProvider = (provider) => {
-    console.log(provider);
+    const newProvider = {
+      ...provider,
+      is_valid: 0,
+    };
+    dispatch(postDeleteProvider(newProvider));
   };
 
   const handleEditProvider = (provider) => {
@@ -27,6 +46,8 @@ const ProviderListPage = () => {
 
   return (
     <Box sx={root}>
+      {loading && <LinearProgress sx={isLoading} />}
+
       <Box sx={titleContainer}>
         <Typography variant="h4">Thợ</Typography>
 
@@ -38,31 +59,39 @@ const ProviderListPage = () => {
       </Box>
 
       <Box mb={3}>
-        <ProviderFilters onSearchChange={handleSearchChange} />
+        <ProviderFilters conditions={conditions} onChange={handleFilterChange} />
       </Box>
 
-      <ProviderTable providerList={providerList} onRemove={handleRemoveProvider} onEdit={handleEditProvider} />
+      <ProviderTable providerList={providerResponse.data} onRemove={handleRemoveProvider} onEdit={handleEditProvider} />
 
       <Box sx={{ my: '16px', display: 'flex', justifyContent: 'center' }}>
-        <Pagination color="primary" count={10} page={1} onChange={handlePageChange} />
+        <Pagination
+          color="primary"
+          count={Math.ceil(providerResponse?.total / providerResponse?.per_page)}
+          page={conditions.page}
+          onChange={handlePageChange}
+        />
       </Box>
-      {/* <Pagination
-        count={Math.ceil(pagination?.total_rows / pagination?.limit)}
-        page={pagination?.page}
-        onChange={handlePageChange}
-      /> */}
-      {/* // totalRows // limit // totalPages = Math.ceil(totalRows / limit) */}
     </Box>
   );
 };
 
-const root = {};
+const root = {
+  position: 'relative',
+  paddingTop: '8px',
+};
 
 const titleContainer = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   mb: '20px',
+};
+
+const isLoading = {
+  position: 'absolute',
+  width: '100%',
+  top: '-8px',
 };
 
 export default ProviderListPage;

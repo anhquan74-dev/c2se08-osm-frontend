@@ -1,12 +1,4 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  sliderClasses,
-} from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import React, { useState } from 'react';
+import { capitalizeString, formatBirthDay, getShortLocation } from '../../../../utils/common';
 
 export default function ProviderTable({ providerList, onEdit, onRemove }) {
   const [open, setOpen] = useState(false);
@@ -46,41 +39,43 @@ export default function ProviderTable({ providerList, onEdit, onRemove }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {providerList.map((provider) => (
-              <TableRow key={provider.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row">
-                  {provider.id}
-                </TableCell>
-                <TableCell align="left">{provider.email}</TableCell>
-                <TableCell align="left">{provider.full_name}</TableCell>
-                <TableCell align="left">{provider.birthday}</TableCell>
-                <TableCell align="left">{provider.gender}</TableCell>
-                <TableCell align="left">{provider.phone_number}</TableCell>
-                <TableCell align="left">{provider.location}</TableCell>
-                <TableCell align="left">
-                  <Button
-                    sx={{ mr: '8px' }}
-                    size="small"
-                    color="primary"
-                    onClick={() => {
-                      onEdit?.(provider);
-                    }}
-                  >
-                    Sửa
-                  </Button>
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    color="error"
-                    onClick={() => {
-                      handleRemoveClick(provider);
-                    }}
-                  >
-                    Xoá
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {providerList?.map((provider) => {
+              return (
+                <TableRow key={provider.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell component="th" scope="row">
+                    {provider.id}
+                  </TableCell>
+                  <TableCell align="left">{provider.email}</TableCell>
+                  <TableCell align="left">{provider.full_name}</TableCell>
+                  <TableCell align="left">{formatBirthDay(provider.birthday)}</TableCell>
+                  <TableCell align="left">{capitalizeString(provider.gender)}</TableCell>
+                  <TableCell align="left">{provider.phone_number}</TableCell>
+                  <TableCell align="left">{getShortLocation(provider.location)}</TableCell>
+                  <TableCell align="left">
+                    <Button
+                      sx={{ mr: '8px' }}
+                      size="small"
+                      color="primary"
+                      onClick={() => {
+                        onEdit?.(provider);
+                      }}
+                    >
+                      Sửa
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      color="error"
+                      onClick={() => {
+                        handleRemoveClick(provider);
+                      }}
+                    >
+                      Xoá
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
