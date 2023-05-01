@@ -1,9 +1,9 @@
 import { TextField } from '@mui/material';
-import { Box } from '@mui/system';
 import React from 'react';
 import { useController } from 'react-hook-form';
 
-const InputField = ({ name, control, label, ...inputProps }) => {
+const InputField = ({ name, control, label, disabled, ...inputProps }) => {
+  console.log(inputProps);
   const {
     field: { value, onChange, onBlur, ref },
     fieldState: { invalid, error },
@@ -12,20 +12,42 @@ const InputField = ({ name, control, label, ...inputProps }) => {
     control,
   });
   return (
-    <TextField
-      size="small"
-      fullWidth
-      label={label}
-      margin="normal"
-      variant="outlined"
-      value={value}
-      onChange={onChange}
-      onBlur={onBlur}
-      inputRef={ref}
-      error={invalid}
-      helperText={error?.message}
-      inputProps={inputProps}
-    />
+    <>
+      {disabled ? (
+        <TextField
+          size="small"
+          fullWidth
+          label={label}
+          margin="normal"
+          variant="outlined"
+          InputProps={{
+            readOnly: true,
+          }}
+          value={value}
+          onChange={onChange}
+          onBlur={onBlur}
+          inputRef={ref}
+          error={invalid}
+          helperText={error?.message}
+          {...inputProps}
+        />
+      ) : (
+        <TextField
+          size="small"
+          fullWidth
+          label={label}
+          margin="normal"
+          variant="outlined"
+          value={value}
+          onChange={onChange}
+          onBlur={onBlur}
+          inputRef={ref}
+          error={invalid}
+          helperText={error?.message}
+          {...inputProps}
+        />
+      )}
+    </>
   );
 };
 

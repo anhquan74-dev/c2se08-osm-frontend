@@ -24,7 +24,7 @@ const header = {
   top: '0',
   left: '0',
   right: '0',
-  zIndex: 100,
+  zIndex: 1051,
 };
 
 const sidebar = {

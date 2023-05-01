@@ -16,22 +16,26 @@ const LocationPickDialog = (props) => {
     libraries: ['places'],
   });
   console.log(isLoaded);
-  const { onClose, open } = props;
+  const { onClose, open, handleSetLocation } = props;
   return (
     <Dialog onClose={onClose} open={open} maxWidth="md">
-      <div className="location-dialog">{isLoaded && <Map onClose={onClose} />}</div>
+      <div className="location-dialog">
+        {isLoaded && <Map onClose={onClose} handleSetLocation={handleSetLocation} />}
+      </div>
     </Dialog>
   );
 };
 
-const Map = ({ onClose }) => {
+const Map = ({ onClose, handleSetLocation }) => {
   const [center, setCenter] = useState({});
   const [activeMarker, setActiveMarker] = useState(null);
   const [location, setLocation] = useState({
     address: '',
-    city: '',
-    district: '',
-    country: '',
+    province_name: '',
+    district_name: '',
+    country_name: '',
+    coords_latitude: '',
+    coords_longitude: '',
   });
 
   const mapRef = React.useRef();
@@ -74,14 +78,17 @@ const Map = ({ onClose }) => {
         console.log(response);
         const address = response.results[0].formatted_address,
           addressArray = response.results[0].address_components,
-          city = getCity(addressArray),
+          coords = response.results[0].geometry.location,
+          province = getProvince(addressArray),
           district = getDistrict(addressArray),
           country = getCountry(addressArray);
         setLocation({
           address: address ? address : '',
-          city: city ? city : '',
-          district: district ? district : '',
-          country: country ? country : '',
+          province_name: province ? province : '',
+          district_name: district ? district : '',
+          country_name: country ? country : '',
+          coords_latitude: coords ? coords?.lat : '',
+          coords_longitude: coords ? coords.lng : '',
         });
       },
       (error) => {
@@ -99,14 +106,19 @@ const Map = ({ onClose }) => {
         console.log(response);
         const address = response.results[0].formatted_address,
           addressArray = response.results[0].address_components,
-          city = getCity(addressArray),
+          coords = response.results[0].geometry.location,
+          province = getProvince(addressArray),
           district = getDistrict(addressArray),
           country = getCountry(addressArray);
+        console.log(coords);
+
         setLocation({
           address: address ? address : '',
-          city: city ? city : '',
-          district: district ? district : '',
-          country: country ? country : '',
+          province_name: province ? province : '',
+          district_name: district ? district : '',
+          country_name: country ? country : '',
+          coords_latitude: coords ? coords?.lat : '',
+          coords_longitude: coords ? coords.lng : '',
         });
       },
       (error) => {
@@ -130,7 +142,7 @@ const Map = ({ onClose }) => {
     }
   };
 
-  const getCity = (addressArray) => {
+  const getProvince = (addressArray) => {
     let state = '';
     for (let i = 0; i < addressArray.length; i++) {
       if (addressArray[i].types[0] && 'administrative_area_level_1' === addressArray[i].types[0]) {
@@ -152,6 +164,8 @@ const Map = ({ onClose }) => {
 
   const handlePickLocation = () => {
     onClose();
+    console.log('handlePickLocation: ', location);
+    handleSetLocation(location);
   };
 
   return (
@@ -183,15 +197,15 @@ const Map = ({ onClose }) => {
         </div>
         <div className="form-group">
           <label htmlFor="district">Quận, huyện</label>
-          <input type="text" disabled value={location.district || ''} />
+          <input type="text" disabled value={location.district_name || ''} />
         </div>
         <div className="form-group">
-          <label htmlFor="city">Tỉnh,Thành phố</label>
-          <input type="text" disabled value={location.city || ''} />
+          <label htmlFor="province">Tỉnh,Thành phố</label>
+          <input type="text" disabled value={location.province_name || ''} />
         </div>
         <div className="form-group">
           <label htmlFor="country">Đất nước</label>
-          <input type="text" disabled value={location.country || ''} />
+          <input type="text" disabled value={location.country_name || ''} />
         </div>
       </div>
       <button onClick={handlePickLocation}>OK</button>

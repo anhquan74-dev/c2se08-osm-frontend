@@ -6,8 +6,13 @@ import { useState } from 'react';
 
 const EditProfile = () => {
   const [open, setOpen] = useState(false);
+  const [location, setLocation] = useState();
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleSetLocation = (location) => {
+    console.log(location);
+    setLocation(location);
   };
   return (
     <div className="customer-edit-profile">
@@ -42,8 +47,8 @@ const EditProfile = () => {
       <div className="customer-address">
         <div className="information-item">
           <h5>Địa chỉ</h5>
-          <input type="text" onClick={() => setOpen(true)} />
-          <LocationPickDialog onClose={handleClose} open={open} />
+          <input type="text" onClick={() => setOpen(true)} value={location?.address || ''} />
+          <LocationPickDialog onClose={handleClose} open={open} handleSetLocation={handleSetLocation} />
         </div>
         <span className="address-icon">
           <LocationOn />

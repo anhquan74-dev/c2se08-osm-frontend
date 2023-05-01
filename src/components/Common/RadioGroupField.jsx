@@ -7,7 +7,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import React from 'react';
 import { useController } from 'react-hook-form';
 
-const RadioGroupField = ({ name, control, label, disabled, options }) => {
+const RadioGroupField = ({ name, control, label, disabled, options, ...inputProps }) => {
   const {
     field: { value, onChange, onBlur },
     fieldState: { invalid, error },
@@ -16,7 +16,7 @@ const RadioGroupField = ({ name, control, label, disabled, options }) => {
     control,
   });
   return (
-    <FormControl disabled={disabled} margin="normal" error={invalid}>
+    <FormControl disabled={disabled} margin="normal" error={invalid} {...inputProps}>
       <FormLabel id="demo-radio-buttons-group-label">{label}</FormLabel>
       <RadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
