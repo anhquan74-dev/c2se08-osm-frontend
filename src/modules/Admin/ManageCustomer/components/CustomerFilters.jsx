@@ -1,24 +1,25 @@
 import { Search } from '@mui/icons-material';
-import {
-  Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  Grid,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
-} from '@mui/material';
-import { useRef } from 'react';
+import { Box, Button, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
+import locationApi from '../../../../api/locationApi';
+import { convertProvinceName } from '../../../../utils/common';
 
-const CustomerFilters = ({ filter, onChange, onSearchChange }) => {
+const CustomerFilters = ({ conditions, onChange }) => {
   const searchRef = useRef();
   const typingTimeoutRef = useRef(null);
+  const [cities, setCities] = useState([]);
+
+  useEffect(() => {
+    const getPublicProvinces = async () => {
+      const res = await locationApi.getPublicProvinces();
+      setCities(res?.data?.results);
+    };
+    getPublicProvinces();
+  }, []);
 
   const handleSearchChange = (e) => {
     const { value } = e.target;
-    if (!onSearchChange) return;
+    if (!onChange) return;
 
     // debounce
     if (typingTimeoutRef.current) {
@@ -26,17 +27,68 @@ const CustomerFilters = ({ filter, onChange, onSearchChange }) => {
     }
 
     typingTimeoutRef.current = setTimeout(() => {
-      // const newFilter = {
-      //   ...filter,
-      //   name: e.target.value,
-      // };
-      onSearchChange(value);
+      const newConditions = {
+        ...conditions,
+        filter: {
+          ...conditions.filter,
+          full_name: value,
+        },
+        page: 1,
+      };
+      onChange(newConditions);
     }, 500);
   };
 
-  const handleSortChange = () => {};
+  const handleCityChange = (e) => {
+    const { value } = e.target;
+    const newConditions = {
+      ...conditions,
+      filter: {
+        ...conditions.filter,
+        province_name: value,
+      },
+      page: 1,
+    };
+    onChange(newConditions);
+  };
 
-  const handleClearFilter = () => {};
+  const handleSortChange = (e) => {
+    const { value } = e.target;
+    const sortFollow = value.split('.');
+    let newConditions;
+    if (sortFollow[0] === '') {
+      newConditions = {
+        ...conditions,
+        sort: [],
+        page: 1,
+      };
+    } else {
+      newConditions = {
+        ...conditions,
+        sort: [
+          {
+            sort_by: sortFollow[0],
+            sort_dir: sortFollow[1],
+          },
+        ],
+        page: 1,
+      };
+    }
+    onChange(newConditions);
+  };
+
+  const handleClearFilter = () => {
+    const newConditions = {
+      ...conditions,
+      filter: {},
+      sort: [],
+      page: 1,
+    };
+    onChange(newConditions);
+    if (searchRef.current) {
+      searchRef.current.value = '';
+    }
+  };
 
   return (
     <Box>
@@ -56,17 +108,36 @@ const CustomerFilters = ({ filter, onChange, onSearchChange }) => {
         <Grid item xs={12} md={6} lg={2}>
           <FormControl fullWidth sx={{ m: 1 }} size="small">
             <InputLabel id="filterByCity">Lọc theo thành phố</InputLabel>
-            <Select labelId="filterByCity" id="filterByCity" label="Lọc theo thành phố" onChange={handleSortChange}>
-              <MenuItem value="">
-                <em>Tất cả</em>
-              </MenuItem>
+            <Select
+              value={conditions?.filter?.province_name || ''}
+              labelId="filterByCity"
+              id="filterByCity"
+              label="Lọc theo thành phố"
+              onChange={handleCityChange}
+            >
+              <option value={''}>
+                <em>Tất cả thành phố</em>
+              </option>
+              {cities?.map((city) => {
+                return (
+                  <option key={city.province_id} value={convertProvinceName(city.province_name)}>
+                    <em>{city.province_name}</em>
+                  </option>
+                );
+              })}
             </Select>
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={2}>
           <FormControl fullWidth sx={{ m: 1 }} size="small">
             <InputLabel id="sortBy">Sắp xếp</InputLabel>
-            <Select labelId="sortBy" id="sortBy" label="Sắp xếp" onChange={handleSortChange}>
+            <Select
+              value={`${conditions?.sort?.at(0)?.sort_by}.${conditions?.sort?.at(0)?.sort_dir}`}
+              labelId="sortBy"
+              id="sortBy"
+              label="Sắp xếp"
+              onChange={handleSortChange}
+            >
               <MenuItem value="">
                 <em>Không sắp xếp</em>
               </MenuItem>

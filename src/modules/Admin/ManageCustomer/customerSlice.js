@@ -1,120 +1,66 @@
-import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import customerApi from '../../../api/customerApi';
+import { LIMIT_DEFAULT, PAGE_DEFAULT } from '../../../utils/constants';
 
-export const getCustomers = createAsyncThunk('customers/getCustomers', async (thunkAPI) => {
-  //call api
-  const res = await customerApi.getAll();
-  return res.data;
+export const getCustomers = createAsyncThunk('customers/getCustomers', async (request, thunkAPI) => {
+  const res = await customerApi.getAll(request);
+  return res;
 });
 
-export const getCustomerId = createAsyncThunk('customers/getCustomerId', async (customerId, { dispatch }) => {
-  const response = await fetch(`https://5adc8779b80f490014fb883.mockapi.io/customers/${customerId}`).then((data) =>
-    data.json()
-  );
-  const finalPayload = response;
-  //dispatch(someOtherAction())
-  return finalPayload; // will dispatch `fulfilled` action
-});
+// export const getCustomerId = createAsyncThunk('customers/getCustomerId', async (customerId, { dispatch }) => {
 
-export const postAddCustomer = createAsyncThunk('customers/postAddCustomer', async (customer, { dispatch }) => {
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(customer),
-  };
-  const response = await fetch(`https://5adc8779b80f490014fb883.mockapi.io/customers`, requestOptions).then((data) =>
-    data.json()
-  );
-  const finalPayload = response;
-  return finalPayload;
-});
+// });
 
-export const postUpdateCustomer = createAsyncThunk('customers/postUpdateCustomer', async (customer, { dispatch }) => {
-  const requestOptions = {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(customer),
-  };
-  const response = await fetch(
-    `https://5adc8779b80f490014fb883.mockapi.io/customers/${customer.id}`,
-    requestOptions
-  ).then((data) => data.json());
-  const finalPayload = response;
-  return finalPayload;
-});
+// export const postAddCustomer = createAsyncThunk('customers/postAddCustomer', async (customer, { dispatch }) => {
+
+// });
+
+// export const postUpdateCustomer = createAsyncThunk('customers/postUpdateCustomer', async (customer, { dispatch }) => {
+
+// });
 
 export const postDeleteCustomer = createAsyncThunk('customers/postDeleteCustomer', async (customer, { dispatch }) => {
-  const requestOptions = {
-    method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(customer),
-  };
-  const response = await fetch(
-    `https://5adc8779b80f490014fb883.mockapi.io/customers/${customer.id}`,
-    requestOptions
-  ).then((data) => data.json());
-  const finalPayload = response;
-  return finalPayload;
+  const res = await customerApi.update(customer);
+  dispatch(getCustomers({ page: PAGE_DEFAULT, limit: LIMIT_DEFAULT }));
+  return res;
 });
 
 //setup state
 const initialState = {
   loading: false,
-  customers: [],
-  isFetchCustomerID: false,
-  customer: {},
+  list: [],
+  conditions: {
+    page: PAGE_DEFAULT,
+    limit: LIMIT_DEFAULT,
+  },
 };
 export const customerSlice = createSlice({
   name: 'customer',
   initialState,
-  reducers: {},
-  extraReducers: {
+  reducers: {
+    setConditions(state, action) {
+      state.conditions = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
     //set get all customer
-    [getCustomers.pending]: (state) => {
+    builder.addCase(getCustomers.pending, (state, action) => {
       state.loading = true;
-    },
-    [getCustomers.fulfilled]: (state, { payload }) => {
+    });
+
+    builder.addCase(getCustomers.fulfilled, (state, action) => {
       state.loading = false;
-      state.customers = payload;
-    },
-    [getCustomers.rejected]: (state) => {
+      state.list = action.payload;
+    });
+
+    builder.addCase(getCustomers.rejected, (state, action) => {
       state.loading = false;
-    },
-
-    //set get customer Id
-    [getCustomerId.pending]: (state) => {
-      state.isFetchCustomerID = true;
-    },
-    [getCustomerId.fulfilled]: (state, { payload }) => {
-      state.isFetchCustomerID = false;
-      state.customer = payload;
-    },
-    [getCustomerId.rejected]: (state) => {
-      state.isFetchCustomerID = false;
-    },
-
-    //set post Customer
-    [postAddCustomer.fulfilled]: (state, { payload }) => {
-      state.customers.push(payload);
-    },
-
-    //set update Customer
-    [postUpdateCustomer.fulfilled]: (state, { payload }) => {
-      const index = state.customers.findIndex((customer) => customer.id === payload.id);
-      //console.log(index)
-      // console.log(payload)
-      state.customers[index] = payload;
-    },
-
-    //set delete Customer
-    [postDeleteCustomer.fulfilled]: (state, { payload }) => {
-      const index = state.customers.findIndex((customer) => customer.id === payload.id);
-      state.customers.splice(index, 1);
-    },
+    });
   },
 });
 
 //actions
+export const customerActions = customerSlice.actions;
 
 //selectors
 

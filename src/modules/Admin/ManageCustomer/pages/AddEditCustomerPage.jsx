@@ -1,29 +1,65 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { Typography } from '@mui/material';
 import { ChevronLeft } from '@mui/icons-material';
 import CustomerForm from '../components/CustomerForm';
+import customerApi from '../../../../api/customerApi';
+import locationApi from '../../../../api/locationApi';
 
 const AddEditCustomerPage = () => {
+  const navigate = useNavigate();
   const { customerId } = useParams();
   const isEdit = Boolean(customerId);
 
   const [customer, setCustomer] = useState();
 
   // call API
-  // useEffect(() => {}, []);
+  useEffect(() => {
+    if (!customerId) return;
+    (async () => {
+      try {
+        const res = await customerApi.get(customerId);
+        setCustomer(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
+
+  console.log(customer);
   const initialValues = {
-    email: 'nguyenvanteo@gmail.com',
-    full_name: 'Nguyen Van Teo',
-    birthday: '1/1/2001',
+    email: '',
+    password: '',
+    full_name: '',
+    birthday: '',
     gender: 'male',
-    phone_number: '0983742843',
-    location: 'Hai Chau, Da Nang',
+    phone_number: '',
+    avatar: '',
+    is_valid: '',
     ...customer,
   };
 
-  const handleCustomerFormSubmit = () => {};
+  const handleCustomerFormSubmit = async (formValues, location) => {
+    const newLocation = {
+      id: formValues.location[0].id,
+      user_id: formValues.id,
+      is_primary: 1,
+      ...location,
+    };
+    console.log(formValues, newLocation);
+    if (isEdit) {
+      await customerApi.update(formValues);
+      await locationApi.updateLocation(newLocation);
+      toast.success('Cập nhật thành công!');
+    } else {
+      await customerApi.add(formValues);
+      await locationApi.createLocation({ user_id: formValues.id, is_primary: 1, ...location });
+      toast.success('Tạo mới thành công!');
+    }
+
+    navigate('/admin/customer');
+  };
 
   return (
     <Box>
@@ -36,7 +72,7 @@ const AddEditCustomerPage = () => {
       <Typography variant="h4">{isEdit ? 'Chỉnh sửa thông tin khách hàng' : 'Thêm mới khách hàng'}</Typography>
       {(!isEdit || Boolean(customer)) && (
         <Box mt={3}>
-          <CustomerForm initialValues={initialValues} onSubmit={handleCustomerFormSubmit} />
+          <CustomerForm initialValues={initialValues} onSubmit={handleCustomerFormSubmit} isEdit={isEdit} />
         </Box>
       )}
     </Box>

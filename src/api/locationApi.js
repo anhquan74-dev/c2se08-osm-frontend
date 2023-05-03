@@ -10,7 +10,7 @@ const locationApi = {
     return axiosClient.get(url);
   },
   createLocation(data) {
-    const url = '/api/locations';
+    const url = '/locations';
     return axiosClient.post(url, data);
   },
   updateLocation(data) {

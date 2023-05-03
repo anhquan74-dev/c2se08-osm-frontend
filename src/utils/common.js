@@ -24,7 +24,7 @@ export const formatBirthDay = (date) => {
   return `${t[2]}-${t[1]}-${t[0]}`;
 };
 
-export const convertProviderName = (value) => {
+export const convertProvinceName = (value) => {
   if (value.includes('Thành phố')) {
     return value.slice(10);
   }

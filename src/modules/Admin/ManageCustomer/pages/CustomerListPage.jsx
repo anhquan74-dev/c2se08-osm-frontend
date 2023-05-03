@@ -5,27 +5,37 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useResolvedPath } from 'react-router-dom';
 import CustomerFilters from '../components/CustomerFilters';
 import CustomerTable from '../components/CustomerTable';
-import { getCustomers } from '../customerSlice';
+import { customerActions, getCustomers, postDeleteCustomer } from '../customerSlice';
 
 const CustomerListPage = () => {
   const url = useResolvedPath('').pathname;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { customers, loading } = useSelector((state) => state.customer);
+  const { list, loading, conditions } = useSelector((state) => state.customer);
 
   useEffect(() => {
-    dispatch(getCustomers());
-  }, []);
+    dispatch(getCustomers(conditions));
+  }, [dispatch, conditions]);
 
-  const handlePageChange = () => {};
+  const handlePageChange = (e, page) => {
+    dispatch(
+      customerActions.setConditions({
+        ...conditions,
+        page: page,
+      })
+    );
+  };
 
-  const handleSearchChange = (filter) => {
-    console.log('Search Change: ', filter);
-    // call API
+  const handleFilterChange = (conditions) => {
+    dispatch(customerActions.setConditions(conditions));
   };
 
   const handleRemoveCustomer = (customer) => {
-    console.log('handleRemoveCustomer: ', customer);
+    const newCustomer = {
+      ...customer,
+      is_valid: 0,
+    };
+    dispatch(postDeleteCustomer(newCustomer));
   };
 
   const handleEditCustomer = (customer) => {
@@ -46,20 +56,19 @@ const CustomerListPage = () => {
       </Box>
 
       <Box mb={3}>
-        <CustomerFilters onSearchChange={handleSearchChange} />
+        <CustomerFilters conditions={conditions} onChange={handleFilterChange} />
       </Box>
 
-      <CustomerTable customerList={customers} onRemove={handleRemoveCustomer} onEdit={handleEditCustomer} />
+      <CustomerTable customerList={list.data} onRemove={handleRemoveCustomer} onEdit={handleEditCustomer} />
 
       <Box sx={{ my: '16px', display: 'flex', justifyContent: 'center' }}>
-        <Pagination color="primary" count={10} page={1} onChange={handlePageChange} />
+        <Pagination
+          color="primary"
+          count={Math.ceil(list?.total / list?.per_page)}
+          page={conditions.page}
+          onChange={handlePageChange}
+        />
       </Box>
-      {/* <Pagination
-        count={Math.ceil(pagination?.total_rows / pagination?.limit)}
-        page={pagination?.page}
-        onChange={handlePageChange}
-      /> */}
-      {/* // totalRows // limit // totalPages = Math.ceil(totalRows / limit) */}
     </Box>
   );
 };
