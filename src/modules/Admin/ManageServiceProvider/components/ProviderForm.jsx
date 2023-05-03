@@ -91,7 +91,7 @@ const ProviderForm = ({ initialValues, onSubmit, isEdit }) => {
                   { label: 'Nữ', value: 'female' },
                 ]}
               />
-              <InputFileField name="avatar" control={control} />
+              <InputFileField name="avatar" control={control} label="Ảnh đại diện" />
             </Box>
             <LocationPickField
               name="location[0].address"

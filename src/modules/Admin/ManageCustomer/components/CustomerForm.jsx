@@ -3,6 +3,7 @@ import { Button, CircularProgress } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import locationApi from '../../../../api/locationApi';
 import { InputField, RadioGroupField } from '../../../../components/Common';
@@ -10,7 +11,6 @@ import DatePickerField from '../../../../components/Common/DatePickerField';
 import InputFileField from '../../../../components/Common/InputFileField';
 import LocationPickField from '../../../../components/Common/LocationPickField';
 import SelectField from '../../../../components/Common/SelectField';
-import { useParams } from 'react-router-dom';
 
 const schema = yup
   .object({
@@ -83,7 +83,7 @@ const CustomerForm = ({ initialValues, onSubmit, isEdit }) => {
               { label: 'Nữ', value: 'female' },
             ]}
           />
-          <InputFileField name="avatar" control={control} />
+          <InputFileField name="avatar" control={control} label="Ảnh đại diện" />
         </Box>
         <LocationPickField
           name="location[0].address"

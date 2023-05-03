@@ -1,24 +1,41 @@
 import { Button, Pagination, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useResolvedPath } from 'react-router-dom';
+import { categoryActions, getCategories } from '../categorySlice';
 import CategoryFilters from '../components/CategoryFilters';
 import CategoryTable from '../components/CategoryTable';
-import { categoryList } from '../categoryList';
 
 const CategoryListPage = () => {
   const url = useResolvedPath('').pathname;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { list, conditions, loading } = useSelector((state) => state.category);
 
-  const handlePageChange = () => {};
+  useEffect(() => {
+    dispatch(getCategories(conditions));
+  }, [dispatch, conditions]);
 
-  const handleSearchChange = (filter) => {
-    console.log('Search Change: ', filter);
-    // call API
+  const handlePageChange = (e, page) => {
+    dispatch(
+      categoryActions.setConditions({
+        ...conditions,
+        page: page,
+      })
+    );
+  };
+
+  const handleFilterChange = (conditions) => {
+    dispatch(categoryActions.setConditions(conditions));
   };
 
   const handleRemoveCategory = (category) => {
-    console.log(category);
+    const newCategory = {
+      ...category,
+      is_valid: 0,
+    };
+    // dispatch(postDeleteCategory(newCategory));
   };
 
   const handleEditCategory = (category) => {
@@ -38,20 +55,19 @@ const CategoryListPage = () => {
       </Box>
 
       <Box mb={3}>
-        <CategoryFilters onSearchChange={handleSearchChange} />
+        <CategoryFilters conditions={conditions} onChange={handleFilterChange} />
       </Box>
 
-      <CategoryTable categoryList={categoryList} onRemove={handleRemoveCategory} onEdit={handleEditCategory} />
+      <CategoryTable categoryList={list.data} onRemove={handleRemoveCategory} onEdit={handleEditCategory} />
 
       <Box sx={{ my: '16px', display: 'flex', justifyContent: 'center' }}>
-        <Pagination color="primary" count={10} page={1} onChange={handlePageChange} />
+        <Pagination
+          color="primary"
+          count={Math.ceil(list?.total / list?.per_page)}
+          page={conditions.page}
+          onChange={handlePageChange}
+        />
       </Box>
-      {/* <Pagination
-        count={Math.ceil(pagination?.total_rows / pagination?.limit)}
-        page={pagination?.page}
-        onChange={handlePageChange}
-      /> */}
-      {/* // totalRows // limit // totalPages = Math.ceil(totalRows / limit) */}
     </Box>
   );
 };

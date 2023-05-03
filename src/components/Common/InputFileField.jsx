@@ -14,10 +14,15 @@ const InputFileField = ({ name, control, label, disabled, ...inputProps }) => {
   const [avatar, setAvatar] = useState();
   const handlePreviewAvatar = (e) => {
     const file = e.target.files[0];
-    file.preview = URL.createObjectURL(file);
-    console.log(file);
     onChange(file);
-    setAvatar(file);
+    console.log('file: ', file, 'value: ', value);
+
+    const newFile = {
+      ...file,
+      preview: URL.createObjectURL(file),
+    };
+    console.log(newFile);
+    setAvatar(newFile);
   };
 
   useEffect(() => {
@@ -28,7 +33,7 @@ const InputFileField = ({ name, control, label, disabled, ...inputProps }) => {
   return (
     <div style={inputFileField}>
       <div style={inputFileLeft}>
-        <Typography>Ảnh đại diện</Typography>
+        <Typography>{label}</Typography>
         <label style={{ display: 'flex', alignItems: 'center' }} htmlFor="upload-photo">
           <TextField
             sx={{ display: 'none' }}
@@ -57,7 +62,7 @@ const InputFileField = ({ name, control, label, disabled, ...inputProps }) => {
               width: '100%',
               height: '100%',
             }}
-            src={value.preview || value}
+            src={avatar?.preview || value}
             alt="preview-avatar"
           />
         ) : (
@@ -75,8 +80,8 @@ const inputFileField = {
 };
 const inputFileLeft = {};
 const inputFileRight = {
-  width: '40%',
-  height: '140px',
+  width: '160px',
+  height: '160px',
 };
 const previewStyle = {
   height: '100%',

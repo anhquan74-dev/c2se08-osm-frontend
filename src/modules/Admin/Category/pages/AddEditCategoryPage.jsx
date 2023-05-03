@@ -1,29 +1,52 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { Typography } from '@mui/material';
 import { ChevronLeft } from '@mui/icons-material';
 import CategoryForm from '../components/CategoryForm';
+import categoryApi from '../../../../api/categoryApi';
+import { toast } from 'react-toastify';
 
 const AddEditCategoryPage = () => {
+  const navigate = useNavigate();
   const { categoryId } = useParams();
   const isEdit = Boolean(categoryId);
 
   const [category, setCategory] = useState();
 
   // call API
-  // useEffect(() => {}, []);
+  useEffect(() => {
+    if (!categoryId) return;
+    (async () => {
+      try {
+        const res = await categoryApi.get(categoryId);
+        setCategory(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
   const initialValues = {
-    title: 'Những lưu ý khi thiết kế và thi công nhà cửa',
-    content: 'abc',
-    image: '98324380.png',
-    valid_flag: 1,
-    date: '03/04/2023',
-    category_id: 1,
+    name: '',
+    logo: '',
+    total_provider: 0,
+    view_priority: '',
+    is_valid: 1,
     ...category,
   };
 
-  const handleCategoryFormSubmit = () => {};
+  const handleCategoryFormSubmit = async (formValues) => {
+    if (isEdit) {
+      await categoryApi.update(formValues);
+      toast.success('Cập nhật thành công!');
+    } else {
+      console.log(formValues);
+      await categoryApi.add(formValues);
+      toast.success('Tạo mới thành công!');
+    }
+
+    navigate('/admin/category');
+  };
 
   return (
     <Box>

@@ -36,23 +36,29 @@ export default function CategoryTable({ categoryList, onEdit, onRemove }) {
           <TableHead>
             <TableRow>
               <TableCell>Id</TableCell>
-              <TableCell align="left">Tiêu đề</TableCell>
-              <TableCell align="left">Danh mục</TableCell>
-              <TableCell align="left">Ngày đăng</TableCell>
-              <TableCell align="left">Trạng thái</TableCell>
+              <TableCell align="left">Tên danh mục</TableCell>
+              <TableCell align="left">Logo</TableCell>
+              <TableCell align="left">Tổng số thợ</TableCell>
               <TableCell align="left">Hành động</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {categoryList.map((category) => (
+            {categoryList?.map((category) => (
               <TableRow key={category.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell component="th" scope="row">
                   {category.id}
                 </TableCell>
-                <TableCell align="left">{category.title}</TableCell>
-                <TableCell align="left">{category.category_id}</TableCell>
-                <TableCell align="left">{category.date}</TableCell>
-                <TableCell align="left">{category.valid_flag}</TableCell>
+                <TableCell align="left">{category.name}</TableCell>
+                <TableCell align="left">
+                  <img
+                    style={{
+                      width: '80px',
+                    }}
+                    src={category.logo}
+                    alt=""
+                  />
+                </TableCell>
+                <TableCell align="left">{category.total_provider}</TableCell>
                 <TableCell align="left">
                   <Button
                     sx={{ mr: '8px' }}
