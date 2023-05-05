@@ -1,0 +1,23 @@
+.home-container-provider {
+    background-color: #ffbe17;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .home-menu-item {
+        min-width: 300px;
+        display: flex;
+        flex-direction: row;
+        background-color: white;
+        padding: 20px;
+        border-radius: 20px;
+        margin: 20px;
+        text-decoration: none;
+        .item-icon{
+            margin-right: 20px;
+        }
+        .item-title{
+
+        }
+    }
+}

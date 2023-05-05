@@ -1,15 +1,19 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import Home from './Home';
+import AppointmentManagement from './AppointmentManagement';
+import About from './About';
+import EditIdentityCard from './EditIdentityCard';
+import EditProfile from './EditProfile';
 
 const ServiceProvider = () => {
   return (
     <Routes>
       <Route path="" element={<Home />} />
-      <Route path="finding-provider/*" element={<FindingProvider />} />
+      <Route path="appointment-management/*" element={<AppointmentManagement />} />
+      <Route path="edit-profile/*" element={<EditProfile />} />
+      <Route path="edit-identify-card/*" element={<EditIdentityCard />} />
       <Route path="about/*" element={<About />} />
-      <Route path="blog/*" element={<News />} />
-      <Route path="me/*" element={<Me />} />
-      <Route path="appointment-request-form/*" element={<AppointmentRequest />} />
     </Routes>
   );
 };
