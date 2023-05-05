@@ -1,6 +1,7 @@
 import { AppBar, Paper, Tab, Tabs } from '@mui/material';
 import React, { useState } from 'react';
 import './AppointmentManagement.scss';
+import Request from '../../../components/Common/Request';
 const TabPanel = (props) => {
   const { children, value, index } = props;
   return <div>{value === index && <h1>{children}</h1>}</div>;
@@ -24,6 +25,7 @@ const AppointmentManagement = () => {
       </AppBar>
       <TabPanel value={value} index={0}>
         Yêu cầu đã nhận
+        <Request />
       </TabPanel>
       <TabPanel value={value} index={1}>
         Đã báo giá
