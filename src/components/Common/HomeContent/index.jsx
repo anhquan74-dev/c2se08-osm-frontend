@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './HomeContent.scss';
 import ProviderCard from '../ProviderCard';
 import ServiceCard from '../ServiceCard';
+import providerApi from '../../../api/providerApi.js';
+import { PAGE_DEFAULT } from '../../../utils/constants';
+import packageApi from '../../../api/packageApi';
 
 const HomeContent = ({ ...props }) => {
   const { title, type } = props;
@@ -25,33 +28,49 @@ const HomeContent = ({ ...props }) => {
 };
 
 const ProviderList = () => {
-  let providerList = [2, 3, 4, 6, 3, 6, 3, 6, 34, 6, 43, 6];
-  providerList.length = 12;
+  const [providerList, setProviderList] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const res = await providerApi.getAll({
+        sort: [
+          {
+            sort_by: 'avg_star',
+            sort_dir: 'desc',
+          },
+        ],
+        page: PAGE_DEFAULT,
+        limit: 12,
+      });
+      setProviderList(res.data);
+    })();
+  }, []);
+
   return (
     <>
       {providerList?.map((item, index) => {
-        return (
-          <ProviderCard
-            key={index}
-            name="Provider name"
-            avatar="https://icdn.dantri.com.vn/thumb_w/680/2023/04/01/afp-messi-1-167911043942020387261-75-0-625-881-crop-1679110702236160038944-1679118122610-1680330659064.jpeg"
-            price="negotiate"
-          />
-        );
+        return <ProviderCard key={index} {...item} />;
       })}
     </>
   );
 };
 
 const ServiceList = () => {
-  let serviceList = [2, 3, 4, 6, 3, 6, 3, 6, 34, 6, 43, 6];
-  serviceList.length = 12;
+  const [servicePackageList, setServicePackageList] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const res = await packageApi.getAll();
+      setServicePackageList(res.data);
+    })();
+  }, []);
+
   return (
     <>
-      {serviceList?.map((item, index) => {
-        return (
-          <ServiceCard key={index} name="Khắc phục sự cố chập điện" provider="Điện lạnh Hưng Thịnh" price="negotiate" />
-        );
+      {servicePackageList?.map((item, index) => {
+        if (index < 12) {
+          return <ServiceCard key={index} {...item} />;
+        }
       })}
     </>
   );

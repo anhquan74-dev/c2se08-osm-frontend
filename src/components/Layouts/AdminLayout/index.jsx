@@ -4,7 +4,6 @@ import AdminHeader from '../components/AdminHeader';
 import { Sidebar } from '../components/index';
 
 const AdminLayout = ({ children }) => {
-  console.log(children);
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={header}>

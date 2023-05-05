@@ -1,12 +1,12 @@
 .provider-card {
   display: flex;
   padding: 14px;
-  justify-content: space-between;
+  // justify-content: space-between;
   border: 1px solid #f3f3f3;
   border-radius: 16px;
   min-width: 0;
   background-color: #fff;
-  gap: 10px;
+  gap: 12px;
   height: 160px;
   box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 }
@@ -20,25 +20,40 @@
 }
 
 .provider-card__left {
+  // width: 34%;
+  span {
+    font-size: 10px;
+    color: black;
+    font-weight: 600;
+  }
 }
 
 .provider-card__right {
   align-items: flex-start;
+  flex-grow: 1;
 
-  gap: 12px;
+  // gap: 12px;
   p {
     color: #0075ff;
     font-weight: 800;
     cursor: pointer;
   }
 
-  div {
+  .price {
     font-size: 12px;
-
-    &:nth-child(2) {
-    }
     span {
       font-weight: 800;
+    }
+  }
+  .services {
+    font-size: 12px;
+    strong {
+      display: block;
+      color: #ababab;
+      font-weight: 800;
+    }
+    span {
+      font-size: 10px;
     }
   }
 }

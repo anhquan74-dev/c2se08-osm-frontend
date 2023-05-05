@@ -15,7 +15,6 @@ const customerApi = {
   },
   update(data) {
     const url = `/customers/${data.id}`;
-    console.log('data', data);
     return axiosClient.post(url, data);
   },
   // remove(id) {

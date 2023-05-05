@@ -15,7 +15,6 @@ const LocationPickDialog = (props) => {
     googleMapsApiKey: import.meta.env.VITE_REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: ['places'],
   });
-  console.log(isLoaded);
   const { onClose, open, handleSetLocation } = props;
   return (
     <Dialog onClose={onClose} open={open} maxWidth="md">

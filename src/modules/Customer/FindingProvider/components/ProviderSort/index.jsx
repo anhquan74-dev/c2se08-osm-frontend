@@ -12,7 +12,31 @@ const theme = createTheme({
   },
 });
 
-const ProviderSort = () => {
+const ProviderSort = ({ onChange, conditions }) => {
+  const handleSortChange = (e) => {
+    const { value } = e.target;
+    const sortFollow = value.split('.');
+    let newConditions;
+    if (sortFollow[0] === '') {
+      newConditions = {
+        ...conditions,
+        sort: [],
+        page: 1,
+      };
+    } else {
+      newConditions = {
+        ...conditions,
+        sort: [
+          {
+            sort_by: sortFollow[0],
+            sort_dir: sortFollow[1],
+          },
+        ],
+        page: 1,
+      };
+    }
+    onChange(newConditions);
+  };
   return (
     <ThemeProvider theme={theme}>
       <div className="provider-sort-main">
@@ -35,12 +59,19 @@ const ProviderSort = () => {
             <InputLabel color="primary" id="sortBy">
               Sắp xếp
             </InputLabel>
-            <Select color="primary" labelId="sortBy" id="sortBy" label="Sắp xếp">
+            <Select
+              value={`${conditions?.sort?.at(0)?.sort_by}.${conditions?.sort?.at(0)?.sort_dir}`}
+              color="primary"
+              labelId="sortBy"
+              id="sortBy"
+              label="Sắp xếp"
+              onChange={handleSortChange}
+            >
               <MenuItem value="">
                 <em>Không sắp xếp</em>
               </MenuItem>
-              <MenuItem value="rate.asc">Đánh giá tăng dần</MenuItem>
-              <MenuItem value="rate.desc">Đánh giá giảm dần</MenuItem>
+              <MenuItem value="avg_star.asc">Đánh giá tăng dần</MenuItem>
+              <MenuItem value="avg_star.desc">Đánh giá giảm dần</MenuItem>
               <MenuItem value="price.asc">Giá tăng dần</MenuItem>
               <MenuItem value="price.desc">Giá giảm dần</MenuItem>
             </Select>

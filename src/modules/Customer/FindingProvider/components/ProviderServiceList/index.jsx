@@ -1,46 +1,69 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ProviderCard from '../../../../../components/Common/ProviderCard';
 import ServiceCard from '../../../../../components/Common/ServiceCard';
 import './ProviderServiceList.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProviders } from '../../../../Admin/ManageServiceProvider/providerSlice';
+import { PAGE_DEFAULT } from '../../../../../utils/constants';
+import packageApi from '../../../../../api/packageApi';
 
-const ProviderServiceList = ({ type, list }) => {
+const ProviderServiceList = ({ type, listResult }) => {
+  // const dispatch = useDispatch();
+  // const { list } = useSelector((state) => state.provider);
+  // console.log(list);
+  // const [servicePackageList, setServicePackageList] = useState([]);
+
+  // useEffect(() => {
+  //   if (type === 'provider') {
+  //     dispatch(
+  //       getProviders({
+  //         sort: [
+  //           {
+  //             sort_by: 'avg_star',
+  //             sort_dir: 'desc',
+  //           },
+  //         ],
+  //         page: PAGE_DEFAULT,
+  //         limit: 12,
+  //       })
+  //     );
+  //   } else {
+  //     (async () => {
+  //       const res = await packageApi.getAll();
+  //       setServicePackageList(res.data);
+  //     })();
+  //   }
+  // }, [type]);
+
   let show;
   if (type === 'provider') {
-    show = <ProviderList />;
+    show = <ProviderList list={listResult} />;
   } else {
-    show = <ServiceList />;
+    show = <ServiceList list={listResult} />;
   }
+
   return <div className="list-show-content">{show}</div>;
 };
 
-const ProviderList = () => {
+const ProviderList = ({ list }) => {
   let providerList = [2, 3, 4, 6, 3, 6, 3, 6, 34, 6, 43, 6];
   providerList.length = 12;
   return (
     <>
-      {providerList?.map((item, index) => {
-        return (
-          <ProviderCard
-            key={index}
-            name="Provider name"
-            avatar="https://icdn.dantri.com.vn/thumb_w/680/2023/04/01/afp-messi-1-167911043942020387261-75-0-625-881-crop-1679110702236160038944-1679118122610-1680330659064.jpeg"
-            price="negotiate"
-          />
-        );
+      {list?.map((item, index) => {
+        return <ProviderCard key={index} {...item} />;
       })}
     </>
   );
 };
 
-const ServiceList = () => {
+const ServiceList = ({ list }) => {
   let serviceList = [2, 3, 4, 6, 3, 6, 3, 6, 34, 6, 43, 6];
   serviceList.length = 12;
   return (
     <>
-      {serviceList?.map((item, index) => {
-        return (
-          <ServiceCard key={index} name="Khắc phục sự cố chập điện" provider="Điện lạnh Hưng Thịnh" price="negotiate" />
-        );
+      {list?.map((item, index) => {
+        return <ServiceCard key={index} {...item} />;
       })}
     </>
   );

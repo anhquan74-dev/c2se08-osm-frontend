@@ -1,12 +1,71 @@
-import React, { useState } from 'react';
-import { categoryList } from '../../../Home/categoryList';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCategories } from '../../../../Admin/Category/categorySlice';
 import Star from '../Star';
 import './ProviderFilter.scss';
 
-const ProviderFilter = () => {
+const ProviderFilter = ({ onChange, conditions }) => {
   const [categoryPick, setCategoryPick] = useState(0);
   const [starPick, setStarPick] = useState(0);
   const rateArr = [5, 4, 3, 2, 1];
+
+  const dispatch = useDispatch();
+  const { list } = useSelector((state) => state.category);
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, []);
+
+  useEffect(() => {
+    let newConditions;
+    console.log(categoryPick);
+    if (categoryPick === 0) {
+      newConditions = {
+        ...conditions,
+        filter: {
+          ...conditions.filter,
+          category_id: null,
+        },
+        page: 1,
+      };
+    } else {
+      newConditions = {
+        ...conditions,
+        filter: {
+          ...conditions.filter,
+          category_id: categoryPick,
+        },
+        page: 1,
+      };
+    }
+    console.log(newConditions);
+    onChange(newConditions);
+  }, [categoryPick]);
+
+  useEffect(() => {
+    let newConditions;
+    console.log(starPick);
+    if (starPick === 0) {
+      newConditions = {
+        ...conditions,
+        filter: {
+          ...conditions.filter,
+          avg_star: null,
+        },
+        page: 1,
+      };
+    } else {
+      newConditions = {
+        ...conditions,
+        filter: {
+          ...conditions.filter,
+          avg_star: starPick,
+        },
+        page: 1,
+      };
+    }
+    onChange(newConditions);
+  }, [starPick]);
 
   return (
     <div className="provider-filter-content">
@@ -20,14 +79,14 @@ const ProviderFilter = () => {
           <li className={`pick-item ${categoryPick === 0 ? 'active' : ''}`} onClick={() => setCategoryPick(0)}>
             Tất cả
           </li>
-          {categoryList.map((item, index) => {
+          {list.map((item, index) => {
             return (
               <li
                 key={index}
                 className={`pick-item ${categoryPick === item.id ? 'active' : ''}`}
                 onClick={() => setCategoryPick(item.id)}
               >
-                {item.title}
+                {item.name}
               </li>
             );
           })}
@@ -41,7 +100,6 @@ const ProviderFilter = () => {
         </div>
         <div className="star-group">
           {rateArr.map((item, index) => {
-            console.log(item);
             return (
               <Star
                 key={index}

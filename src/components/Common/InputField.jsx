@@ -3,7 +3,6 @@ import React from 'react';
 import { useController } from 'react-hook-form';
 
 const InputField = ({ name, control, label, disabled, ...inputProps }) => {
-  console.log(inputProps);
   const {
     field: { value, onChange, onBlur, ref },
     fieldState: { invalid, error },

@@ -13,7 +13,6 @@ const PostForm = ({ initialValues, onSubmit }) => {
     { label: 'Cải tạo nhà cửa', value: 1 },
     { label: 'Sửa điện & nước', value: 2 },
   ];
-  console.log(post);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
