@@ -66,4 +66,17 @@
       flex-direction: column;
     }
   }
+  .request-done {
+    display: flex;
+    flex-direction: column;
+    .provider-evaluate {
+      display: flex;
+    }
+    .customer-evaluate {
+      display: flex;
+    }
+  }
+}
+.disable {
+  display: none !important;
 }
