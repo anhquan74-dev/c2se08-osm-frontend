@@ -2,14 +2,23 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import categoryApi from '../../../api/categoryApi';
 import { LIMIT_DEFAULT, PAGE_DEFAULT } from '../../../utils/constants';
 
-export const getCategories = createAsyncThunk('categories/getCategories', async (request, thunkAPI) => {
-  const res = await categoryApi.getAll(request);
-  return res;
+export const getCategoriesPagination = createAsyncThunk(
+  'categories/getCategoriesPagination',
+  async (request, thunkAPI) => {
+    const res = await categoryApi.getAllPagination(request);
+    return res;
+  }
+);
+
+export const getCategories = createAsyncThunk('categories/getCategories', async (thunkAPI) => {
+  const res = await categoryApi.getAll();
+  return res?.data;
 });
 
 // setup state
 const initialState = {
   loading: false,
+  listPagination: [],
   list: [],
   conditions: {
     page: PAGE_DEFAULT,
@@ -26,6 +35,20 @@ export const categorySlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    //set get all categories pagination
+    builder.addCase(getCategoriesPagination.pending, (state, action) => {
+      state.loading = true;
+    });
+
+    builder.addCase(getCategoriesPagination.fulfilled, (state, action) => {
+      state.loading = false;
+      state.listPagination = action.payload;
+    });
+
+    builder.addCase(getCategoriesPagination.rejected, (state, action) => {
+      state.loading = false;
+    });
+
     //set get all categories
     builder.addCase(getCategories.pending, (state, action) => {
       state.loading = true;

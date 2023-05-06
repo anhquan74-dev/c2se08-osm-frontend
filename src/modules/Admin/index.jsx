@@ -9,7 +9,6 @@ import ManageServiceProvider from './ManageServiceProvider';
 
 const Admin = () => {
   const url = useResolvedPath('').pathname;
-  console.log(url);
   return (
     <Routes>
       <Route path="dashboard/*" element={<Dashboard />} />

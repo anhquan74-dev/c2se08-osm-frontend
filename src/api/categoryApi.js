@@ -2,6 +2,10 @@ import axiosClient from './axiosClient';
 
 const categoryApi = {
   getAll(request) {
+    const url = '/categories';
+    return axiosClient.get(url, request);
+  },
+  getAllPagination(request) {
     const url = '/categories/search';
     return axiosClient.post(url, request);
   },

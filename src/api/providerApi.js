@@ -2,7 +2,7 @@ import axiosClient from './axiosClient';
 
 const providerApi = {
   getAll(request) {
-    const url = '/provider/search';
+    const url = '/providers/search';
     return axiosClient.post(url, request);
   },
   get(id) {
@@ -15,7 +15,6 @@ const providerApi = {
   },
   update(data) {
     const url = `/providers/${data.id}`;
-    console.log('data', data);
     return axiosClient.post(url, data);
   },
   // remove(id) {

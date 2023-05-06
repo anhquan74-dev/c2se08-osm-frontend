@@ -15,9 +15,7 @@ const DatePickerField = ({ name, control, label, disabled, ...inputProps }) => {
     name,
     control,
   });
-  console.log(value);
   value = dayjs(value || new Date());
-  console.log(value);
   const handleChangeDate = (e) => {
     onChange(moment(e.$d).format('YYYY-MM-DD HH:mm:ss'));
   };

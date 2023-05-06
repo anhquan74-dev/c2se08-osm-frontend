@@ -3,7 +3,7 @@ import { Box } from '@mui/system';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useResolvedPath } from 'react-router-dom';
-import { categoryActions, getCategories } from '../categorySlice';
+import { categoryActions, getCategoriesPagination } from '../categorySlice';
 import CategoryFilters from '../components/CategoryFilters';
 import CategoryTable from '../components/CategoryTable';
 
@@ -11,10 +11,10 @@ const CategoryListPage = () => {
   const url = useResolvedPath('').pathname;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { list, conditions, loading } = useSelector((state) => state.category);
+  const { listPagination, conditions, loading } = useSelector((state) => state.category);
 
   useEffect(() => {
-    dispatch(getCategories(conditions));
+    dispatch(getCategoriesPagination(conditions));
   }, [dispatch, conditions]);
 
   const handlePageChange = (e, page) => {
@@ -58,12 +58,12 @@ const CategoryListPage = () => {
         <CategoryFilters conditions={conditions} onChange={handleFilterChange} />
       </Box>
 
-      <CategoryTable categoryList={list.data} onRemove={handleRemoveCategory} onEdit={handleEditCategory} />
+      <CategoryTable categoryList={listPagination.data} onRemove={handleRemoveCategory} onEdit={handleEditCategory} />
 
       <Box sx={{ my: '16px', display: 'flex', justifyContent: 'center' }}>
         <Pagination
           color="primary"
-          count={Math.ceil(list?.total / list?.per_page)}
+          count={Math.ceil(listPagination?.total / listPagination?.per_page)}
           page={conditions.page}
           onChange={handlePageChange}
         />
