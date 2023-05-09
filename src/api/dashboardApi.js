@@ -17,6 +17,10 @@ const dashboardApi = {
     const url = '/post-count';
     return axiosClient.get(url);
   },
+  getTotalAppointmentIn12Month() {
+    const url = '/appointments-count-by-month';
+    return axiosClient.get(url);
+  },
 };
 
 export default dashboardApi;
