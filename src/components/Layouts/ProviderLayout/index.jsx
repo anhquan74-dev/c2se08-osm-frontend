@@ -1,14 +1,14 @@
-import React from "react";
-import { Footer, Header } from "../components";
+import React from 'react';
+import { Footer, Header } from '../components';
 
 const ProviderLayout = ({ children }) => {
   return (
-    <div>
-      <div>
+    <div className="main-layout">
+      <div className="main-header pro-header">
         <Header />
       </div>
-      <div>{children}</div>
-      <div>
+      <>{children}</>
+      <div className="main-footer">
         <Footer />
       </div>
     </div>

@@ -24,6 +24,21 @@ const Header = () => {
       <div className="header-logo">OSM System</div>
       <ul className="header-link">
         <li>
+          <NavLink to="/provider/appointments" label="Quản lý lịch hẹn">
+            Quản lý lịch hẹn
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/provider/information" label="Chỉnh sửa thông tin hiển thị">
+            Chỉnh sửa thông tin hiển thị
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/provider/services" label="Chỉnh sửa thông tin hiển thị">
+            Dịch vụ
+          </NavLink>
+        </li>
+        <li>
           <NavLink to="/" label="Trang chủ">
             Trang chủ
           </NavLink>

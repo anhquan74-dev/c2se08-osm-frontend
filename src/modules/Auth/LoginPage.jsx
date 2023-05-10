@@ -3,7 +3,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { InputField } from '../../components/Common';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import './Auth.scss';
 
 const schema = yup
@@ -38,6 +38,15 @@ const LoginPage = () => {
     defaultValues: initialValues,
     resolver: yupResolver(schema),
   });
+
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    // ..
+    navigate('/admin');
+    // navigate('/');
+    // navigate('/provider');
+  };
   return (
     <div className="login-page">
       <div className="login-logo">ONLINE SERVICE MARKET</div>
@@ -46,7 +55,9 @@ const LoginPage = () => {
         <form className="login-form">
           <InputField name="email" control={control} label="Email" />
           <InputField name="password" control={control} label="Mật khẩu" type="password" />
-          <button type="submit">Đăng nhập</button>
+          <button type="submit" onClick={handleLogin}>
+            Đăng nhập
+          </button>
           <NavLink>Quên mật khẩu?</NavLink>
           <span> · </span>
           <NavLink to="/register">Đăng ký</NavLink>

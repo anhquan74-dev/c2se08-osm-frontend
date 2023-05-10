@@ -116,5 +116,53 @@
   }
 
   .footer {
+    .cancel {
+      span {
+        color: red;
+        font-weight: 600;
+        cursor: pointer;
+      }
+    }
+    .price {
+      span {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      div {
+        input {
+          font-size: 14px;
+          border-radius: 8px;
+          padding: 12px 14px;
+          outline: none;
+          border: none;
+          background-color: #e1e1e181;
+          margin: 8px 12px 0 0;
+        }
+      }
+    }
+    .btn-price {
+      margin-top: 20px;
+      cursor: pointer;
+      text-transform: uppercase;
+      border-radius: 8px;
+      font-weight: 700;
+      color: #fff;
+      background-color: #007bff;
+      padding: 8px 14px;
+      outline: none;
+      border: none;
+      padding: 12px 20px;
+    }
+  }
+  .price1 {
+    span {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    p {
+      color: #e24040;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
   }
 }

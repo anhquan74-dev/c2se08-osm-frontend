@@ -30,7 +30,7 @@ function App() {
       />
 
       <Route
-        path="/service-provider/*"
+        path="/provider/*"
         element={
           // <RoleAuthRoute role="provider">
           <ProviderLayout>

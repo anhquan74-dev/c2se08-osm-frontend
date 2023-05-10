@@ -8,9 +8,9 @@ const Dashboard = () => {
   return (
     <div>
       Dashboard
-      <Routes>
+      {/* <Routes>
         <Route path="blogs" element={<Blogs />} />
-      </Routes>
+      </Routes> */}
     </div>
   );
 };

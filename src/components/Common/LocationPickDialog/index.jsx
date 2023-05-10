@@ -185,7 +185,11 @@ const Map = ({ onClose, handleSetLocation }) => {
           draggable
           onDragEnd={(e) => handleMarkerDragEnd(e)}
         >
-          {activeMarker ? <InfoWindow onCloseClick={() => setActiveMarker(null)}></InfoWindow> : null}
+          {activeMarker ? (
+            <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+              <div>Địa chỉ ở đây</div>
+            </InfoWindow>
+          ) : null}
         </Marker>
       </GoogleMap>
       <div className="address-group">

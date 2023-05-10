@@ -1,0 +1,47 @@
+.package-item {
+  display: flex;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 12px;
+  justify-content: space-between;
+  font-size: 14px;
+  align-items: flex-start;
+  &:hover {
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  }
+  h4 {
+    font-size: 18px;
+  }
+  .item-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    > h4 {
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+        color: #007bff;
+      }
+    }
+    .star {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    strong {
+      color: #ff8a00;
+      font-size: 18px;
+      font-weight: 800;
+    }
+  }
+
+  .item-right {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+    border-radius: 5px;
+    background-color: var(--primary);
+  }
+}
