@@ -5,6 +5,7 @@ import providerReducer from '../modules/Admin/ManageServiceProvider/providerSlic
 import counterReducer from '../modules/counter/counterSlice';
 import providerCustomerReducer from '../modules/Customer/FindingProvider/providerCustomerSlice';
 import dashboardReducer from '../modules/Admin/Dashboard/dashboardSlice';
+import authReducer from '../modules/Auth/authSlice';
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     category: categoryReducer,
     providerCustomer: providerCustomerReducer,
     dashboard: dashboardReducer,
+    auth: authReducer,
   },
 });

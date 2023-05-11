@@ -1,9 +1,10 @@
-import axios from "axios";
+import axios from 'axios';
+import authApi from './authApi';
 
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_REACT_APP_API_ENDPOINT,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
@@ -11,6 +12,11 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use(
   function (config) {
     // Do something before request is sent
+    const token = authApi.getLocalAccessToken();
+    if (token) {
+      // config.headers.Authorization = 'Bearer ' + token; // neu co token thi config header cho moi lan goi request
+      config.headers = { ...axiosClient.headers, Authorization: `Bearer ${token}` };
+    }
     return config;
   },
   function (error) {
