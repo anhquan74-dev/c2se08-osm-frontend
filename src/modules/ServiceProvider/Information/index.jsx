@@ -10,6 +10,8 @@ import './Information.scss';
 import Slider from 'react-slick';
 import { categoryList } from '../../Customer/Home/categoryList';
 import { useNavigate } from 'react-router-dom';
+import { Breadcrumbs, Stack, Typography, Link } from '@mui/material';
+import { NavigateNext } from '@mui/icons-material';
 
 const Information = () => {
   const { isLoaded } = useLoadScript({
@@ -50,8 +52,27 @@ const Information = () => {
   const handleEditService = () => {
     navigate('/provider/services');
   };
+
+  const handleClickBreadCrum = (event) => {
+    console.log(event.target.href);
+    event.preventDefault();
+    navigate(event.target.href.slice(21));
+  };
   return (
     <div className="provider-info container">
+      <div className="break-crum">
+        <Stack spacing={2}>
+          <Breadcrumbs separator={<NavigateNext fontSize="medium" />} aria-label="breadcrumb">
+            <Link underline="hover" key="1" color="inherit" href="/provider" onClick={handleClickBreadCrum}>
+              Trang chủ
+            </Link>
+            <Typography key="3" color="text.primary">
+              Thông tin hiển thị
+            </Typography>
+          </Breadcrumbs>
+        </Stack>
+      </div>
+
       <h3>Thông tin hiển thị</h3>
       <div className="info-name">
         <div className="name-left">

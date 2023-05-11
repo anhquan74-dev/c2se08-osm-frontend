@@ -41,24 +41,36 @@ const AddEditCustomerPage = () => {
   };
 
   const handleCustomerFormSubmit = async (formValues, location) => {
-    const newLocation = {
-      id: formValues.location[0].id,
-      user_id: formValues.id,
-      is_primary: 1,
-      ...location,
+    // const newLocation = {
+    //   id: formValues.location[0].id,
+    //   user_id: formValues.id,
+    //   is_primary: 1,
+    //   ...location,
+    // };
+    formValues = {
+      ...formValues,
+      location: { ...location, is_primary: 1 },
     };
-    console.log(formValues, newLocation);
+    const formData = new FormData();
+    for (const key in formValues) {
+      if (Object.hasOwnProperty.call(formValues, key)) {
+        const value = formValues[key];
+        formData.append(key, value);
+      }
+    }
+    // for (const [key, value] of formData) {
+    //   console.log(`${key}: ${value}`);
+    // }
+
     if (isEdit) {
-      await customerApi.update(formValues);
-      await locationApi.updateLocation(newLocation);
+      await customerApi.update(formData);
       toast.success('Cập nhật thành công!');
     } else {
-      await customerApi.add(formValues);
-      await locationApi.createLocation({ user_id: formValues.id, is_primary: 1, ...location });
+      await customerApi.add(formData);
       toast.success('Tạo mới thành công!');
     }
 
-    navigate('/admin/customer');
+    // navigate('/admin/customer');
   };
 
   return (

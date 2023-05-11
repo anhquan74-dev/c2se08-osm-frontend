@@ -11,6 +11,7 @@ import DatePickerField from '../../../../components/Common/DatePickerField';
 import InputFileField from '../../../../components/Common/InputFileField';
 import LocationPickField from '../../../../components/Common/LocationPickField';
 import SelectField from '../../../../components/Common/SelectField';
+import imageApi from '../../../../api/imageApi';
 
 const schema = yup
   .object({
@@ -30,29 +31,46 @@ const CustomerForm = ({ initialValues, onSubmit, isEdit }) => {
     control,
     handleSubmit,
     formState: { isSubmitting },
+    watch,
   } = useForm({
     defaultValues: initialValues,
     resolver: yupResolver(schema),
   });
   const { customerId } = useParams();
+  const [isDirty, setIsDirty] = useState(false);
   const [location, setLocation] = useState();
+  const [avatar, setAvatar] = useState();
+
+  useEffect(() => {
+    const subscription = watch((data) => {
+      console.log(data);
+      console.log('initialValues: ', initialValues);
+
+      setIsDirty(JSON.stringify(initialValues) !== JSON.stringify(data));
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [watch]);
 
   const handleSetLocation = (location) => {
     console.log(location);
     setLocation(location);
   };
 
+  const handleSetAvatar = (avatar) => {
+    console.log(avatar);
+    setAvatar(avatar);
+  };
+
   useEffect(() => {
-    if (!customerId) return;
+    setLocation(initialValues?.location[0]);
     (async () => {
-      try {
-        const res = await locationApi.getLocationByUserId(customerId);
-        setLocation(res.data[0]);
-      } catch (error) {
-        console.log(error);
-      }
+      const res = await imageApi.get(initialValues.avatar.id);
+      setAvatar(res);
     })();
   }, []);
+  console.log(avatar);
 
   const handleFormSubmit = async (formValues) => {
     console.log('Submit: ', formValues);
@@ -83,7 +101,13 @@ const CustomerForm = ({ initialValues, onSubmit, isEdit }) => {
               { label: 'Nữ', value: 'female' },
             ]}
           />
-          <InputFileField name="avatar" control={control} label="Ảnh đại diện" />
+          <InputFileField
+            name="avatar"
+            control={control}
+            // handleSetAvatar={handleSetAvatar}
+            avatar={avatar}
+            label="Ảnh đại diện"
+          />
         </Box>
         <LocationPickField
           name="location[0].address"
@@ -102,7 +126,7 @@ const CustomerForm = ({ initialValues, onSubmit, isEdit }) => {
         />
 
         <Box>
-          <Button mt={3} type="submit" variant="contained" color="primary" disabled={isSubmitting}>
+          <Button mt={3} type="submit" variant="contained" color="primary" disabled={isSubmitting || !isDirty}>
             {isSubmitting && (
               <>
                 <CircularProgress size={16} color="primary" />

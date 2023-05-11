@@ -45,3 +45,105 @@
     background-color: var(--primary);
   }
 }
+
+.package-detail-dialog {
+  min-width: 500px;
+  h3 {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+  .rate-price {
+    display: flex;
+    gap: 10px;
+    > span {
+      width: 1px;
+      height: 20px;
+      background-color: #ccc;
+    }
+  }
+  .desc {
+    div {
+      font-size: 14px;
+    }
+  }
+  .star {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+  }
+  hr {
+    margin: 10px 0;
+    height: 6px;
+    background-color: #dfdfdfab;
+    border: none;
+  }
+  .feedback {
+    h4 {
+      margin-bottom: 12px;
+    }
+    .feedback-content {
+      border: 1px solid #dfdfdf;
+      padding: 12px;
+      border-radius: 15px;
+      .content-up {
+        padding-bottom: 10px;
+        border-bottom: 1px solid #dfdfdf;
+      }
+
+      .content-down {
+        > p {
+          font-size: 14px;
+          font-weight: 700;
+          line-height: 18px;
+          margin-bottom: 5px;
+          margin-top: 15px;
+        }
+
+        .content {
+          margin-left: 48px;
+          font-size: 14px;
+          line-height: 22px;
+          white-space: break-spaces;
+          word-break: break-word;
+        }
+        .date {
+          margin-left: 48px;
+          color: #999;
+          font-size: 12px;
+          line-height: 20px;
+        }
+
+        .reply {
+          width: max-content;
+          position: relative;
+          input {
+            width: 400px;
+            padding: 10px 30px 10px 12px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            background-color: #dfdfdf7a;
+            font-size: 14px;
+          }
+
+          > svg {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 10px;
+            &:hover {
+              font-size: 25px;
+            }
+          }
+        }
+
+        > span {
+          font-size: 12px;
+          color: #949494;
+        }
+      }
+    }
+  }
+}

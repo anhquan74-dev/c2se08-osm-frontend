@@ -3,7 +3,7 @@ import { Fab, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
 
-const InputFileField = ({ name, control, label, disabled, ...inputProps }) => {
+const InputFileField = ({ name, control, label, disabled, avatar, handleSetAvatar, ...inputProps }) => {
   const {
     field: { value, onChange, onBlur, ref },
     fieldState: { invalid, error },
@@ -11,25 +11,25 @@ const InputFileField = ({ name, control, label, disabled, ...inputProps }) => {
     name,
     control,
   });
-  const [avatar, setAvatar] = useState();
+  const [avatarPick, setAvatarPick] = useState();
   const handlePreviewAvatar = (e) => {
     const file = e.target.files[0];
     onChange(file);
     console.log('file: ', file, 'value: ', value);
 
-    const newFile = {
-      ...file,
-      preview: URL.createObjectURL(file),
-    };
-    console.log(newFile);
-    setAvatar(newFile);
+    // const newFile = {
+    //   ...file,
+    //   preview: URL.createObjectURL(file),
+    // };
+    // console.log(newFile);
+    setAvatarPick(URL.createObjectURL(file));
   };
 
   useEffect(() => {
     return () => {
-      avatar && URL.revokeObjectURL(avatar.preview);
+      avatarPick && URL.revokeObjectURL(avatarPick);
     };
-  }, [avatar]);
+  }, [avatarPick]);
   return (
     <div style={inputFileField}>
       <div style={inputFileLeft}>
@@ -55,14 +55,14 @@ const InputFileField = ({ name, control, label, disabled, ...inputProps }) => {
         </label>
       </div>
       <div style={inputFileRight}>
-        {value ? (
+        {avatar ? (
           <img
             style={{
               objectFit: 'cover',
               width: '100%',
               height: '100%',
             }}
-            src={avatar?.preview || value}
+            src={avatarPick || avatar}
             alt="preview-avatar"
           />
         ) : (

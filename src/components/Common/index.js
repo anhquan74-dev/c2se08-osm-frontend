@@ -6,3 +6,4 @@ export { default as DatePickerField } from './DatePickerField';
 export { default as LocationPickField } from './LocationPickField';
 export { default as AppointmentItem } from './AppointmentItem/index';
 export { default as EmptyAppointment } from './EmptyAppointment/index';
+export { default as InputMultipleFile } from './InputMutipleFile';

@@ -6,11 +6,12 @@ import ManagePackage from './ManagePackage';
 import ManageService from './ManageService';
 import ServiceDetail from './ManageService/ServiceDetail';
 import EditProfile from './EditProfile';
+import Home from './Home';
 
 const ServiceProvider = () => {
   return (
     <Routes>
-      {/* <Route path="" element={<Home />} /> */}
+      <Route path="" element={<Home />} />
       <Route path="appointments/*" element={<ManageAppointment />} />
       <Route path="information/*" element={<Information />} />
       <Route path="edit-profile/*" element={<EditProfile />} />
