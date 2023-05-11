@@ -4,10 +4,13 @@ import Admin from './modules/Admin';
 import { LoginPage, RegisterPage } from './modules/Auth';
 import Customer from './modules/Customer';
 import ServiceProvider from './modules/ServiceProvider';
+import { RoleAuthRoute } from './components/RoleAuthRoute';
+import Test from './components/Test';
 
 function App() {
   return (
     <Routes>
+      <Route path="/test" element={<Test />} />
       <Route
         path="/*"
         element={
@@ -21,22 +24,22 @@ function App() {
       <Route
         path="/admin/*"
         element={
-          // <RoleAuthRoute role="admin">
-          <AdminLayout>
-            <Admin />
-          </AdminLayout>
-          // </RoleAuthRoute>
+          <RoleAuthRoute role="admin">
+            <AdminLayout>
+              <Admin />
+            </AdminLayout>
+          </RoleAuthRoute>
         }
       />
 
       <Route
         path="/service-provider/*"
         element={
-          // <RoleAuthRoute role="provider">
-          <ProviderLayout>
-            <ServiceProvider />
-          </ProviderLayout>
-          // </RoleAuthRoute>
+          <RoleAuthRoute role="provider">
+            <ProviderLayout>
+              <ServiceProvider />
+            </ProviderLayout>
+          </RoleAuthRoute>
         }
       />
     </Routes>

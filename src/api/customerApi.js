@@ -5,9 +5,9 @@ const customerApi = {
     const url = '/customers/search';
     return axiosClient.post(url, request);
   },
-  get(id) {
-    const url = `/customers/${id}`;
-    return axiosClient.get(url);
+  get(dataSend) {
+    const url = `/customers/${dataSend.id}`;
+    return dataSend.api.get(url);
   },
   add(data) {
     const url = '/customers';
