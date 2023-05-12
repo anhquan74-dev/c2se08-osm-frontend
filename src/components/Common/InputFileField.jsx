@@ -3,7 +3,7 @@ import { Fab, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
 
-const InputFileField = ({ name, control, label, disabled, avatar, handleSetAvatar, ...inputProps }) => {
+const InputFileField = ({ name, control, label, disabled, ...inputProps }) => {
   const {
     field: { value, onChange, onBlur, ref },
     fieldState: { invalid, error },
@@ -55,14 +55,14 @@ const InputFileField = ({ name, control, label, disabled, avatar, handleSetAvata
         </label>
       </div>
       <div style={inputFileRight}>
-        {avatar ? (
+        {value ? (
           <img
             style={{
               objectFit: 'cover',
               width: '100%',
               height: '100%',
             }}
-            src={avatarPick || avatar}
+            src={avatarPick || value.url}
             alt="preview-avatar"
           />
         ) : (

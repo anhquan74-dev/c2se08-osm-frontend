@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes, useResolvedPath } from 'react-router-dom';
+import { Navigate, Route, Routes, useResolvedPath } from 'react-router-dom';
 import Blog from './Blog';
 import Category from './Category';
 import CommentAnalysis from './CommentAnalysis';
@@ -11,6 +11,7 @@ const Admin = () => {
   const url = useResolvedPath('').pathname;
   return (
     <Routes>
+      <Route path="/" element={<Navigate to="dashboard" />} />
       <Route path="dashboard/*" element={<Dashboard />} />
       <Route path="customer/*" element={<ManageCustomer />} />
       <Route path="provider/*" element={<ManageServiceProvider />} />

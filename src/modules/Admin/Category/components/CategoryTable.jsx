@@ -54,7 +54,7 @@ export default function CategoryTable({ categoryList, onEdit, onRemove }) {
                     style={{
                       width: '80px',
                     }}
-                    src={category.logo}
+                    src={category?.logo?.url}
                     alt=""
                   />
                 </TableCell>

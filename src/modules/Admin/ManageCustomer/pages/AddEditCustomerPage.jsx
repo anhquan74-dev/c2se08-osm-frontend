@@ -41,26 +41,37 @@ const AddEditCustomerPage = () => {
   };
 
   const handleCustomerFormSubmit = async (formValues, location) => {
-    // const newLocation = {
-    //   id: formValues.location[0].id,
-    //   user_id: formValues.id,
-    //   is_primary: 1,
-    //   ...location,
-    // };
-    formValues = {
+    let user = {
       ...formValues,
       location: { ...location, is_primary: 1 },
     };
+    console.log(formValues);
+
     const formData = new FormData();
-    for (const key in formValues) {
-      if (Object.hasOwnProperty.call(formValues, key)) {
-        const value = formValues[key];
-        formData.append(key, value);
-      }
-    }
-    // for (const [key, value] of formData) {
-    //   console.log(`${key}: ${value}`);
+    // for (const key in formValues) {
+    //   if (Object.hasOwnProperty.call(formValues, key)) {
+    //     const value = formValues[key];
+    //     formData.append(key, value);
+    //   }
     // }
+    formData.append('phone_number', user.phone_number);
+    formData.append('gender', user.gender);
+    formData.append('birthday', user.birthday);
+    formData.append('full_name', user.full_name);
+    formData.append('email', user.email);
+    formData.append('password', user.password);
+    formData.append('is_valid', user.is_valid);
+    formData.append('location[address]', user.location.address);
+    formData.append('location[province_name]', user.location.province_name);
+    formData.append('location[district_name]', user.location.district_name);
+    formData.append('location[country_name]', user.location.country_name);
+    formData.append('location[coords_latitude]', user.location.coords_latitude);
+    formData.append('location[coords_longitude]', user.location.coords_longitude);
+    formData.append('location[is_primary]', user.location.is_primary);
+    // Thêm avatar vào formData nếu có
+    if (user.avatar && user.avatar instanceof File) {
+      formData.append('avatar', user.avatar);
+    }
 
     if (isEdit) {
       await customerApi.update(formData);
@@ -70,7 +81,7 @@ const AddEditCustomerPage = () => {
       toast.success('Tạo mới thành công!');
     }
 
-    // navigate('/admin/customer');
+    navigate('/admin/customer');
   };
 
   return (

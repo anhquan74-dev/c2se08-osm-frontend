@@ -107,11 +107,9 @@ const CustomerFilters = ({ conditions, onChange }) => {
         </Grid>
         <Grid item xs={12} md={6} lg={2}>
           <FormControl fullWidth sx={{ m: 1 }} size="small">
-            <InputLabel id="filterByCity">Lọc theo thành phố</InputLabel>
-            <Select
+            <select
               value={conditions?.filter?.province_name || ''}
-              labelId="filterByCity"
-              id="filterByCity"
+              className="select-dashboard"
               label="Lọc theo thành phố"
               onChange={handleCityChange}
             >
@@ -125,7 +123,7 @@ const CustomerFilters = ({ conditions, onChange }) => {
                   </option>
                 );
               })}
-            </Select>
+            </select>
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={2}>

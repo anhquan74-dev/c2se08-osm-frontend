@@ -1,4 +1,4 @@
-import { Button, Pagination, Typography } from '@mui/material';
+import { Button, LinearProgress, Pagination, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -44,6 +44,7 @@ const CategoryListPage = () => {
 
   return (
     <Box sx={root}>
+      {loading && <LinearProgress sx={isLoading} />}
       <Box sx={titleContainer}>
         <Typography variant="h4">Quản lý danh mục</Typography>
 
@@ -72,13 +73,22 @@ const CategoryListPage = () => {
   );
 };
 
-const root = {};
+const root = {
+  position: 'relative',
+  paddingTop: '8px',
+};
 
 const titleContainer = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   mb: '20px',
+};
+
+const isLoading = {
+  position: 'absolute',
+  width: '100%',
+  top: '-8px',
 };
 
 export default CategoryListPage;

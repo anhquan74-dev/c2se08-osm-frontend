@@ -21,7 +21,7 @@ const AddEditProviderPage = () => {
     (async () => {
       try {
         const res = await providerApi.get(providerId);
-        setProvider(res.data[0]);
+        setProvider(res.data);
       } catch (error) {
         console.log(error);
       }
@@ -31,6 +31,7 @@ const AddEditProviderPage = () => {
   console.log(provider);
   const initialValues = {
     email: '',
+    password: undefined,
     full_name: '',
     birthday: '',
     gender: 'male',
@@ -50,20 +51,52 @@ const AddEditProviderPage = () => {
   };
 
   const handleProviderFormSubmit = async (formValues, location) => {
-    const newLocation = {
-      id: formValues.location[0].id,
-      user_id: formValues.id,
-      is_primary: 1,
-      ...location,
+    let user = {
+      ...formValues,
+      location: { ...location, is_primary: 1 },
     };
-    console.log(formValues, newLocation);
+    console.log(formValues);
+    const formData = new FormData();
+    formData.append('phone_number', user.phone_number);
+    formData.append('gender', user.gender);
+    formData.append('birthday', user.birthday);
+    formData.append('full_name', user.full_name);
+    formData.append('email', user.email);
+    formData.append('password', user.password);
+    formData.append('is_valid', user.is_valid);
+    formData.append('introduction', user.introduction);
+    formData.append('location[address]', user.location.address);
+    formData.append('location[province_name]', user.location.province_name);
+    formData.append('location[district_name]', user.location.district_name);
+    formData.append('location[country_name]', user.location.country_name);
+    formData.append('location[coords_latitude]', user.location.coords_latitude);
+    formData.append('location[coords_longitude]', user.location.coords_longitude);
+    formData.append('location[is_primary]', user.location.is_primary);
+    formData.append('is_favorite', user.is_favorite);
+    formData.append('is_working', user.is_working);
+    formData.append('total_rate', user.total_rate);
+    formData.append('total_star', user.total_star);
+    formData.append('avg_star', user.avg_star);
+    formData.append('clicks', user.clicks);
+    formData.append('views', user.views);
+    formData.append('click_rate', user.click_rate);
+    // Thêm avatar vào formData nếu có
+    if (user.avatar && user.avatar instanceof File) {
+      formData.append('avatar', user.avatar);
+    }
+
+    if (user.banner) {
+      for (let i = 0; i < user.banner.length; i++) {
+        formData.append('banner[]', user.banner[i]);
+      }
+    }
+
     if (isEdit) {
-      await providerApi.update(formValues);
-      await locationApi.updateLocation(newLocation);
+      formData.append('id', user.id);
+      await providerApi.update(formData);
       toast.success('Cập nhật thành công!');
     } else {
       await providerApi.add(formValues);
-      await locationApi.createLocation({ user_id: formValues.id, is_primary: 1, ...location });
       toast.success('Tạo mới thành công!');
     }
 

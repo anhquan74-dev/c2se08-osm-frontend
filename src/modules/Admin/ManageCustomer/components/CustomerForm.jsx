@@ -64,11 +64,11 @@ const CustomerForm = ({ initialValues, onSubmit, isEdit }) => {
   };
 
   useEffect(() => {
-    setLocation(initialValues?.location[0]);
-    (async () => {
-      const res = await imageApi.get(initialValues.avatar.id);
-      setAvatar(res);
-    })();
+    setLocation(initialValues?.location?.[0]);
+    // (async () => {
+    //   const res = await imageApi.get(initialValues.avatar.id);
+    //   setAvatar(res);
+    // })();
   }, []);
   console.log(avatar);
 
@@ -105,7 +105,7 @@ const CustomerForm = ({ initialValues, onSubmit, isEdit }) => {
             name="avatar"
             control={control}
             // handleSetAvatar={handleSetAvatar}
-            avatar={avatar}
+            // avatar={avatar}
             label="Ảnh đại diện"
           />
         </Box>

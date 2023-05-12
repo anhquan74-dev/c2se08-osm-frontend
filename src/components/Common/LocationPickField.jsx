@@ -1,5 +1,5 @@
 import { TextField } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
 import LocationPickDialog from './LocationPickDialog';
 
@@ -12,7 +12,9 @@ const LocationPickField = ({ name, control, location, handleSetLocation, ...inpu
     name,
     control,
   });
-
+  useEffect(() => {
+    onChange([{ ...location }]);
+  }, [location]);
   const handleClose = () => {
     setOpen(false);
   };
@@ -25,7 +27,7 @@ const LocationPickField = ({ name, control, location, handleSetLocation, ...inpu
         margin="normal"
         variant="outlined"
         value={location?.address || ''}
-        onChange={onChange}
+        // onChange={onChange}
         // disabled
         onBlur={onBlur}
         inputRef={ref}

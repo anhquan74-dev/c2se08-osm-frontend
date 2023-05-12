@@ -110,7 +110,6 @@ const ProviderFilters = ({ conditions, onChange }) => {
             <select
               value={conditions?.filter?.province_name || ''}
               className="select-dashboard"
-              id="filterByCity"
               onChange={handleCityChange}
             >
               <option value={''}>

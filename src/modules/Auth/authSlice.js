@@ -3,6 +3,7 @@ import jwt_decode from 'jwt-decode';
 import authApi from '../../api/authApi';
 import customerApi from '../../api/customerApi';
 import providerApi from '../../api/providerApi';
+import axiosClient from '../../api/axiosClient';
 
 export const logIn = createAsyncThunk('auths/logIn', async (request, thunkAPI) => {
   const res = await authApi.login(request);
@@ -23,6 +24,9 @@ export const getMe = createAsyncThunk('user/getMe', async (request) => {
     res = await providerApi.get(request?.user);
   } else if (request?.role === 'customer') {
     res = await customerApi.get(request?.user);
+  } else {
+    const url = `/admins/${request?.user}`;
+    res = await axiosClient.get(url);
   }
   console.log('user: ', res.data[0]);
   authApi.setUser(res.data[0] || res.data);

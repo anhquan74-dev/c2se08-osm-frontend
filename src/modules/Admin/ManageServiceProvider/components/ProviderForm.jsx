@@ -2,7 +2,7 @@ import { Button, CircularProgress } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { InputField, RadioGroupField } from '../../../../components/Common';
+import { InputField, InputMultipleFile, RadioGroupField } from '../../../../components/Common';
 import DatePickerField from '../../../../components/Common/DatePickerField';
 import InputFileField from '../../../../components/Common/InputFileField';
 import LocationPickField from '../../../../components/Common/LocationPickField';
@@ -30,14 +30,26 @@ const ProviderForm = ({ initialValues, onSubmit, isEdit }) => {
     control,
     handleSubmit,
     formState: { isSubmitting },
+    watch,
   } = useForm({
     defaultValues: initialValues,
     resolver: yupResolver(schema),
   });
   const { providerId } = useParams();
   const [location, setLocation] = useState();
+  const [isDirty, setIsDirty] = useState(false);
 
-  console.log(initialValues);
+  useEffect(() => {
+    const subscription = watch((data) => {
+      console.log(data);
+      console.log('initialValues: ', initialValues);
+      console.log(JSON.stringify(initialValues) !== JSON.stringify(data));
+      setIsDirty(JSON.stringify(initialValues) !== JSON.stringify(data));
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [watch]);
 
   const handleFormSubmit = async (formValues) => {
     console.log('Submit: ', formValues);
@@ -94,19 +106,14 @@ const ProviderForm = ({ initialValues, onSubmit, isEdit }) => {
               <InputFileField name="avatar" control={control} label="Ảnh đại diện" />
             </Box>
             <LocationPickField
-              name="location[0].address"
+              // name="location[0].address"
+              name="location"
               control={control}
               handleSetLocation={handleSetLocation}
               location={location}
             />
-            <InputField
-              name="introduction"
-              control={control}
-              label="Giới thiệu"
-              multiline
-              rows={4}
-              defaultValue="Default Value"
-            />
+            <InputMultipleFile name="banner" control={control} label="Ảnh bìa" />
+            <InputField name="introduction" control={control} label="Giới thiệu" multiline rows={4} />
             <SelectField
               name="is_valid"
               control={control}
@@ -135,7 +142,7 @@ const ProviderForm = ({ initialValues, onSubmit, isEdit }) => {
             type="submit"
             variant="contained"
             color="primary"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isDirty}
           >
             {isSubmitting && (
               <>

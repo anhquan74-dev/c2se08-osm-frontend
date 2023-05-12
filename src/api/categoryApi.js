@@ -15,11 +15,19 @@ const categoryApi = {
   },
   add(data) {
     const url = '/categories';
-    return axiosClient.post(url, data);
+    return axiosClient.post(url, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Cần thiết lập Content-Type là multipart/form-data để server có thể hiểu được dữ liệu gửi lên
+      },
+    });
   },
   update(data) {
-    const url = `/categories/${data.id}`;
-    return axiosClient.post(url, data);
+    const url = `/categories/${data.get('id')}`;
+    return axiosClient.post(url, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Cần thiết lập Content-Type là multipart/form-data để server có thể hiểu được dữ liệu gửi lên
+      },
+    });
   },
 };
 

@@ -36,15 +36,23 @@ const AddEditCategoryPage = () => {
   };
 
   const handleCategoryFormSubmit = async (formValues) => {
+    const formData = new FormData();
+    formData.append('name', formValues.name);
+    formData.append('view_priority', formValues.view_priority);
+    formData.append('is_valid', formValues.is_valid);
+
+    if (formValues.logo && formValues.logo instanceof File) {
+      formData.append('logo', formValues.logo);
+    }
     if (isEdit) {
-      await categoryApi.update(formValues);
+      formData.append('id', formValues.id);
+      await categoryApi.update(formData);
       toast.success('Cập nhật thành công!');
     } else {
       console.log(formValues);
-      await categoryApi.add(formValues);
+      await categoryApi.add(formData);
       toast.success('Tạo mới thành công!');
     }
-
     navigate('/admin/category');
   };
 
@@ -53,10 +61,10 @@ const AddEditCategoryPage = () => {
       <Link to={'/admin/category'}>
         <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           <ChevronLeft />
-          <Box>Trở về trang quản lý bài đăng</Box>
+          <Box>Trở về trang quản lý danh mục</Box>
         </Typography>
       </Link>
-      <Typography variant="h4">{isEdit ? 'Chỉnh sửa thông tin bài đăng' : 'Thêm mới bài đăng'}</Typography>
+      <Typography variant="h4">{isEdit ? 'Chỉnh sửa thông tin danh mục' : 'Thêm mới danh mục'}</Typography>
       {(!isEdit || Boolean(category)) && (
         <Box mt={3}>
           <CategoryForm initialValues={initialValues} onSubmit={handleCategoryFormSubmit} />

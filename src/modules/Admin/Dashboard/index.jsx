@@ -59,7 +59,7 @@ const Dashboard = () => {
           },
         ],
         filter: {
-          province_name: 'TP Hồ Chí Minh',
+          province_name: 'Hồ Chí Minh',
         },
         page: PAGE_DEFAULT,
         limit: 10,
