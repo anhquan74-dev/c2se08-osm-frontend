@@ -22,7 +22,7 @@ const NewsListPage = () => {
       </div>
       <div className="news-list-grid">
         {listNews.map((item, index) => {
-          return <NewsItem news={item} />;
+          return <NewsItem key={index} news={item} />;
         })}
       </div>
       <div className="pagination">

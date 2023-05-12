@@ -44,7 +44,7 @@ const Sidebar = () => {
         <List>
           {sideBarArr.map((item, index) => {
             return (
-              <NavLink to={item.to} className="sidebar__item">
+              <NavLink key={index} to={item.to} className="sidebar__item">
                 <ListItem disablePadding>
                   <ListItemButton>
                     <ListItemIcon>{item.icon}</ListItemIcon>

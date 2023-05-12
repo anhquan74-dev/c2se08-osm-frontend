@@ -2,11 +2,20 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import './Header.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { useUserRole } from '../../../hooks/useUserRole';
+import authApi from '../../../api/authApi';
+import { logOut } from '../../../modules/Auth/authSlice';
+import { useEffect } from 'react';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const { currentUser } = useSelector((state) => state.auth);
+  const role = useUserRole();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -19,45 +28,69 @@ const Header = () => {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
+  useEffect(() => {
+    if (!currentUser) {
+      navigate('/login');
+    }
+  }, [currentUser]);
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    dispatch(logOut());
+  };
   return (
     <div className="header-content container">
       <div className="header-logo">OSM System</div>
       <ul className="header-link">
-        <li>
-          <NavLink to="/provider/appointments" label="Quản lý lịch hẹn">
-            Quản lý lịch hẹn
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/provider/information" label="Chỉnh sửa thông tin hiển thị">
-            Chỉnh sửa thông tin hiển thị
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/provider/services" label="Chỉnh sửa thông tin hiển thị">
-            Dịch vụ
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/" label="Trang chủ">
-            Trang chủ
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/finding-provider" label="Tìm thợ">
-            Tìm thợ
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/about" label="Về OSM System">
-            Về OSM System
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/blog" label="Blog">
-            Blog
-          </NavLink>
-        </li>
+        {role === 'provider' && (
+          <>
+            <li>
+              <NavLink end to="/provider" label="Trang chủ">
+                Trang chủ
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/provider/appointments" label="Quản lý lịch hẹn">
+                Quản lý lịch hẹn
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/provider/information" label="Chỉnh sửa thông tin hiển thị">
+                Chỉnh sửa thông tin hiển thị
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/provider/services" label="Dịch vụ">
+                Dịch vụ
+              </NavLink>
+            </li>
+          </>
+        )}
+
+        {role === 'customer' && (
+          <>
+            <li>
+              <NavLink to="/" label="Trang chủ">
+                Trang chủ
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/finding-provider" label="Tìm thợ">
+                Tìm thợ
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/about" label="Về OSM System">
+                Về OSM System
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/blog" label="Blog">
+                Blog
+              </NavLink>
+            </li>
+          </>
+        )}
         <li>
           <div onClick={handleClick}>
             <div>
@@ -96,7 +129,7 @@ const Header = () => {
                 <NavLink to="/me/appointment">Quản lý lịch hẹn</NavLink>
               </li>
               <li>
-                <NavLink to="/login">Đăng xuất</NavLink>
+                <a onClick={handleLogout}>Đăng xuất</a>
               </li>
             </ul>
           </Popover>
