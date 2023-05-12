@@ -2,15 +2,20 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import './Header.scss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useUserRole } from '../../../hooks/useUserRole';
+import authApi from '../../../api/authApi';
+import { logOut } from '../../../modules/Auth/authSlice';
+import { useEffect } from 'react';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { currentUser } = useSelector((state) => state.auth);
   const role = useUserRole();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -23,6 +28,16 @@ const Header = () => {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
+  useEffect(() => {
+    if (!currentUser) {
+      navigate('/login');
+    }
+  }, [currentUser]);
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    dispatch(logOut());
+  };
   return (
     <div className="header-content container">
       <div className="header-logo">OSM System</div>
@@ -114,7 +129,7 @@ const Header = () => {
                 <NavLink to="/me/appointment">Quản lý lịch hẹn</NavLink>
               </li>
               <li>
-                <NavLink to="/login">Đăng xuất</NavLink>
+                <a onClick={handleLogout}>Đăng xuất</a>
               </li>
             </ul>
           </Popover>

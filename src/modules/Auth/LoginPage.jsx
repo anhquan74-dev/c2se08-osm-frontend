@@ -53,7 +53,7 @@ const LoginPage = () => {
 
   const handleLogin = (formValues) => {
     console.log('Submit: ', formValues);
-    dispatch(logIn(formValues, dispatch));
+    dispatch(logIn(formValues));
   };
   return (
     <div className="login-page">

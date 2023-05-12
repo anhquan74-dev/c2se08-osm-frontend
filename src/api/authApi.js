@@ -6,10 +6,9 @@ const authApi = {
     return axiosClient.post(url, user);
   },
 
-  logout(refreshToken) {
+  logout() {
     const url = '/logout';
-    this.removeUser('user');
-    return httpRequest.post(url, { refreshToken });
+    return axiosClient.post(url);
   },
 
   getLocalRefreshToken() {
@@ -24,6 +23,10 @@ const authApi = {
 
   updateLocalAccessToken(token) {
     localStorage.setItem('access_token', token);
+  },
+
+  updateLocalRefreshToken(token) {
+    localStorage.setItem('refresh_token', token);
   },
 
   getUser() {

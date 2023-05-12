@@ -9,6 +9,7 @@ const ServicePicker = ({ services, handleChangeService }) => {
       {services.map((item, index) => {
         return (
           <span
+            key={index}
             className={`service-item ${activeService === index ? 'active' : ''}`}
             onClick={() => {
               setActiveService(index);

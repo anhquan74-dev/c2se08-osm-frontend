@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import authApi from '../../api/authApi';
-import providerApi from '../../api/providerApi';
-import customerApi from '../../api/customerApi';
 import jwt_decode from 'jwt-decode';
+import authApi from '../../api/authApi';
+import customerApi from '../../api/customerApi';
+import providerApi from '../../api/providerApi';
 
 export const logIn = createAsyncThunk('auths/logIn', async (request, thunkAPI) => {
   const res = await authApi.login(request);
@@ -29,6 +29,15 @@ export const getMe = createAsyncThunk('user/getMe', async (request) => {
   return authApi.getUser();
 });
 
+export const logOut = createAsyncThunk('auths/logOut', async (request, thunkAPI) => {
+  const res = await authApi.logout();
+  authApi.removeUser('user');
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('refresh_token');
+  console.log(res);
+  return res;
+});
+
 const user = authApi.getUser();
 
 //setup state
@@ -40,13 +49,19 @@ const initialState = user
     }
   : {
       isLoggedIn: false,
-      currentUser: {},
+      currentUser: null,
       isLoading: false,
     };
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    logoutRedux(state) {
+      state.isLoggedIn = false;
+      state.currentUser = null;
+      state.isLoading = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(logIn.fulfilled, (state, action) => {
       state.isLoggedIn = true;
@@ -54,6 +69,10 @@ export const authSlice = createSlice({
     });
     builder.addCase(getMe.fulfilled, (state, action) => {
       state.currentUser = action.payload;
+    });
+    builder.addCase(logOut.fulfilled, (state, action) => {
+      state.isLoggedIn = false;
+      state.currentUser = null;
     });
   },
 });
