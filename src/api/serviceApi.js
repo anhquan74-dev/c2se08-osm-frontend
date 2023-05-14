@@ -17,6 +17,10 @@ const serviceApi = {
       },
     });
   },
+  deleteByCategoryId(id) {
+    const url = `/hard-delete-service-by-category-id/${id}`;
+    return axiosClient.post(url);
+  },
 };
 
 export default serviceApi;

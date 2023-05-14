@@ -34,6 +34,7 @@ const ManageService = () => {
   const [openDialogAdd, setOpenDialogAdd] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState();
   const [service, setService] = useState(null);
+  const [categoryDelete, setCategoryDelete] = useState(null);
   const navigate = useNavigate();
   const handleClickSetting = (event) => {
     setAnchorEl(event.currentTarget);
@@ -54,7 +55,7 @@ const ManageService = () => {
     setOpenDialogAdd(false);
   };
 
-  const handleRemoveClick = (event) => {
+  const handleRemoveClick = () => {
     // setSelectedProvider(provider);
     setOpenDialogRemove(true);
   };
@@ -63,7 +64,12 @@ const ManageService = () => {
     setOpenDialogAdd(true);
   };
 
-  const handleRemoveService = () => {};
+  const handleRemoveService = async () => {
+    const res = await serviceApi.deleteByCategoryId(categoryDelete);
+    if (res.statusCode === 200) {
+      dispatch(getCategoriesForProvider(currentUserId));
+    }
+  };
 
   const handleAddService = async () => {
     if (service !== null) {
@@ -100,7 +106,6 @@ const ManageService = () => {
     dispatch(getCategoriesForProvider(currentUserId));
     dispatch(getCategoriesProviderNotHave(currentUserId));
   }, [dispatch]);
-
   return (
     <>
       <div className="manage-service container">
@@ -124,7 +129,13 @@ const ManageService = () => {
                     <h4>{item.dataCategory[0]?.name}</h4>
                     <span>{item.countPackage} báo giá</span>
                   </div>
-                  <div className="item-right" onClick={handleClickSetting}>
+                  <div
+                    className="item-right"
+                    onClick={(event) => {
+                      handleClickSetting(event);
+                      setCategoryDelete(item.dataCategory[0]?.id);
+                    }}
+                  >
                     <SettingsIcon />
                   </div>
                   <Popover
@@ -149,7 +160,12 @@ const ManageService = () => {
                         <NavLink to="/provider/services/1">Bảng báo giá</NavLink>
                       </li>
                       <li>
-                        <NavLink to="" onClick={handleRemoveClick}>
+                        <NavLink
+                          to=""
+                          onClick={() => {
+                            handleRemoveClick();
+                          }}
+                        >
                           Xóa danh mục
                         </NavLink>
                       </li>
@@ -185,7 +201,7 @@ const ManageService = () => {
           </Button>
           <Button
             onClick={() => {
-              handleRemoveService(selectedProvider);
+              handleRemoveService();
               setOpenDialogRemove(false);
             }}
             color="error"
