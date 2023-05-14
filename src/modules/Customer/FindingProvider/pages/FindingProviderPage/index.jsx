@@ -8,6 +8,7 @@ import ProviderServiceList from '../../components/ProviderServiceList';
 import ProviderSort from '../../components/ProviderSort';
 import { getPackages, getProviders, providerCustomerActions } from '../../providerCustomerSlice';
 import './FindingProviderPage.scss';
+import { PAGE_DEFAULT } from '../../../../../utils/constants';
 
 const FindingProviderPage = () => {
   const [type, setType] = useState('service');
@@ -15,9 +16,20 @@ const FindingProviderPage = () => {
   const dispatch = useDispatch();
   const { providerList, packageList, conditions, loading } = useSelector((state) => state.providerCustomer);
   const [list, setList] = useState([]);
-  // useEffect(() => {
-  //   dispatch(getProviders(conditions));
-  // }, [dispatch, conditions]);
+  useEffect(() => {
+    dispatch(
+      providerCustomerActions.setConditions({
+        sort: [
+          {
+            sort_by: 'avg_star',
+            sort_dir: 'desc',
+          },
+        ],
+        page: PAGE_DEFAULT,
+        limit: 30,
+      })
+    );
+  }, []);
 
   const handleFilterChange = (conditions) => {
     dispatch(providerCustomerActions.setConditions(conditions));
@@ -31,13 +43,6 @@ const FindingProviderPage = () => {
     }
   }, [type, conditions]);
 
-  useEffect(() => {
-    setList(providerList.data);
-  }, [providerList]);
-
-  useEffect(() => {
-    setList(packageList.data);
-  }, [packageList]);
   return (
     <div className="finding-provider container">
       <div className="provider-sort">
@@ -76,9 +81,7 @@ const FindingProviderPage = () => {
             Nhà cung cấp dịch vụ
           </button>
         </div>
-        <div className="list-show">
-          {searchMap ? <ProvidersOnMap providerList={[]} /> : <ProviderServiceList type={type} listResult={list} />}
-        </div>
+        <div className="list-show">{searchMap ? <ProvidersOnMap /> : <ProviderServiceList type={type} />}</div>
       </div>
     </div>
   );

@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import './ServiceCard.scss';
-import { NavLink } from 'react-router-dom';
+import React from 'react';
+import Skeleton from 'react-loading-skeleton';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Rating from '../Rating';
-import providerApi from '../../../api/providerApi';
-import serviceApi from '../../../api/serviceApi';
+import './ServiceCard.scss';
 
 const ServiceCard = (props) => {
   const { name, description, is_negotiable, avg_star, price, service, provider } = props;
   const starArr = [1, 2, 3, 4, 5];
   starArr.length = 5;
-  // const [provider, setProvider] = useState();
-  // useEffect(() => {
-  //   if (!service_id) return;
-  //   (async () => {
-  //     const res = await serviceApi.get(service_id);
-  //     setProvider(res.data[0]?.user);
-  //   })();
-  // }, []);
+  const navigate = useNavigate();
+
   return (
     <div className="service-card">
-      <h3 title={name}>{name?.length < 31 ? name : <>{name?.slice(0, 30)}...</>}</h3>
+      <h3
+        title={name}
+        onClick={() => {
+          navigate(`/finding-provider/${provider?.id}`);
+        }}
+      >
+        {name?.length < 31 ? name : <>{name?.slice(0, 30)}...</>}
+      </h3>
       <h4>{provider?.full_name}</h4>
       {avg_star ? <Rating starNumber={avg_star} size="small" /> : <span className="no-rating">Chưa có đánh giá</span>}
       <div>
@@ -32,9 +32,31 @@ const ServiceCard = (props) => {
           </span>
         )}
       </div>
-      <NavLink className="service-card-btn">Lấy báo giá</NavLink>
+      <NavLink to={`/finding-provider/${provider?.id}`} className="service-card-btn">
+        Lấy báo giá
+      </NavLink>
     </div>
   );
 };
+
+const Loading = () => {
+  return (
+    <div className="service-card">
+      <h3>
+        <Skeleton width={250} height={16} />
+      </h3>
+      <h4>
+        <Skeleton width={160} height={14} />
+      </h4>
+      <Skeleton width={140} height={14} />
+      <div>
+        <Skeleton width={180} height={18} />
+      </div>
+      <Skeleton width={100} height={24} />
+    </div>
+  );
+};
+
+ServiceCard.Loading = Loading;
 
 export default ServiceCard;

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
+import 'react-loading-skeleton/dist/skeleton.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -10,9 +11,11 @@ import App from './App';
 import { store } from './app/store';
 import './index.scss';
 import axiosSetupInterceptors from './api/axiosSetupInterceptors';
+import { SkeletonTheme } from 'react-loading-skeleton';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
+  // <SkeletonTheme baseColor="#202020" highlightColor="#444">
   <Provider store={store}>
     <BrowserRouter>
       <App />
@@ -30,6 +33,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       />
     </BrowserRouter>
   </Provider>
+  // </SkeletonTheme>
   // </React.StrictMode>
 );
 
