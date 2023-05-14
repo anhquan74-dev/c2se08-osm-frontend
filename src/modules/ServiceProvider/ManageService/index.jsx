@@ -17,31 +17,23 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './ManageService.scss';
-
-const options = [
-  {
-    value: '1',
-    label: 'Cải tạo nhà cửa',
-  },
-  {
-    value: '2',
-    label: 'Sửa xe',
-  },
-  {
-    value: '3',
-    label: 'Dọn dẹp vệ sinh',
-  },
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { getCategoriesForProvider, getCategoriesProviderNotHave } from './manageServiceSlice';
+import serviceApi from '../../../api/serviceApi';
 
 const ManageService = () => {
+  const currentUserId = useSelector((state) => state.auth.currentUser.id);
+  const serviceList = useSelector((state) => state.manageService.serviceList);
+  const selectCategory = useSelector((state) => state.manageService.serviceProviderNotHaveList);
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDialogRemove, setOpenDialogRemove] = useState(false);
   const [openDialogAdd, setOpenDialogAdd] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState();
-  const [service, setService] = useState(1);
+  const [service, setService] = useState(null);
   const navigate = useNavigate();
   const handleClickSetting = (event) => {
     setAnchorEl(event.currentTarget);
@@ -67,14 +59,32 @@ const ManageService = () => {
     setOpenDialogRemove(true);
   };
 
-  const handleAddClick = () => {
+  const handleAddClick = async () => {
     setOpenDialogAdd(true);
   };
 
   const handleRemoveService = () => {};
 
-  const handleAddService = () => {
-    console.log(service);
+  const handleAddService = async () => {
+    if (service !== null) {
+      setService(selectCategory[0]?.value);
+      const dataSend = {
+        category_id: service,
+        provider_id: currentUserId,
+        is_valid: 1,
+      };
+      await serviceApi.create(dataSend);
+    } else {
+      const dataSend = {
+        category_id: selectCategory[0]?.value,
+        provider_id: currentUserId,
+        is_valid: 1,
+      };
+      await serviceApi.create(dataSend);
+    }
+
+    dispatch(getCategoriesForProvider(currentUserId));
+    dispatch(getCategoriesProviderNotHave(currentUserId));
   };
 
   const handleClickService = () => {};
@@ -86,6 +96,11 @@ const ManageService = () => {
     event.preventDefault();
     navigate(event.target.href.slice(21));
   };
+  useEffect(() => {
+    dispatch(getCategoriesForProvider(currentUserId));
+    dispatch(getCategoriesProviderNotHave(currentUserId));
+  }, [dispatch]);
+
   return (
     <>
       <div className="manage-service container">
@@ -101,71 +116,52 @@ const ManageService = () => {
         </Stack>
         <h3>Dịch vụ</h3>
         <div className="service-content">
-          <div className="service-item" onClick={handleClickService}>
-            <div className="item-left">
-              <h4>Sửa điện & nước</h4>
-              <span>2 báo giá</span>
-            </div>
-            <div className="item-right" onClick={handleClickSetting}>
-              <SettingsIcon />
-            </div>
-            <Popover
-              sx={{
-                borderRadius: '20px !important',
-              }}
-              id={id}
-              open={open}
-              anchorEl={anchorEl}
-              onClose={handleClose}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-            >
-              <ul className="profile-popover">
-                <li>
-                  <NavLink to="/provider/services/1">Bảng báo giá</NavLink>
-                </li>
-                <li>
-                  <NavLink to="" onClick={handleRemoveClick}>
-                    Xóa danh mục
-                  </NavLink>
-                </li>
-              </ul>
-            </Popover>
-          </div>
-          <div className="service-item">
-            <div className="item-left">
-              <h4>Sửa xe</h4>
-              <span>1 báo giá</span>
-            </div>
-            <div className="item-right">
-              <SettingsIcon />
-            </div>
-          </div>
-          <div className="service-item">
-            <div className="item-left">
-              <h4>Sửa đồ điện gia dụng</h4>
-              <span>3 báo giá</span>
-            </div>
-            <div className="item-right">
-              <SettingsIcon />
-            </div>
-          </div>
-          <div className="service-item">
-            <div className="item-left">
-              <h4>Dọn dẹp vệ sinh</h4>
-              <span>0 báo giá</span>
-            </div>
-            <div className="item-right">
-              <SettingsIcon />
-            </div>
-          </div>
-          <div className="service-item add-service" onClick={handleAddClick}>
+          {serviceList &&
+            serviceList.map((item, index) => {
+              return (
+                <div key={index} className="service-item" onClick={handleClickService}>
+                  <div className="item-left">
+                    <h4>{item.dataCategory[0]?.name}</h4>
+                    <span>{item.countPackage} báo giá</span>
+                  </div>
+                  <div className="item-right" onClick={handleClickSetting}>
+                    <SettingsIcon />
+                  </div>
+                  <Popover
+                    sx={{
+                      borderRadius: '20px !important',
+                    }}
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                  >
+                    <ul className="profile-popover">
+                      <li>
+                        <NavLink to="/provider/services/1">Bảng báo giá</NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="" onClick={handleRemoveClick}>
+                          Xóa danh mục
+                        </NavLink>
+                      </li>
+                    </ul>
+                  </Popover>
+                </div>
+              );
+            })}
+          <div
+            className={selectCategory.length === 0 ? 'disable' : 'service-item add-service'}
+            onClick={handleAddClick}
+          >
             <h4>+ Thêm dịch vụ</h4>
           </div>
         </div>
@@ -216,16 +212,17 @@ const ManageService = () => {
               <Select
                 labelId="service_label"
                 label="Thêm dịch vụ"
-                value={service}
+                defaultValue={selectCategory[0]?.value}
                 onChange={(e) => handleChangeService(e)}
               >
-                {options.map((option) => {
-                  return (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  );
-                })}
+                {selectCategory &&
+                  selectCategory.map((option) => {
+                    return (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    );
+                  })}
               </Select>
             </FormControl>
           </DialogContentText>
