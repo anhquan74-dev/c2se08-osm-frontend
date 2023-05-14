@@ -7,20 +7,20 @@ const EmptyAppointment = (props) => {
   let titleName = '';
   let desc = '';
   switch (status) {
-    case 0:
+    case 'new-or-offered':
       titleName = 'Chưa có Yêu cầu nào.';
       desc = 'Hãy tiếp tục tìm Thợ để giúp bạn giải quyết vấn đề nhé!';
       break;
-    case 1:
+    case 'appointed':
       titleName = 'Chưa có Lịch hẹn nào.';
       desc = 'Bạn vẫn đang giải quyết các vấn đề một mình mà không cần bất kỳ Thợ nào?';
       break;
-    case 2:
+    case 'done':
       titleName = 'Chưa có lịch hẹn nào hoàn thành.';
       desc =
         'Hãy kiên nhẫn và đợi cho đến khi Thợ hoàn thành công việc của họ.  Và hãy nhớ nhấn “Hoàn thành Lịch hẹn” khi công việc đã hoàn tất.';
       break;
-    case 3:
+    case 'canceled':
       titleName = 'Chưa có lịch hẹn nào bị hủy.';
       desc = 'Thật tuyệt vời!';
       break;

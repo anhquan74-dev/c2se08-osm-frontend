@@ -13,6 +13,11 @@ export const getPackages = createAsyncThunk('providerCustomer/getPackages', asyn
   return res;
 });
 
+export const getProviderById = createAsyncThunk('providerCustomer/getProviderById', async (request, thunkAPI) => {
+  const res = await providerApi.get(request);
+  return res;
+});
+
 // export const getProviderId = createAsyncThunk('providers/getProviderId', async (providerId, { dispatch }) => {
 
 // });
@@ -30,6 +35,8 @@ const initialState = {
   loading: false,
   providerList: [],
   packageList: [],
+  provider: null,
+  services: null,
   conditions: {
     sort: [
       {
@@ -75,6 +82,21 @@ export const providerCustomerSlice = createSlice({
     });
 
     builder.addCase(getPackages.rejected, (state, action) => {
+      state.loading = false;
+    });
+
+    //set get provider by id
+    builder.addCase(getProviderById.pending, (state, action) => {
+      state.loading = true;
+    });
+
+    builder.addCase(getProviderById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.provider = action.payload.data;
+      state.services = action.payload.data.service;
+    });
+
+    builder.addCase(getProviderById.rejected, (state, action) => {
       state.loading = false;
     });
   },

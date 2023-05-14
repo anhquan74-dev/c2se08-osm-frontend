@@ -10,6 +10,9 @@ import ProviderPackage from '../../components/ProviderPackage';
 import './ProviderDetailPage.scss';
 import Rating from '../../../../../components/Common/Rating';
 import providerApi from '../../../../../api/providerApi';
+import Skeleton from 'react-loading-skeleton';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProviderById } from '../../providerCustomerSlice';
 
 const ProviderDetailPage = () => {
   const starArr = [1, 2, 3, 4, 5];
@@ -24,16 +27,21 @@ const ProviderDetailPage = () => {
   };
 
   const { providerId } = useParams();
+  // const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-  const [provider, setProvider] = useState(null);
+  // const [provider, setProvider] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { provider, loading } = useSelector((state) => state.providerCustomer);
 
   useEffect(() => {
     if (!providerId) return;
-    (async () => {
-      const res = await providerApi.get(providerId);
-      setProvider(res?.data);
-    })();
+    // (async () => {
+    //   const res = await providerApi.get(providerId);
+    //   setLoading(false);
+    //   setProvider(res);
+    // })();
+    dispatch(getProviderById(providerId));
   }, [providerId]);
 
   console.log(provider);
@@ -90,7 +98,8 @@ const ProviderDetailPage = () => {
         <div className="pd-left">
           <div className="avatar-rate pd-left-item">
             <div>
-              <img src={provider?.avatar?.url} alt="avatar" />
+              {loading && <Skeleton width={205} height={205} />}
+              {!loading && <img src={provider?.avatar?.url} alt="avatar" />}
             </div>
             <Rating starNumber={provider?.avg_star} size="large" />
             <div onClick={handleOpenFeedbackDialog}>11 phản hồi</div>
@@ -99,9 +108,15 @@ const ProviderDetailPage = () => {
           <div className="pd-left-item">
             <h3>Địa điểm</h3>
             <div>
-              <h4>{provider?.location?.[0].province_name}</h4>
+              <h4>
+                {!loading && provider?.location?.[0].province_name}
+                {loading && <Skeleton width={100} height={20} />}
+              </h4>
               <ul>
-                <li>{provider?.location?.[0].district_name}</li>
+                <li>
+                  {!loading && provider?.location?.[0].district_name}
+                  {loading && <Skeleton width={80} height={16} />}
+                </li>
               </ul>
             </div>
           </div>
@@ -110,39 +125,54 @@ const ProviderDetailPage = () => {
             <div>
               <h4>Số điện thoại</h4>
               <ul>
-                <li>(+84){provider?.phone_number}</li>
+                <li>
+                  {!loading && <>(+84){provider?.phone_number}</>}
+                  {loading && <Skeleton width={80} height={16} />}
+                </li>
               </ul>
             </div>
             <div>
               <h4>Email</h4>
               <ul>
-                <li>{provider?.email}</li>
+                <li>
+                  {!loading && provider?.email}
+                  {loading && <Skeleton width={80} height={16} />}
+                </li>
               </ul>
             </div>
           </div>
         </div>
         <div className="pd-right">
           <div className="provider-name">
-            <span>{provider?.full_name}</span>
+            <span>
+              {!loading && provider?.full_name}
+              {loading && <Skeleton width={250} height={30} />}
+            </span>
             <span>
               <Chat fontSize="small" />
               Chat
             </span>
           </div>
-          <div className="provider-desc">{provider?.introduction}</div>
+          <div className="provider-desc">
+            {!loading && provider?.introduction}
+            {loading && <Skeleton width={890} height={70} />}
+          </div>
           <div className="provider-slick">
-            <Slider {...settings}>
-              {provider?.banner?.map((item, index) => {
-                return (
-                  <>
-                    <img key={index} src={item?.url} alt="image" />
-                  </>
-                );
-              })}
-            </Slider>
+            {!loading && (
+              <Slider {...settings}>
+                {provider?.banner?.map((item, index) => {
+                  return (
+                    <>
+                      <img key={index} src={item?.url} alt="image" />
+                    </>
+                  );
+                })}
+              </Slider>
+            )}
+            {loading && <Skeleton width={890} height={180} />}
           </div>
           <div className="provider-package">
-            <ProviderPackage services={provider?.service} />
+            <ProviderPackage />
           </div>
         </div>
       </div>
