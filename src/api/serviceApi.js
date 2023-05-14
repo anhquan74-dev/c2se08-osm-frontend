@@ -9,6 +9,18 @@ const serviceApi = {
     const url = `/services/${id}`;
     return axiosClient.get(url);
   },
+  create(data) {
+    const url = '/services';
+    return axiosClient.post(url, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Cần thiết lập Content-Type là multipart/form-data để server có thể hiểu được dữ liệu gửi lên
+      },
+    });
+  },
+  deleteByCategoryId(id) {
+    const url = `/hard-delete-service-by-category-id/${id}`;
+    return axiosClient.post(url);
+  },
 };
 
 export default serviceApi;

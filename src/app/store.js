@@ -6,6 +6,7 @@ import counterReducer from '../modules/counter/counterSlice';
 import providerCustomerReducer from '../modules/Customer/FindingProvider/providerCustomerSlice';
 import dashboardReducer from '../modules/Admin/Dashboard/dashboardSlice';
 import authReducer from '../modules/Auth/authSlice';
+import manageServiceReducer from '../modules/ServiceProvider/ManageService/manageServiceSlice';
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
     providerCustomer: providerCustomerReducer,
     dashboard: dashboardReducer,
     auth: authReducer,
+    manageService: manageServiceReducer,
   },
 });
