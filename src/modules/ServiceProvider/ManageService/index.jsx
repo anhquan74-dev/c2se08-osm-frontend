@@ -68,6 +68,7 @@ const ManageService = () => {
     const res = await serviceApi.deleteByCategoryId(categoryDelete);
     if (res.statusCode === 200) {
       dispatch(getCategoriesForProvider(currentUserId));
+      setAnchorEl(null);
     }
   };
 
@@ -160,12 +161,7 @@ const ManageService = () => {
                         <NavLink to="/provider/services/1">Bảng báo giá</NavLink>
                       </li>
                       <li>
-                        <NavLink
-                          to=""
-                          onClick={() => {
-                            handleRemoveClick();
-                          }}
-                        >
+                        <NavLink to="" onClick={handleRemoveClick}>
                           Xóa danh mục
                         </NavLink>
                       </li>
