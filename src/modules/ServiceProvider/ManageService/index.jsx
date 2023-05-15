@@ -67,6 +67,7 @@ const ManageService = () => {
   const handleRemoveService = async () => {
     const res = await serviceApi.deleteByCategoryId(categoryChoose);
     if (res.statusCode === 200) {
+      dispatch(getCategoriesProviderNotHave(currentUserId));
       dispatch(getCategoriesForProvider(currentUserId));
       setAnchorEl(null);
     }
