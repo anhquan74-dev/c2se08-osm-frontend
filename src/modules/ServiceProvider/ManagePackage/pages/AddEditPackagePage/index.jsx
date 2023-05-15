@@ -3,6 +3,7 @@ import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import './AddEditPackagePage.scss';
 import packageApi from '../../../../../api/packageApi';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const AddEditPackagePage = () => {
   const { package_id } = useParams();
@@ -11,7 +12,7 @@ const AddEditPackagePage = () => {
   const service_id = useSelector((state) => state.manageService.currentServiceId);
   const category_id = useSelector((state) => state.manageService.currentCategoryId);
   const [providerPackage, setProviderPackage] = useState({
-    name: '',
+    name: null,
     description: '',
     price: '',
     is_negotiable: true,
@@ -22,8 +23,8 @@ const AddEditPackagePage = () => {
     if (!package_id) return;
     (async () => {
       try {
-        // const res = await packageApi.get(package_id);
-        // setProviderPackage(res.data);
+        const res = await packageApi.get(package_id);
+        setProviderPackage(res?.data);
       } catch (error) {
         console.log(error);
       }
@@ -31,16 +32,29 @@ const AddEditPackagePage = () => {
   }, []);
 
   const { name, description, price, is_negotiable } = providerPackage;
+  console.log('providerPackage:', providerPackage);
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     let formValue = { ...providerPackage, service_id: service_id };
     if (providerPackage.is_negotiable) {
       formValue = { ...formValue, price: 0, is_negotiable: 1 };
-      await packageApi.create(formValue);
+      if (isEdit) {
+        await packageApi.update(package_id, formValue);
+        toast.success('Cập nhật thành công!');
+      } else {
+        await packageApi.create(formValue);
+        toast.success('Thêm mới thành công!');
+      }
       navigate('/provider/services/' + category_id);
     } else {
       formValue = { ...formValue, is_negotiable: 0 };
-      await packageApi.create(formValue);
+      if (isEdit) {
+        await packageApi.update(package_id, formValue);
+        toast.success('Cập nhật thành công!');
+      } else {
+        toast.success('Thêm mới thành công!');
+        await packageApi.create(formValue);
+      }
       navigate('/provider/services/' + category_id);
     }
   };
@@ -67,7 +81,7 @@ const AddEditPackagePage = () => {
             id="name"
             type="text"
             name="name"
-            value={name}
+            value={name || ''}
             onChange={handleChangePackage}
             placeholder="Nhập tên dịch vụ"
           />
@@ -78,7 +92,7 @@ const AddEditPackagePage = () => {
             id="price"
             type="text"
             name="price"
-            value={price}
+            value={price || ''}
             onChange={handleChangePackage}
             disabled={is_negotiable}
             placeholder="Nhập đơn giá"
@@ -96,7 +110,7 @@ const AddEditPackagePage = () => {
         </div>
         <div className="form-group">
           <label htmlFor="description">Thêm chi tiết (không bắt buộc)</label>
-          <textarea value={description} name="description" onChange={handleChangePackage} rows="7" />
+          <textarea value={description || ''} name="description" onChange={handleChangePackage} rows="7" />
         </div>
         <button type="submit" onClick={handleFormSubmit}>
           <NavLink to="">Lưu</NavLink>

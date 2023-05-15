@@ -5,17 +5,22 @@ import DefaultAvatar from '../../../assets/images/default-avatar.png';
 import Rating from '../Rating';
 
 const FeedbackItem = (props) => {
+  const { feedbackInfo } = props;
+  console.log('🚀 ~ file: index.jsx:9 ~ FeedbackItem ~ feedbackInfo:', feedbackInfo);
   return (
     <div className="feedback-item">
       <div className="heading">
         <div className="right">
           <div className="avatar">
-            <img src={DefaultAvatar} alt="" />
+            <img
+              src={feedbackInfo.customerInfo.avatar !== null ? feedbackInfo?.customerInfo.avatar?.url : DefaultAvatar}
+              alt=""
+            />
           </div>
           <div className="name-rate">
-            <h3>Anh Quan</h3>
+            <h3>{feedbackInfo?.customerInfo?.full_name}</h3>
             <p>
-              <Rating starNumber={4} />
+              <Rating starNumber={feedbackInfo?.feedback.star} />
             </p>
           </div>
         </div>
@@ -24,11 +29,8 @@ const FeedbackItem = (props) => {
           <ThumbUpOffAlt />
         </div>
       </div>
-      <div className="content">
-        Anh thợ làm việc rất chuyên nghiệp và nhiệt tình. Phản hồi dịch vụ nhanh và đến làm đúng giờ. Giá cả rất phải
-        chăng và hợp lý. Sẽ ủng hộ dịch vụ của anh và giới thiệu anh thợ cho bạn bè, người thân khi cần.{' '}
-      </div>
-      <div className="date">06/02/2023</div>
+      <div className="content">{feedbackInfo?.feedback.comment}. </div>
+      <div className="date">{feedbackInfo?.feedback.created_at}</div>
     </div>
   );
 };
