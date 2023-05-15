@@ -5,13 +5,13 @@ import PackageItem from '../../ManagePackage/components/PackageItem';
 import { Breadcrumbs, Stack, Typography, Link } from '@mui/material';
 import { NavigateNext } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllPackageByProviderCategory } from '../manageServiceSlice';
 import packageApi from '../../../../api/packageApi';
+import { setCurrentCategoryId, setCurrentServiceId } from '../manageServiceSlice';
 
 const ServiceDetail = () => {
   const { service_id } = useParams();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [currentCategory, setCurrentCategory] = useState(null);
   const currentUserId = useSelector((state) => state.auth.currentUser.id);
   const serviceList = useSelector((state) => state.manageService.serviceList);
@@ -28,12 +28,12 @@ const ServiceDetail = () => {
         provider_id: currentUserId,
         category_id: service_id,
       });
-      console.log('🚀 ~ file: index.jsx:31 ~ loadData ~ res.data:', res.data[0].package);
       if (res.statusCode === 200) {
         setPackageList(res.data[0].package);
       }
     };
     loadData();
+    dispatch(setCurrentCategoryId(service_id));
   }, []);
 
   const handleClickBreadCrum = (event) => {
@@ -41,7 +41,6 @@ const ServiceDetail = () => {
     console.log(event.target.href.slice(21));
     navigate(event.target.href.slice(21));
   };
-  console.log('packageList', packageList);
   return (
     <div className="all-packages container">
       <div className="break-crum">
@@ -69,8 +68,13 @@ const ServiceDetail = () => {
           })}
       </div>
       <div className="add-package">
-        <button>
+        <button
+          onClick={() => {
+            dispatch(setCurrentServiceId(packageList[0].service_id));
+          }}
+        >
           <NavLink to="/provider/packages/add">Thêm báo giá</NavLink>
+          {/* <NavLink to="/provider/services/id">Thêm báo giá</NavLink> */}
         </button>
       </div>
     </div>

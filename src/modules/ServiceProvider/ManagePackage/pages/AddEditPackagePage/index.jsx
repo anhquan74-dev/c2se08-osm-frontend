@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import './AddEditPackagePage.scss';
+import packageApi from '../../../../../api/packageApi';
+import { useSelector } from 'react-redux';
 
 const AddEditPackagePage = () => {
   const { package_id } = useParams();
+  const navigate = useNavigate();
   const isEdit = Boolean(package_id);
-
+  const service_id = useSelector((state) => state.manageService.currentServiceId);
+  const category_id = useSelector((state) => state.manageService.currentCategoryId);
   const [providerPackage, setProviderPackage] = useState({
     name: '',
     description: '',
@@ -27,13 +31,18 @@ const AddEditPackagePage = () => {
   }, []);
 
   const { name, description, price, is_negotiable } = providerPackage;
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    let formValue = { ...providerPackage };
+    let formValue = { ...providerPackage, service_id: service_id };
     if (providerPackage.is_negotiable) {
-      formValue = { ...formValue, price: 0 };
+      formValue = { ...formValue, price: 0, is_negotiable: 1 };
+      await packageApi.create(formValue);
+      navigate('/provider/services/' + category_id);
+    } else {
+      formValue = { ...formValue, is_negotiable: 0 };
+      await packageApi.create(formValue);
+      navigate('/provider/services/' + category_id);
     }
-    console.log('Submit: ', formValue);
   };
 
   const handleChangePackage = (e) => {
@@ -46,7 +55,6 @@ const AddEditPackagePage = () => {
       ...providerPackage,
       [name]: value,
     });
-    console.log(providerPackage);
   };
 
   return (
@@ -90,7 +98,7 @@ const AddEditPackagePage = () => {
           <label htmlFor="description">Thêm chi tiết (không bắt buộc)</label>
           <textarea value={description} name="description" onChange={handleChangePackage} rows="7" />
         </div>
-        <button type="submit">
+        <button type="submit" onClick={handleFormSubmit}>
           <NavLink to="">Lưu</NavLink>
         </button>
       </form>

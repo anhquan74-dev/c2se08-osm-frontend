@@ -8,8 +8,8 @@ import FeedbackItem from '../../../../../components/Common/FeedbackItem';
 import SendIcon from '@mui/icons-material/Send';
 
 const PackageItem = (props) => {
+  const navigate = useNavigate();
   const packageInfo = props.packageInfo;
-  console.log('🚀 ~ file: index.jsx:12 ~ PackageItem ~ packageInfo:', packageInfo);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDetailDialog, setOpenDetailDialog] = useState(false);
   const [openDialogRemove, setOpenDialogRemove] = useState(false);
@@ -20,18 +20,14 @@ const PackageItem = (props) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const handleCloseDetailDialog = () => {
     setOpenDetailDialog(false);
   };
   const handleCloseDialogRemove = () => {
     setOpenDialogRemove(false);
   };
-
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-
-  const navigate = useNavigate();
 
   const handleClickPackageItem = () => {
     setOpenDetailDialog(true);

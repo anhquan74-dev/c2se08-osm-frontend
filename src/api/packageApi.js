@@ -17,6 +17,14 @@ const packageApi = {
     const url = `/packages/${id}`;
     return axiosClient.post(url);
   },
+  create(data) {
+    const url = '/packages';
+    return axiosClient.post(url, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Cần thiết lập Content-Type là multipart/form-data để server có thể hiểu được dữ liệu gửi lên
+      },
+    });
+  },
 };
 
 export default packageApi;

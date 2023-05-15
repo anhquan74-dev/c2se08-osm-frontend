@@ -32,6 +32,7 @@ export const getAllPackageByProviderCategory = createAsyncThunk(
 const initialState = {
   loading: false,
   serviceList: [],
+  currentServiceId: null,
   currentCategoryId: null,
   serviceProviderNotHaveList: [],
   packageByProviderCategory: [],
@@ -40,6 +41,9 @@ export const manageServiceSlice = createSlice({
   name: 'manageService',
   initialState,
   reducers: {
+    setCurrentServiceId: (state, action) => {
+      state.currentServiceId = action.payload;
+    },
     setCurrentCategoryId: (state, action) => {
       state.currentCategoryId = action.payload;
     },
@@ -89,6 +93,7 @@ export const manageServiceSlice = createSlice({
 
 //actions
 export const manageServiceActions = manageServiceSlice.actions;
+export const { setCurrentServiceId } = manageServiceSlice.actions;
 export const { setCurrentCategoryId } = manageServiceSlice.actions;
 
 //selectors
