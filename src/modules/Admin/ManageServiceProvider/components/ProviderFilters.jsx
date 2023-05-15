@@ -2,7 +2,7 @@ import { Search } from '@mui/icons-material';
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import locationApi from '../../../../api/locationApi';
-import { convertProvinceName } from '../../../../utils/common';
+import { formatProvinceName } from '../../../../utils/common';
 
 const ProviderFilters = ({ conditions, onChange }) => {
   const searchRef = useRef();
@@ -117,7 +117,7 @@ const ProviderFilters = ({ conditions, onChange }) => {
               </option>
               {cities?.map((city) => {
                 return (
-                  <option key={city.province_id} value={convertProvinceName(city.province_name)}>
+                  <option key={city.province_id} value={formatProvinceName(city.province_name)}>
                     <em>{city.province_name}</em>
                   </option>
                 );

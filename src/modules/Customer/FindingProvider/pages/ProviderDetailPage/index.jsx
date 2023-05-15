@@ -1,20 +1,21 @@
 import { Chat, LocationOn, Search } from '@mui/icons-material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Breadcrumbs, FormControl, InputLabel, Link, OutlinedInput, Stack, Typography } from '@mui/material';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import FeedbackDialog from '../../../../../components/Common/FeedbackDialog';
 import { categoryList } from '../../../Home/categoryList';
 import ProviderPackage from '../../components/ProviderPackage';
 import './ProviderDetailPage.scss';
 import Rating from '../../../../../components/Common/Rating';
+import providerApi from '../../../../../api/providerApi';
+import Skeleton from 'react-loading-skeleton';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProviderById } from '../../providerCustomerSlice';
 
 const ProviderDetailPage = () => {
-  const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
   const starArr = [1, 2, 3, 4, 5];
-
   const settings = {
     dots: true,
     infinite: true,
@@ -24,6 +25,26 @@ const ProviderDetailPage = () => {
     autoplay: true,
     autoplaySpeed: 2500,
   };
+
+  const { providerId } = useParams();
+  // const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  // const [provider, setProvider] = useState(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { provider, loading } = useSelector((state) => state.providerCustomer);
+
+  useEffect(() => {
+    if (!providerId) return;
+    // (async () => {
+    //   const res = await providerApi.get(providerId);
+    //   setLoading(false);
+    //   setProvider(res);
+    // })();
+    dispatch(getProviderById(providerId));
+  }, [providerId]);
+
+  console.log(provider);
 
   const handleClick = (event) => {
     event.preventDefault();
@@ -68,7 +89,7 @@ const ProviderDetailPage = () => {
               Tìm thợ
             </Link>
             <Typography key="3" color="text.primary">
-              Tên thợ
+              {provider?.full_name}
             </Typography>
           </Breadcrumbs>
         </Stack>
@@ -77,22 +98,25 @@ const ProviderDetailPage = () => {
         <div className="pd-left">
           <div className="avatar-rate pd-left-item">
             <div>
-              <img
-                src="https://icdn.dantri.com.vn/thumb_w/680/2023/04/01/afp-messi-1-167911043942020387261-75-0-625-881-crop-1679110702236160038944-1679118122610-1680330659064.jpeg"
-                alt="avatar"
-              />
+              {loading && <Skeleton width={205} height={205} />}
+              {!loading && <img src={provider?.avatar?.url} alt="avatar" />}
             </div>
-            <Rating starNumber={4} size="large" />
+            <Rating starNumber={provider?.avg_star} size="large" />
             <div onClick={handleOpenFeedbackDialog}>11 phản hồi</div>
             <FeedbackDialog type="provider" open={open} onClose={handleClose} />
           </div>
           <div className="pd-left-item">
             <h3>Địa điểm</h3>
             <div>
-              <h4>Thành phố Đà Nẵng</h4>
+              <h4>
+                {!loading && provider?.location?.[0].province_name}
+                {loading && <Skeleton width={100} height={20} />}
+              </h4>
               <ul>
-                <li>Hải Châu</li>
-                <li>Thanh Khê</li>
+                <li>
+                  {!loading && provider?.location?.[0].district_name}
+                  {loading && <Skeleton width={80} height={16} />}
+                </li>
               </ul>
             </div>
           </div>
@@ -101,46 +125,51 @@ const ProviderDetailPage = () => {
             <div>
               <h4>Số điện thoại</h4>
               <ul>
-                <li>+84362474855</li>
+                <li>
+                  {!loading && <>(+84){provider?.phone_number}</>}
+                  {loading && <Skeleton width={80} height={16} />}
+                </li>
               </ul>
             </div>
             <div>
               <h4>Email</h4>
               <ul>
-                <li>trananhquan0704@gmail.com</li>
+                <li>
+                  {!loading && provider?.email}
+                  {loading && <Skeleton width={80} height={16} />}
+                </li>
               </ul>
             </div>
           </div>
         </div>
         <div className="pd-right">
           <div className="provider-name">
-            <span>Điện lạnh Hưng Thịnh</span>
+            <span>
+              {!loading && provider?.full_name}
+              {loading && <Skeleton width={250} height={30} />}
+            </span>
             <span>
               <Chat fontSize="small" />
               Chat
             </span>
           </div>
           <div className="provider-desc">
-            👨‍🔧ĐIỆN LẠNH HƯNG THỊNH - HOTLINE: 0987.880.307 📌 Chúng tôi chuyên: ✓ Sữa chữa, vệ sinh, lắp đặt các thiết
-            bị điện lạnh: tủ lạnh, máy giặt, máy lạnh, máy nước nóng... ✓ Mua bán trao đổi các mặt hàng điện máy mới và
-            cũ.... ✓ Nhận bảo trì thi công Điện - Nước cho công ty, khách sạn, nhà hàng..... -----------------------
-            LIÊN HỆ SỬA CHỮA ĐIỆN LẠNH TẠI NHÀ - ĐIỆN LẠNH HƯNG THỊNH ☎️ Hotline | zalo: 0987.880.307 🏠 Địa chỉ | L7
-            688/57 - Lê Đức Thọ- P17 Gò Vấp
+            {!loading && provider?.introduction}
+            {loading && <Skeleton width={890} height={70} />}
           </div>
           <div className="provider-slick">
-            <Slider {...settings}>
-              {categoryList.map((item, index) => {
-                return (
-                  <>
-                    <img
-                      key={index}
-                      src="https://icdn.dantri.com.vn/thumb_w/680/2023/04/01/afp-messi-1-167911043942020387261-75-0-625-881-crop-1679110702236160038944-1679118122610-1680330659064.jpeg"
-                      alt="image"
-                    />
-                  </>
-                );
-              })}
-            </Slider>
+            {!loading && (
+              <Slider {...settings}>
+                {provider?.banner?.map((item, index) => {
+                  return (
+                    <>
+                      <img key={index} src={item?.url} alt="image" />
+                    </>
+                  );
+                })}
+              </Slider>
+            )}
+            {loading && <Skeleton width={890} height={180} />}
           </div>
           <div className="provider-package">
             <ProviderPackage />

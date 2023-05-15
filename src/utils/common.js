@@ -24,10 +24,49 @@ export const formatBirthDay = (date) => {
   return `${t[2]}-${t[1]}-${t[0]}`;
 };
 
-export const convertProvinceName = (value) => {
+export const convertProvinceIdToProvinceName = (provinceId, provinces) => {
+  let provinceName = '';
+  for (let i = 0; i < provinces.length; i++) {
+    if (provinces[i].province_id === provinceId) {
+      provinceName = formatProvinceName(provinces[i].province_name);
+      break;
+    }
+  }
+  return provinceName;
+};
+export const convertDistrictIdToDistrictName = (districtId, districts) => {
+  let districtName = '';
+  for (let i = 0; i < districts.length; i++) {
+    if (districts[i].district_id === districtId) {
+      districtName = formatDistrictName(districts[i].district_name);
+      break;
+    }
+  }
+  return districtName;
+};
+export const formatProvinceName = (value) => {
   if (value.includes('Thành phố')) {
     return value.slice(10);
   }
 
   return value.slice(5);
+};
+export const formatDistrictName = (value) => {
+  if (value.includes('Thành phố')) {
+    return value.slice(10);
+  }
+
+  if (value.includes('Huyện')) {
+    return value.slice(6);
+  }
+
+  if (value.includes('Thị xã')) {
+    return value.slice(7);
+  }
+
+  if (value.includes('Quận')) {
+    return value.slice(5);
+  }
+
+  return value;
 };

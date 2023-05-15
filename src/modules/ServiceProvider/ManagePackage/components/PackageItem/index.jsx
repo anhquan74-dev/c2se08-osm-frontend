@@ -43,7 +43,7 @@ const PackageItem = (props) => {
 
   const handleRemovePackage = () => {};
   return (
-    <div className="package-item">
+    <div className="pro-package-item">
       <div className="item-left">
         <h4 onClick={handleClickPackageItem}>{packageInfo?.name}</h4>
         {/* check star */}

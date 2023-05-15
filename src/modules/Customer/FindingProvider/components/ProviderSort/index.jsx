@@ -1,7 +1,7 @@
 import { Search } from '@mui/icons-material';
 import { FormControl, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import React from 'react';
+import React, { useRef } from 'react';
 import './ProviderSort.scss';
 
 const theme = createTheme({
@@ -13,6 +13,9 @@ const theme = createTheme({
 });
 
 const ProviderSort = ({ onChange, conditions }) => {
+  const searchRef = useRef();
+  const typingTimeoutRef = useRef(null);
+
   const handleSortChange = (e) => {
     const { value } = e.target;
     const sortFollow = value.split('.');
@@ -37,6 +40,31 @@ const ProviderSort = ({ onChange, conditions }) => {
     }
     onChange(newConditions);
   };
+
+  const handleSearchChange = (e) => {
+    const { value } = e.target;
+    if (!onChange) return;
+    console.log(value);
+    // debounce
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+
+    typingTimeoutRef.current = setTimeout(() => {
+      const newConditions = {
+        ...conditions,
+        filter: {
+          ...conditions.filter,
+          full_name: value,
+          name: value,
+        },
+        page: 1,
+      };
+      console.log(newConditions);
+      onChange(newConditions);
+    }, 500);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <div className="provider-sort-main">
@@ -50,6 +78,8 @@ const ProviderSort = ({ onChange, conditions }) => {
               id="searchByName"
               endAdornment={<Search position="start"></Search>}
               label="Tìm kiểm theo tên"
+              onChange={handleSearchChange}
+              inputRef={searchRef}
             />
           </FormControl>
         </div>

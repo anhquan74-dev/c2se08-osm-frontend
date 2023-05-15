@@ -37,34 +37,49 @@ const ProviderServiceList = ({ type, listResult }) => {
 
   let show;
   if (type === 'provider') {
-    show = <ProviderList list={listResult} />;
+    show = <ProviderList />;
   } else {
-    show = <ServiceList list={listResult} />;
+    show = <ServiceList />;
   }
 
   return <div className="list-show-content">{show}</div>;
 };
 
-const ProviderList = ({ list }) => {
-  let providerList = [2, 3, 4, 6, 3, 6, 3, 6, 34, 6, 43, 6];
-  providerList.length = 12;
+const ProviderList = () => {
+  const { providerList, packageList, conditions, loading } = useSelector((state) => state.providerCustomer);
   return (
     <>
-      {list?.map((item, index) => {
-        return <ProviderCard key={index} {...item} />;
-      })}
+      {loading &&
+        Array(12)
+          .fill(0)
+          .map((_, index) => {
+            return <ProviderCard.Loading key={index} />;
+          })}
+      {!loading &&
+        providerList?.data?.map((item, index) => {
+          return <ProviderCard key={index} {...item} />;
+        })}
     </>
   );
 };
 
-const ServiceList = ({ list }) => {
-  let serviceList = [2, 3, 4, 6, 3, 6, 3, 6, 34, 6, 43, 6];
-  serviceList.length = 12;
+const ServiceList = () => {
+  const { providerList, packageList, conditions, loading } = useSelector((state) => state.providerCustomer);
+
   return (
     <>
-      {list?.map((item, index) => {
-        return <ServiceCard key={index} {...item} />;
-      })}
+      {loading &&
+        Array(12)
+          .fill(0)
+          .map((_, index) => {
+            return <ServiceCard.Loading key={index} />;
+          })}
+      {!loading &&
+        packageList.data?.map((item, index) => {
+          /* if (index < 12) {
+          } */
+          return <ServiceCard key={index} {...item} />;
+        })}
     </>
   );
 };

@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Category } from '../../../components/Common';
-import './Home.scss';
-import HomeContent from '../../../components/Common/HomeContent';
-import SearchBar from '../../../components/Common/SearchBar';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import banner1 from '../../../assets/images/banner1.jpg';
 import banner2 from '../../../assets/images/banner2.png';
 import dangkytho from '../../../assets/images/dangkytho.jpeg';
-import categoryApi from '../../../api/categoryApi';
-import { PAGE_DEFAULT } from '../../../utils/constants';
-import { useDispatch, useSelector } from 'react-redux';
+import { Category } from '../../../components/Common';
+import HomeContent from '../../../components/Common/HomeContent';
+import SearchBar from '../../../components/Common/SearchBar';
 import { getCategories } from '../../Admin/Category/categorySlice';
+import './Home.scss';
 
 const Home = () => {
   const contentArr = [
@@ -24,12 +22,12 @@ const Home = () => {
   ];
   // const [categoryList, setCategoryList] = useState([]);
   const dispatch = useDispatch();
-  const categoryList = useSelector((state) => state.category.list);
+  const { list, loading } = useSelector((state) => state.category);
 
   useEffect(() => {
-    dispatch(getCategories());
+    if (list.length === 0) dispatch(getCategories());
   }, []);
-  // console.log(categoryList);
+  console.log(list);
   return (
     <div className="home-container container">
       <SearchBar />
@@ -47,9 +45,16 @@ const Home = () => {
       <div className="home-category">
         <h3>Danh mục dịch vụ OSM System</h3>
         <div className="category-content">
-          {categoryList.map((item, index) => {
-            return <Category key={index} icon={item.logo} title={item.name} />;
-          })}
+          {loading &&
+            Array(8)
+              .fill(0)
+              .map((_, index) => {
+                return <Category.Loading key={index} />;
+              })}
+          {!loading &&
+            list?.map((item, index) => {
+              return <Category key={index} icon={item.logo} title={item.name} />;
+            })}
         </div>
       </div>
       {contentArr.map((item, index) => {

@@ -5,6 +5,9 @@ const locationApi = {
   getPublicProvinces() {
     return axios.get('https://vapi.vnappmob.com/api/province');
   },
+  getPublicDistricts(provinceId) {
+    return axios.get(`https://vapi.vnappmob.com/api/province/district/${provinceId}`);
+  },
   getLocationByUserId(id) {
     const url = `/locations-by-user/${id}`;
     return axiosClient.get(url);

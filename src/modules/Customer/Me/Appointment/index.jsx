@@ -1,47 +1,54 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Appointment.scss';
 import EmptyAppointment from './EmptyAppointment';
 import AppointmentItem from './AppointmentItem';
+import appointmentApi from '../../../../api/appointmentApi';
 
 const Appointment = () => {
-  const [statusPicker, setStatusPicker] = useState(0);
-  // fetch danh sách appointment theo status
-  // --> listAppointment
-  const listAppointment = [{}];
+  const [statusPicker, setStatusPicker] = useState('new-or-offered');
+  const [listAppointment, setListAppointment] = useState();
+  useEffect(() => {
+    (async () => {
+      const res = await appointmentApi.getByStatus(statusPicker);
+      console.log(res);
+      setListAppointment(res.data);
+    })();
+  }, [statusPicker]);
+  console.log(listAppointment);
   return (
     <div className="me-appointment">
       <div className="appointment-status">
         <div
-          className={`status-item ${statusPicker === 0 ? 'active' : ''}`}
+          className={`status-item ${statusPicker === 'new-or-offered' ? 'active' : ''}`}
           onClick={() => {
-            setStatusPicker(0);
+            setStatusPicker('new-or-offered');
           }}
         >
           <span>Yêu cầu</span>
           <span>0</span>
         </div>
         <div
-          className={`status-item ${statusPicker === 1 ? 'active' : ''}`}
+          className={`status-item ${statusPicker === 'appointed' ? 'active' : ''}`}
           onClick={() => {
-            setStatusPicker(1);
+            setStatusPicker('appointed');
           }}
         >
           <span>Lịch hẹn</span>
           <span>1</span>
         </div>
         <div
-          className={`status-item ${statusPicker === 2 ? 'active' : ''}`}
+          className={`status-item ${statusPicker === 'done' ? 'active' : ''}`}
           onClick={() => {
-            setStatusPicker(2);
+            setStatusPicker('done');
           }}
         >
           <span>Đã xong</span>
           <span>1</span>
         </div>
         <div
-          className={`status-item ${statusPicker === 3 ? 'active' : ''}`}
+          className={`status-item ${statusPicker === 'canceled' ? 'active' : ''}`}
           onClick={() => {
-            setStatusPicker(3);
+            setStatusPicker('canceled');
           }}
         >
           <span>Đã hủy</span>
@@ -49,10 +56,10 @@ const Appointment = () => {
         </div>
       </div>
       <div className="appointment-content">
-        {listAppointment.length === 0 ? (
+        {listAppointment?.length === 0 ? (
           <EmptyAppointment status={statusPicker} />
         ) : (
-          listAppointment.map((item, index) => {
+          listAppointment?.map((item, index) => {
             return <AppointmentItem key={index} status={statusPicker} appointment={item} />;
           })
         )}

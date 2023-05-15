@@ -4,6 +4,7 @@ import { GoogleMap, InfoWindow, Marker, useLoadScript } from '@react-google-maps
 import Rating from '../Rating';
 import { NavLink } from 'react-router-dom';
 import CustomMarker from '../../../assets/images/man.png';
+import { useSelector } from 'react-redux';
 
 const markers = [
   {
@@ -42,15 +43,16 @@ const markers = [
   },
 ];
 
-const ProvidersOnMap = ({ providerList }) => {
+const ProvidersOnMap = () => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_REACT_APP_GOOGLE_MAPS_API_KEY, // Add your API key
   });
-  console.log(isLoaded);
   return <div className="provider-on-map">{isLoaded && <Map />}</div>;
 };
 
 const Map = () => {
+  const { providerList, loading, conditions } = useSelector((state) => state.providerCustomer);
+  console.log(providerList.data);
   const [center, setCenter] = useState({});
   useEffect(() => {
     getLocation();
@@ -70,6 +72,15 @@ const Map = () => {
     });
     console.log('Latitude: ' + position.coords.latitude + ' Longitude: ' + position.coords.longitude);
   }
+
+  useEffect(() => {
+    console.log('change - ,', conditions);
+    setCenter({
+      lat: parseFloat(providerList?.data?.[0]?.location?.[0].coords_latitude),
+      lng: parseFloat(providerList?.data?.[0]?.location?.[0].coords_longitude),
+    });
+  }, [providerList]);
+  console.log(center);
   const [activeMarker, setActiveMarker] = useState(null);
 
   const handleActiveMarker = (marker) => {
@@ -92,37 +103,47 @@ const Map = () => {
       onClick={() => setActiveMarker(null)}
       mapContainerStyle={{ width: '100vw', height: '100vh' }}
       center={center}
-      zoom={13}
+      zoom={12}
     >
-      {markers.map(({ id, name, image, price, rate, position }) => (
-        <Marker key={id} position={position} onClick={() => handleActiveMarker(id)} options={{ icon: CustomMarker }}>
-          {activeMarker === id ? (
-            <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-              <div className="gmap-infowindow">
-                <div className="gmap-image">
-                  <div>
-                    <img src={image} alt="Placeholder image" />
+      {providerList?.data?.map((provider, index) => {
+        return (
+          <Marker
+            key={provider?.id}
+            position={{
+              lat: parseFloat(provider?.location?.[0].coords_latitude),
+              lng: parseFloat(provider?.location?.[0].coords_longitude),
+            }}
+            onClick={() => handleActiveMarker(provider?.id)}
+            options={{ icon: CustomMarker }}
+          >
+            {activeMarker === provider?.id ? (
+              <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+                <div className="gmap-infowindow">
+                  <div className="gmap-image">
+                    <div>
+                      <img src={provider?.avatar?.url} alt="Placeholder image" />
+                    </div>
+                  </div>
+                  <div className="gmap-detail pt-1">
+                    <p className="marker-name mb-1">{provider?.full_name}</p>
+                    <div className="marker-des mb-1">
+                      <span className="mr-2">
+                        <Rating starNumber={provider?.avg_star} />
+                      </span>
+                      <span>
+                        Giá từ <span style={{ fontWeight: 800 }}>{provider?.price} vnđ</span>
+                      </span>
+                    </div>
+                    <NavLink className="marker-view-detail event-tracking" to={`/finding-provider/${provider?.id}`}>
+                      Xem Chi Tiết
+                    </NavLink>
                   </div>
                 </div>
-                <div className="gmap-detail pt-1">
-                  <p className="marker-name mb-1">{name}</p>
-                  <div className="marker-des mb-1">
-                    <span className="mr-2">
-                      <Rating starNumber={rate} />
-                    </span>
-                    <span>
-                      Giá từ <span style={{ fontWeight: 800 }}>{price} vnđ</span>
-                    </span>
-                  </div>
-                  <NavLink className="marker-view-detail event-tracking" to={`/finding-provider/${id}`}>
-                    Xem Chi Tiết
-                  </NavLink>
-                </div>
-              </div>
-            </InfoWindow>
-          ) : null}
-        </Marker>
-      ))}
+              </InfoWindow>
+            ) : null}
+          </Marker>
+        );
+      })}
     </GoogleMap>
   );
 };

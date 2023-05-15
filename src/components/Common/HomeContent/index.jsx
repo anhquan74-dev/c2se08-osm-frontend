@@ -5,9 +5,13 @@ import ServiceCard from '../ServiceCard';
 import providerApi from '../../../api/providerApi.js';
 import { PAGE_DEFAULT } from '../../../utils/constants';
 import packageApi from '../../../api/packageApi';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPackages, getProviders } from '../../../modules/Customer/FindingProvider/providerCustomerSlice';
 
 const HomeContent = ({ ...props }) => {
   const { title, type } = props;
+  const navigate = useNavigate();
 
   let list;
   if (type === 'provider') {
@@ -20,7 +24,13 @@ const HomeContent = ({ ...props }) => {
     <div className="home-content container">
       <div className="title-content">
         <h3>{title}</h3>
-        <p>Xem tất cả</p>
+        <p
+          onClick={() => {
+            navigate('/finding-provider');
+          }}
+        >
+          Xem tất cả
+        </p>
       </div>
       <div className="main-content">{list}</div>
     </div>
@@ -28,11 +38,12 @@ const HomeContent = ({ ...props }) => {
 };
 
 const ProviderList = () => {
-  const [providerList, setProviderList] = useState([]);
+  const dispatch = useDispatch();
+  const { loading, providerList } = useSelector((state) => state.providerCustomer);
 
   useEffect(() => {
-    (async () => {
-      const res = await providerApi.getAll({
+    dispatch(
+      getProviders({
         sort: [
           {
             sort_by: 'avg_star',
@@ -41,37 +52,59 @@ const ProviderList = () => {
         ],
         page: PAGE_DEFAULT,
         limit: 12,
-      });
-      setProviderList(res.data);
-    })();
+      })
+    );
   }, []);
 
   return (
     <>
-      {providerList?.map((item, index) => {
-        return <ProviderCard key={index} {...item} />;
-      })}
+      {loading &&
+        Array(12)
+          .fill(0)
+          .map((_, index) => {
+            return <ProviderCard.Loading key={index} />;
+          })}
+      {!loading &&
+        providerList.data?.map((item, index) => {
+          return <ProviderCard key={index} {...item} />;
+        })}
     </>
   );
 };
 
 const ServiceList = () => {
-  const [servicePackageList, setServicePackageList] = useState([]);
-
+  const dispatch = useDispatch();
+  const { loading, packageList } = useSelector((state) => state.providerCustomer);
+  console.log(packageList);
   useEffect(() => {
-    (async () => {
-      const res = await packageApi.getAll();
-      setServicePackageList(res.data);
-    })();
+    dispatch(
+      getPackages({
+        sort: [
+          {
+            sort_by: 'avg_star',
+            sort_dir: 'desc',
+          },
+        ],
+        page: PAGE_DEFAULT,
+        limit: 12,
+      })
+    );
   }, []);
 
   return (
     <>
-      {servicePackageList?.map((item, index) => {
-        if (index < 12) {
+      {loading &&
+        Array(12)
+          .fill(0)
+          .map((_, index) => {
+            return <ServiceCard.Loading key={index} />;
+          })}
+      {!loading &&
+        packageList.data?.map((item, index) => {
+          /* if (index < 12) {
+          } */
           return <ServiceCard key={index} {...item} />;
-        }
-      })}
+        })}
     </>
   );
 };
