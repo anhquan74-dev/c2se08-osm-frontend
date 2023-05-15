@@ -1,6 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import providerApi from '../../../api/providerApi';
-import { LIMIT_DEFAULT, PAGE_DEFAULT } from '../../../utils/constants';
 import categoryApi from '../../../api/categoryApi';
 import packageApi from '../../../api/packageApi';
 
@@ -25,7 +23,8 @@ export const getAllPackageByProviderCategory = createAsyncThunk(
   'manageService/getAllPackageByProviderCategory',
   async (request) => {
     const res = await packageApi.getAllPackageByProviderCategory(request);
-    return res.data;
+    return res.data[0].package;
+    console.log('🚀 ~ file: manageServiceSlice.js:28 ~ res.data[0].package:', res.data[0].package);
   }
 );
 //setup state

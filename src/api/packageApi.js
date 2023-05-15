@@ -25,6 +25,10 @@ const packageApi = {
       },
     });
   },
+  delete(id) {
+    const url = `hard-delete-package/${id}`;
+    return axiosClient.post(url);
+  },
 };
 
 export default packageApi;

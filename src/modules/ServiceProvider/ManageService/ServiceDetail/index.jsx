@@ -5,8 +5,7 @@ import PackageItem from '../../ManagePackage/components/PackageItem';
 import { Breadcrumbs, Stack, Typography, Link } from '@mui/material';
 import { NavigateNext } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import packageApi from '../../../../api/packageApi';
-import { setCurrentCategoryId, setCurrentServiceId } from '../manageServiceSlice';
+import { getAllPackageByProviderCategory, setCurrentCategoryId, setCurrentServiceId } from '../manageServiceSlice';
 
 const ServiceDetail = () => {
   const { service_id } = useParams();
@@ -15,8 +14,7 @@ const ServiceDetail = () => {
   const [currentCategory, setCurrentCategory] = useState(null);
   const currentUserId = useSelector((state) => state.auth.currentUser.id);
   const serviceList = useSelector((state) => state.manageService.serviceList);
-  const [packageList, setPackageList] = useState([]);
-
+  const packageList = useSelector((state) => state.manageService.packageByProviderCategory);
   useEffect(() => {
     const loadData = async () => {
       serviceList.map((item) => {
@@ -24,18 +22,16 @@ const ServiceDetail = () => {
           setCurrentCategory(item.dataCategory[0]);
         }
       });
-      const res = await packageApi.getAllPackageByProviderCategory({
-        provider_id: currentUserId,
-        category_id: service_id,
-      });
-      if (res.statusCode === 200) {
-        setPackageList(res.data[0].package);
-      }
+      dispatch(
+        getAllPackageByProviderCategory({
+          provider_id: currentUserId,
+          category_id: service_id,
+        })
+      );
     };
     loadData();
     dispatch(setCurrentCategoryId(service_id));
   }, []);
-
   const handleClickBreadCrum = (event) => {
     event.preventDefault();
     console.log(event.target.href.slice(21));
@@ -64,7 +60,7 @@ const ServiceDetail = () => {
       <div className="packages-content">
         {packageList &&
           packageList.map((item, index) => {
-            return <PackageItem key={index} packageInfo={item} />;
+            return <PackageItem key={index} packageInfo={item} provider_id={currentUserId} category_id={service_id} />;
           })}
       </div>
       <div className="add-package">

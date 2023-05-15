@@ -6,10 +6,15 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import { NavLink, useNavigate } from 'react-router-dom';
 import FeedbackItem from '../../../../../components/Common/FeedbackItem';
 import SendIcon from '@mui/icons-material/Send';
+import packageApi from '../../../../../api/packageApi';
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllPackageByProviderCategory } from '../../../ManageService/manageServiceSlice';
 
 const PackageItem = (props) => {
-  const navigate = useNavigate();
-  const packageInfo = props.packageInfo;
+  // const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { packageInfo, provider_id, category_id } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDetailDialog, setOpenDetailDialog] = useState(false);
   const [openDialogRemove, setOpenDialogRemove] = useState(false);
@@ -37,7 +42,19 @@ const PackageItem = (props) => {
     setOpenDialogRemove(true);
   };
 
-  const handleRemovePackage = () => {};
+  const handleRemovePackage = async () => {
+    const res = await packageApi.delete(packageInfo.id);
+    if (res.statusCode == 200) {
+      setAnchorEl(null);
+      toast.success('Xóa báo giá thành công!');
+      dispatch(
+        getAllPackageByProviderCategory({
+          provider_id,
+          category_id,
+        })
+      );
+    }
+  };
   return (
     <div className="pro-package-item">
       <div className="item-left">
@@ -51,7 +68,14 @@ const PackageItem = (props) => {
         <p>{packageInfo?.description}</p>
         <strong>{packageInfo?.price} đ</strong>
       </div>
-      <div className="item-right" onClick={handleClickSetting}>
+      <div
+        className="item-right"
+        onClick={handleClickSetting}
+        // onClick={(event) => {
+        //   handleClickSetting(event);
+        //   setPackageIdDelete(item.dataCategory[0]?.id);
+        // }}
+      >
         <SettingsIcon />
       </div>
       <Popover
