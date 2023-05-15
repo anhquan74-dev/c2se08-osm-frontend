@@ -19,7 +19,7 @@ const ProviderPackage = () => {
     (async () => {
       const res = await packageApi.getAllByServiceId(serviceId);
       setLoading(false);
-      setPackages(res.data);
+      setPackages(res?.data);
     })();
   };
   console.log(packages);
@@ -27,7 +27,7 @@ const ProviderPackage = () => {
   return (
     <div className="provider-package-wrapper">
       <ServicePicker handleChangeService={handleChangeService} services={services} />
-      {packages?.length === 0 && (
+      {!packages && (
         <div className="empty">
           <img src={Empty} alt="" />
           Chưa có báo giá

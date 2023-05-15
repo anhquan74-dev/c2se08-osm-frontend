@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import categoryApi from '../../../api/categoryApi';
 import packageApi from '../../../api/packageApi';
+import feedbackApi from '../../../api/feedbackApi';
 
 export const getCategoriesForProvider = createAsyncThunk('manageService/getCategoriesForProvider', async (request) => {
   const res = await categoryApi.getCategoriesForProvider(request);
@@ -27,6 +28,13 @@ export const getAllPackageByProviderCategory = createAsyncThunk(
     console.log('🚀 ~ file: manageServiceSlice.js:28 ~ res.data[0].package:', res.data[0].package);
   }
 );
+export const getAllFeedbackByPackage = createAsyncThunk('manageService/getAllFeedbackByPackage', async (request) => {
+  const res = await feedbackApi.getAllFeedbackByPackage(request);
+  if (res.statusCode == 200) {
+    return res.feedbackList;
+  }
+  return [];
+});
 //setup state
 const initialState = {
   loading: false,
@@ -35,6 +43,7 @@ const initialState = {
   currentCategoryId: null,
   serviceProviderNotHaveList: [],
   packageByProviderCategory: [],
+  feedbackByPackage: [],
 };
 export const manageServiceSlice = createSlice({
   name: 'manageService',
@@ -78,13 +87,22 @@ export const manageServiceSlice = createSlice({
     builder.addCase(getAllPackageByProviderCategory.pending, (state, action) => {
       state.loading = true;
     });
-
     builder.addCase(getAllPackageByProviderCategory.fulfilled, (state, action) => {
       state.loading = false;
       state.packageByProviderCategory = action.payload;
     });
-
     builder.addCase(getAllPackageByProviderCategory.rejected, (state, action) => {
+      state.loading = false;
+    });
+    // feedback by package_id
+    builder.addCase(getAllFeedbackByPackage.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(getAllFeedbackByPackage.fulfilled, (state, action) => {
+      state.loading = false;
+      state.feedbackByPackage = action.payload;
+    });
+    builder.addCase(getAllFeedbackByPackage.rejected, (state, action) => {
       state.loading = false;
     });
   },

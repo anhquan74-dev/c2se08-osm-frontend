@@ -9,10 +9,12 @@ import SendIcon from '@mui/icons-material/Send';
 import packageApi from '../../../../../api/packageApi';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllPackageByProviderCategory } from '../../../ManageService/manageServiceSlice';
+import { getAllFeedbackByPackage, getAllPackageByProviderCategory } from '../../../ManageService/manageServiceSlice';
 
 const PackageItem = (props) => {
   // const navigate = useNavigate();
+  const feedbackListByPackage = useSelector((state) => state.manageService.feedbackByPackage);
+  console.log(' feedbackList::::::', feedbackListByPackage);
   const dispatch = useDispatch();
   const { packageInfo, provider_id, category_id } = props;
   const [anchorEl, setAnchorEl] = useState(null);
@@ -36,6 +38,7 @@ const PackageItem = (props) => {
 
   const handleClickPackageItem = () => {
     setOpenDetailDialog(true);
+    dispatch(getAllFeedbackByPackage(packageInfo.id));
   };
 
   const handleRemoveClick = () => {
@@ -68,14 +71,7 @@ const PackageItem = (props) => {
         <p>{packageInfo?.description}</p>
         <strong>{packageInfo?.price} đ</strong>
       </div>
-      <div
-        className="item-right"
-        onClick={handleClickSetting}
-        // onClick={(event) => {
-        //   handleClickSetting(event);
-        //   setPackageIdDelete(item.dataCategory[0]?.id);
-        // }}
-      >
+      <div className="item-right" onClick={handleClickSetting}>
         <SettingsIcon />
       </div>
       <Popover
@@ -97,7 +93,7 @@ const PackageItem = (props) => {
       >
         <ul className="profile-popover">
           <li>
-            <NavLink to="/provider/packages/1">Chỉnh sửa</NavLink>
+            <NavLink to={`/provider/packages/${packageInfo.id}`}>Chỉnh sửa</NavLink>
           </li>
           <li>
             <NavLink to="" onClick={handleRemoveClick}>
@@ -111,47 +107,56 @@ const PackageItem = (props) => {
         onClose={handleCloseDetailDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        maxWidth="md"
+        fullWidth
       >
         <DialogTitle id="alert-dialog-title">Chi tiết Báo giá</DialogTitle>
         <DialogContent>
           <div className="package-detail-dialog">
-            <h3>Sửa xe máy, xe honda</h3>
+            <h3>{packageInfo?.name}</h3>
             <div className="rate-price">
-              <strong>200.000đ</strong>
+              <strong>{packageInfo?.price}đ</strong>
               <span></span>
               <div className="star">
                 <Star sx={{ color: '#ffbe17' }} />
-                <span>5/5</span>
+                <span>{packageInfo?.avg_star}/5</span>
               </div>
             </div>
             <hr />
             <div className="desc">
               <h4>Thêm chi tiết</h4>
-              <div>Gọi đâu có đó, có thể thương lượng giá tùy trường hợp</div>
+              <div>{packageInfo?.description}</div>
             </div>
             <hr />
             <div className="feedback">
               <h4>Đánh giá</h4>
-              <div className="feedback-content">
-                <div className="content-up">
-                  <FeedbackItem />
-                </div>
-                <div className="content-down">
-                  {/* check provider đã trả lời hay chưa */}
-                  <p>Phản hồi của nhà cung cấp</p>
-                  <>
-                    <div className="reply">
-                      <input type="text" name="" id="" placeholder="Nhập câu trả lời" />
-                      <SendIcon color="" />
-                    </div>
-                    <span>Bạn chỉ được phản hồi đánh giá một lần</span>
-                  </>
-                  <>
-                    {/* <div className="content">Cảm ơn ông nha</div>
-                    <div className="date">06/02/2023</div> */}
-                  </>
-                </div>
+              <div className="feedback-container">
+                {feedbackListByPackage &&
+                  feedbackListByPackage.map((item, index) => {
+                    return (
+                      <div className="feedback-content">
+                        <div className="content-up">
+                          <FeedbackItem key={index} feedbackInfo={item} />
+                        </div>
+                        <div className="content-down">
+                          {item?.feedback?.reply ? (
+                            <>
+                              <div className="content">Cảm ơn ông nha</div>
+                              <div className="date">06/02/2023</div>
+                            </>
+                          ) : (
+                            <>
+                              <p>Phản hồi của nhà cung cấp</p>
+                              <div className="reply">
+                                <input type="text" name="" id="" placeholder="Nhập câu trả lời" />
+                                <SendIcon color="" />
+                              </div>
+                              <span>Bạn chỉ được phản hồi đánh giá một lần</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           </div>
