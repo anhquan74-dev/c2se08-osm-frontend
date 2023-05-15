@@ -3,13 +3,40 @@ import './Appointment.scss';
 import EmptyAppointment from './EmptyAppointment';
 import AppointmentItem from './AppointmentItem';
 import appointmentApi from '../../../../api/appointmentApi';
+import Skeleton from 'react-loading-skeleton';
 
 const Appointment = () => {
   const [statusPicker, setStatusPicker] = useState('new-or-offered');
   const [listAppointment, setListAppointment] = useState();
+  const [loading, setLoading] = useState(true);
+  const [totalAppoinment, setTotalAppointment] = useState({
+    newOrOffered: 0,
+    appointed: 0,
+    done: 0,
+    canceled: 0,
+  });
+
   useEffect(() => {
     (async () => {
+      const newOrOffered = (await appointmentApi.getTotalByStatus('new-or-offered'))?.data;
+      const appointed = (await appointmentApi.getTotalByStatus('appointed'))?.data;
+      const done = (await appointmentApi.getTotalByStatus('done'))?.data;
+      const canceled = (await appointmentApi.getTotalByStatus('canceled'))?.data;
+      setTotalAppointment({
+        ...totalAppoinment,
+        newOrOffered,
+        appointed,
+        done,
+        canceled,
+      });
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
       const res = await appointmentApi.getByStatus(statusPicker);
+      setLoading(false);
       console.log(res);
       setListAppointment(res.data);
     })();
@@ -25,7 +52,7 @@ const Appointment = () => {
           }}
         >
           <span>Yêu cầu</span>
-          <span>0</span>
+          <span>{totalAppoinment?.newOrOffered}</span>
         </div>
         <div
           className={`status-item ${statusPicker === 'appointed' ? 'active' : ''}`}
@@ -34,7 +61,7 @@ const Appointment = () => {
           }}
         >
           <span>Lịch hẹn</span>
-          <span>1</span>
+          <span>{totalAppoinment?.appointed}</span>
         </div>
         <div
           className={`status-item ${statusPicker === 'done' ? 'active' : ''}`}
@@ -43,7 +70,7 @@ const Appointment = () => {
           }}
         >
           <span>Đã xong</span>
-          <span>1</span>
+          <span>{totalAppoinment?.done}</span>
         </div>
         <div
           className={`status-item ${statusPicker === 'canceled' ? 'active' : ''}`}
@@ -52,17 +79,23 @@ const Appointment = () => {
           }}
         >
           <span>Đã hủy</span>
-          <span>0</span>
+          <span>{totalAppoinment?.canceled}</span>
         </div>
       </div>
       <div className="appointment-content">
-        {listAppointment?.length === 0 ? (
-          <EmptyAppointment status={statusPicker} />
-        ) : (
-          listAppointment?.map((item, index) => {
-            return <AppointmentItem key={index} status={statusPicker} appointment={item} />;
-          })
+        {loading && (
+          <div style={{ margin: '8px 0 0 0' }}>
+            <Skeleton width={915} height={420} />
+          </div>
         )}
+        {!loading &&
+          (listAppointment?.length === 0 ? (
+            <EmptyAppointment status={statusPicker} />
+          ) : (
+            listAppointment?.map((item, index) => {
+              return <AppointmentItem key={index} status={statusPicker} appointment={item} />;
+            })
+          ))}
       </div>
     </div>
   );

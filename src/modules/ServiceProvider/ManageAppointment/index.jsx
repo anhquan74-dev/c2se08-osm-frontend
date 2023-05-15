@@ -1,21 +1,60 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './ManageAppointment.scss';
 import { AppointmentItem, EmptyAppointment } from '../../../components/Common';
 import { Breadcrumbs, Link, Stack, Typography } from '@mui/material';
 import { NavigateNext } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import appointmentApi from '../../../api/appointmentApi';
 
 const ManageAppointment = () => {
-  const [statusPicker, setStatusPicker] = useState(0);
+  const [statusPicker, setStatusPicker] = useState('new');
   // fetch danh sách appointment theo status
   // --> listAppointment
-  const listAppointment = [{}];
   const navigate = useNavigate();
   const handleClickBreadCrum = (event) => {
     console.log(event.target.href);
     event.preventDefault();
     navigate(event.target.href.slice(21));
   };
+
+  const [listAppointment, setListAppointment] = useState();
+  const [loading, setLoading] = useState(true);
+  const [totalAppointment, setTotalAppointment] = useState({
+    new: 0,
+    offered: 0,
+    appointed: 0,
+    done: 0,
+    canceled: 0,
+  });
+
+  useEffect(() => {
+    (async () => {
+      const newStatus = (await appointmentApi.getTotalByStatus('new'))?.data;
+      const offered = (await appointmentApi.getTotalByStatus('offered'))?.data;
+      const appointed = (await appointmentApi.getTotalByStatus('appointed'))?.data;
+      const done = (await appointmentApi.getTotalByStatus('done'))?.data;
+      const canceled = (await appointmentApi.getTotalByStatus('canceled'))?.data;
+      setTotalAppointment({
+        ...totalAppointment,
+        new: newStatus,
+        offered,
+        appointed,
+        done,
+        canceled,
+      });
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      const res = await appointmentApi.getByStatus(statusPicker);
+      setLoading(false);
+      console.log(res);
+      setListAppointment(res.data);
+    })();
+  }, [statusPicker]);
+  console.log(listAppointment);
   return (
     <div className="provider-appointment container">
       <div className="break-crum">
@@ -40,7 +79,7 @@ const ManageAppointment = () => {
             }}
           >
             <span>Yêu cầu đã nhận</span>
-            <span>0</span>
+            <span>{totalAppointment?.new}</span>
           </div>
           <div
             className={`status-item ${statusPicker === 1 ? 'active' : ''}`}
@@ -49,7 +88,7 @@ const ManageAppointment = () => {
             }}
           >
             <span>Đã báo giá</span>
-            <span>1</span>
+            <span>{totalAppointment?.offered}</span>
           </div>
           <div
             className={`status-item ${statusPicker === 2 ? 'active' : ''}`}
@@ -58,7 +97,7 @@ const ManageAppointment = () => {
             }}
           >
             <span>Lịch hẹn</span>
-            <span>1</span>
+            <span>{totalAppointment?.appointed}</span>
           </div>
           <div
             className={`status-item ${statusPicker === 3 ? 'active' : ''}`}
@@ -67,7 +106,7 @@ const ManageAppointment = () => {
             }}
           >
             <span>Đã xong</span>
-            <span>1</span>
+            <span>{totalAppointment?.done}</span>
           </div>
           <div
             className={`status-item ${statusPicker === 4 ? 'active' : ''}`}
@@ -76,14 +115,14 @@ const ManageAppointment = () => {
             }}
           >
             <span>Đã hủy</span>
-            <span>0</span>
+            <span>{totalAppointment?.canceled}</span>
           </div>
         </div>
         <div className="appointment-content">
-          {listAppointment.length === 0 ? (
+          {listAppointment?.length === 0 ? (
             <EmptyAppointment status={statusPicker} type="provider" />
           ) : (
-            listAppointment.map((item, index) => {
+            listAppointment?.map((item, index) => {
               return <AppointmentItem key={index} status={statusPicker} appointment={item} type="provider" />;
             })
           )}

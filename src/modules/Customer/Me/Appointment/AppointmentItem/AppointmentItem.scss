@@ -117,6 +117,10 @@
 
   .footer {
     .rating {
+      p {
+        width: 65%;
+        font-size: 14px;
+      }
     }
     .price {
       text-align: right;
@@ -153,6 +157,11 @@
         max-width: max-content;
         padding: 10px;
         transition: all 0.4s;
+        &:disabled {
+          cursor: no-drop;
+          color: #fff;
+          background: #dbdbdb;
+        }
       }
       .rate-btn {
         cursor: pointer;

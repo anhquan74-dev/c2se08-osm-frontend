@@ -108,6 +108,11 @@ const AppointmentItem = (props) => {
               </span>
             </>
           )}
+          {appointment?.status === 'appointed' && (
+            <p>
+              Vui lòng nhấn nút <strong>Xác nhận để hoàn thành Lịch Hẹn</strong> và Thợ có thể nhận thanh toán.
+            </p>
+          )}
         </div>
         <div className="price">
           {appointment?.price ? (
@@ -121,9 +126,11 @@ const AppointmentItem = (props) => {
             <button className="accept-price-btn">Chấp nhận báo giá</button>
           )}
           {appointment?.price && appointment?.status === 'appointed' && (
-            <button className="done-btn">Hoàn thành lịch hẹn</button>
+            <button className="done-btn" disabled={appointment?.job_status === 'finished'}>
+              Hoàn thành lịch hẹn
+            </button>
           )}
-          {appointment?.price && appointment?.status === 'done' && (
+          {appointment?.price && appointment?.status === 'done' && !appointment?.feedback && (
             <button
               className="rate-btn"
               onClick={() => {
@@ -150,10 +157,10 @@ const AppointmentItem = (props) => {
             </div>
             <div className="rating-content">
               <div className="provider-image">
-                <img src="" alt="" />
+                <img src={appointment?.service?.provider?.avatar?.url} alt="" />
               </div>
               <p>Thợ</p>
-              <h4>Trần Anh Quân</h4>
+              <h4>{appointment?.service?.provider?.full_name}</h4>
               <Star
                 name="simple-controlled"
                 value={star}
