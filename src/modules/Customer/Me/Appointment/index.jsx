@@ -93,7 +93,14 @@ const Appointment = () => {
             <EmptyAppointment status={statusPicker} />
           ) : (
             listAppointment?.map((item, index) => {
-              return <AppointmentItem key={index} status={statusPicker} appointment={item} />;
+              return (
+                <AppointmentItem
+                  key={index}
+                  status={statusPicker}
+                  appointment={item}
+                  setStatusPicker={setStatusPicker}
+                />
+              );
             })
           ))}
       </div>

@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const capitalizeString = (str) => {
   if (!str) return '';
 
@@ -69,4 +71,10 @@ export const formatDistrictName = (value) => {
   }
 
   return value;
+};
+
+export const isTimeBeforeNow = (datetime) => {
+  console.log(datetime, new Date());
+  console.log(moment(datetime).isBefore(new Date()));
+  return moment(datetime).isBefore(new Date());
 };

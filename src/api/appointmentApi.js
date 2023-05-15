@@ -17,6 +17,10 @@ const appointmentApi = {
       },
     });
   },
+  update(request) {
+    const url = `/appointments/${request.id}`;
+    return axiosClient.post(url, request);
+  },
 };
 
 export default appointmentApi;

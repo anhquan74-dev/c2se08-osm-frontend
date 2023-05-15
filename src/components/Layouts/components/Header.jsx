@@ -9,6 +9,7 @@ import { useUserRole } from '../../../hooks/useUserRole';
 import authApi from '../../../api/authApi';
 import { logOut } from '../../../modules/Auth/authSlice';
 import { useEffect } from 'react';
+import Logo from '../../../assets/images/logo.png';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -40,7 +41,9 @@ const Header = () => {
   };
   return (
     <div className="header-content container">
-      <div className="header-logo">OSM System</div>
+      <div className="header-logo">
+        <img src={Logo} alt="" />
+      </div>
       <ul className="header-link">
         {role === 'provider' && (
           <>

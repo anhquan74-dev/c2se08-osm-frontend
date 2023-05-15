@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import banner1 from '../../../assets/images/banner1.jpg';
-import banner2 from '../../../assets/images/banner2.png';
-import dangkytho from '../../../assets/images/dangkytho.jpeg';
+import bg1 from '../../../assets/images/bg1.jpg';
+import bg2 from '../../../assets/images/bg2.jpg';
+import bg3 from '../../../assets/images/bg3.png';
 import { Category } from '../../../components/Common';
 import HomeContent from '../../../components/Common/HomeContent';
 import SearchBar from '../../../components/Common/SearchBar';
@@ -33,13 +33,13 @@ const Home = () => {
       <SearchBar />
       <div className="banner">
         <div>
-          <img src={banner1} alt="" />
+          <img src={bg1} alt="" />
         </div>
         <div>
-          <img src={banner2} alt="" />
+          <img src={bg2} alt="" />
         </div>
         <div>
-          <img src={dangkytho} alt="" />
+          <img src={bg3} alt="" />
         </div>
       </div>
       <div className="home-category">

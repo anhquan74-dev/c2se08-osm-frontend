@@ -5,11 +5,11 @@ import { Breadcrumbs, Link, Stack, Typography } from '@mui/material';
 import { NavigateNext } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import appointmentApi from '../../../api/appointmentApi';
+import Skeleton from 'react-loading-skeleton';
 
 const ManageAppointment = () => {
   const [statusPicker, setStatusPicker] = useState('new');
-  // fetch danh sách appointment theo status
-  // --> listAppointment
+
   const navigate = useNavigate();
   const handleClickBreadCrum = (event) => {
     console.log(event.target.href);
@@ -73,45 +73,45 @@ const ManageAppointment = () => {
       <div className="me-appointment ">
         <div className="appointment-status">
           <div
-            className={`status-item ${statusPicker === 0 ? 'active' : ''}`}
+            className={`status-item ${statusPicker === 'new' ? 'active' : ''}`}
             onClick={() => {
-              setStatusPicker(0);
+              setStatusPicker('new');
             }}
           >
             <span>Yêu cầu đã nhận</span>
             <span>{totalAppointment?.new}</span>
           </div>
           <div
-            className={`status-item ${statusPicker === 1 ? 'active' : ''}`}
+            className={`status-item ${statusPicker === 'offered' ? 'active' : ''}`}
             onClick={() => {
-              setStatusPicker(1);
+              setStatusPicker('offered');
             }}
           >
             <span>Đã báo giá</span>
             <span>{totalAppointment?.offered}</span>
           </div>
           <div
-            className={`status-item ${statusPicker === 2 ? 'active' : ''}`}
+            className={`status-item ${statusPicker === 'appointed' ? 'active' : ''}`}
             onClick={() => {
-              setStatusPicker(2);
+              setStatusPicker('appointed');
             }}
           >
             <span>Lịch hẹn</span>
             <span>{totalAppointment?.appointed}</span>
           </div>
           <div
-            className={`status-item ${statusPicker === 3 ? 'active' : ''}`}
+            className={`status-item ${statusPicker === 'done' ? 'active' : ''}`}
             onClick={() => {
-              setStatusPicker(3);
+              setStatusPicker('done');
             }}
           >
             <span>Đã xong</span>
             <span>{totalAppointment?.done}</span>
           </div>
           <div
-            className={`status-item ${statusPicker === 4 ? 'active' : ''}`}
+            className={`status-item ${statusPicker === 'canceled' ? 'active' : ''}`}
             onClick={() => {
-              setStatusPicker(4);
+              setStatusPicker('canceled');
             }}
           >
             <span>Đã hủy</span>
@@ -119,13 +119,27 @@ const ManageAppointment = () => {
           </div>
         </div>
         <div className="appointment-content">
-          {listAppointment?.length === 0 ? (
-            <EmptyAppointment status={statusPicker} type="provider" />
-          ) : (
-            listAppointment?.map((item, index) => {
-              return <AppointmentItem key={index} status={statusPicker} appointment={item} type="provider" />;
-            })
+          {loading && (
+            <div style={{ margin: '8px 0 0 0' }}>
+              <Skeleton width={1230} height={440} />
+            </div>
           )}
+          {!loading &&
+            (listAppointment?.length === 0 ? (
+              <EmptyAppointment status={statusPicker} type="provider" />
+            ) : (
+              listAppointment?.map((item, index) => {
+                return (
+                  <AppointmentItem
+                    key={index}
+                    status={statusPicker}
+                    appointment={item}
+                    type="provider"
+                    setStatusPicker={setStatusPicker}
+                  />
+                );
+              })
+            ))}
         </div>
       </div>
     </div>

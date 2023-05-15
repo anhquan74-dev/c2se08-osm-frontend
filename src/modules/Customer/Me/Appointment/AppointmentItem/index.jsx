@@ -7,11 +7,14 @@ import ImageIcon from '@mui/icons-material/Image';
 import Rating from '../../../../../components/Common/Rating';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import Star from '@mui/material/Rating';
+import appointmentApi from '../../../../../api/appointmentApi';
+import { isTimeBeforeNow } from '../../../../../utils/common';
 
 const AppointmentItem = (props) => {
-  const { status, appointment } = props;
+  const { status, appointment, setStatusPicker } = props;
   const [openRateDialog, setOpenRateDialog] = useState(false);
   const [star, setStar] = useState();
+  const [comment, setComment] = useState();
   console.log(status, appointment);
 
   const handleCloseRateDialog = () => {
@@ -20,6 +23,41 @@ const AppointmentItem = (props) => {
 
   const handleRating = () => {
     setOpenRateDialog(false);
+    alert(star, comment);
+  };
+
+  // xu ly chap nhan bao gia
+  const handleAcceptPrice = () => {
+    const { id, price, status, complete_date, cancel_date, job_status } = appointment;
+    (async () => {
+      const res = await appointmentApi.update({
+        id,
+        price,
+        status: 'appointed',
+        job_status,
+        complete_date,
+        cancel_date,
+      });
+      console.log(res);
+      setStatusPicker('appointed');
+    })();
+  };
+
+  // xu ly hoan thanh lich hen
+  const handleAppointmentCompleted = () => {
+    const { id, price, status, complete_date, cancel_date, job_status } = appointment;
+    (async () => {
+      const res = await appointmentApi.update({
+        id,
+        price,
+        status: 'done',
+        job_status,
+        complete_date,
+        cancel_date,
+      });
+      console.log(res);
+      setStatusPicker('done');
+    })();
   };
   return (
     <div className="appointment-item">
@@ -123,10 +161,16 @@ const AppointmentItem = (props) => {
             <strong>Chưa nhận được báo giá</strong>
           )}
           {appointment?.price && appointment?.status === 'offered' && (
-            <button className="accept-price-btn">Chấp nhận báo giá</button>
+            <button className="accept-price-btn" onClick={handleAcceptPrice}>
+              Chấp nhận báo giá
+            </button>
           )}
           {appointment?.price && appointment?.status === 'appointed' && (
-            <button className="done-btn" disabled={appointment?.job_status === 'finished'}>
+            <button
+              className="done-btn"
+              disabled={appointment?.job_status === 'new' && !isTimeBeforeNow(appointment?.date)}
+              onClick={handleAppointmentCompleted}
+            >
               Hoàn thành lịch hẹn
             </button>
           )}
@@ -169,7 +213,12 @@ const AppointmentItem = (props) => {
                 }}
                 size="large"
               />
-              <textarea class="customer-comment" placeholder="Bạn nghĩ gì về Nhà cung cấp này?"></textarea>
+              <textarea
+                class="customer-comment"
+                placeholder="Bạn nghĩ gì về Nhà cung cấp này?"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              ></textarea>
               <div className="note">
                 Sau khi gửi, bạn sẽ <strong>không thể chỉnh sửa</strong> đánh giá được nữa. Bạn chắc chắn muốn gửi nội
                 dung đánh giá này chứ?
