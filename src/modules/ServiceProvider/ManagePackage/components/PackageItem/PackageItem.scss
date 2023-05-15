@@ -82,66 +82,72 @@
     h4 {
       margin-bottom: 12px;
     }
-    .feedback-content {
-      border: 1px solid #dfdfdf;
-      padding: 12px;
-      border-radius: 15px;
-      .content-up {
-        padding-bottom: 10px;
-        border-bottom: 1px solid #dfdfdf;
-      }
-
-      .content-down {
-        > p {
-          font-size: 14px;
-          font-weight: 700;
-          line-height: 18px;
-          margin-bottom: 5px;
-          margin-top: 15px;
+    .feedback-container {
+      overflow-y: scroll;
+      height: 320px;
+      .feedback-content {
+        border: 1px solid #dfdfdf;
+        padding: 12px;
+        margin-bottom: 6px;
+        border-radius: 15px;
+        .content-up {
+          padding-bottom: 10px;
+          border-bottom: 1px solid #dfdfdf;
         }
 
-        .content {
-          margin-left: 48px;
-          font-size: 14px;
-          line-height: 22px;
-          white-space: break-spaces;
-          word-break: break-word;
-        }
-        .date {
-          margin-left: 48px;
-          color: #999;
-          font-size: 12px;
-          line-height: 20px;
-        }
-
-        .reply {
-          width: max-content;
-          position: relative;
-          input {
-            width: 400px;
-            padding: 10px 30px 10px 12px;
-            border-radius: 8px;
-            border: none;
-            outline: none;
-            background-color: #dfdfdf7a;
+        .content-down {
+          > p {
             font-size: 14px;
+            font-weight: 700;
+            line-height: 18px;
+            margin-bottom: 5px;
+            margin-top: 15px;
           }
 
-          > svg {
-            cursor: pointer;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            right: 10px;
-            &:hover {
-              font-size: 25px;
+          .content {
+            margin-top: 8px;
+            margin-left: 48px;
+            font-size: 14px;
+            line-height: 22px;
+            white-space: break-spaces;
+            word-break: break-word;
+          }
+          .date {
+            margin-left: 48px;
+            color: #999;
+            font-size: 12px;
+            line-height: 20px;
+          }
+
+          .reply {
+            width: max-content;
+            position: relative;
+            input {
+              width: 400px;
+              padding: 10px 30px 10px 12px;
+              border-radius: 8px;
+              border: none;
+              outline: none;
+              background-color: #dfdfdf7a;
+              font-size: 14px;
+            }
+
+            > svg {
+              cursor: pointer;
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+              right: 10px;
+              &:hover {
+                font-size: 25px;
+              }
             }
           }
-        }
 
-        > span {
-          font-size: 12px;
-          color: #949494;
+          > span {
+            font-size: 12px;
+            color: #949494;
+          }
         }
       }
     }

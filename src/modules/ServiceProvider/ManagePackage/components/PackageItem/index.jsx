@@ -107,7 +107,7 @@ const PackageItem = (props) => {
         onClose={handleCloseDetailDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        maxWidth="md"
+        fullWidth
       >
         <DialogTitle id="alert-dialog-title">Chi tiết Báo giá</DialogTitle>
         <DialogContent>
@@ -129,28 +129,34 @@ const PackageItem = (props) => {
             <hr />
             <div className="feedback">
               <h4>Đánh giá</h4>
-              <div className="feedback-content">
-                <div className="content-up">
-                  {feedbackListByPackage &&
-                    feedbackListByPackage.map((item, index) => {
-                      return <FeedbackItem key={index} feedbackInfo={item} />;
-                    })}
-                </div>
-                <div className="content-down">
-                  {/* check provider đã trả lời hay chưa */}
-                  <p>Phản hồi của nhà cung cấp</p>
-                  <>
-                    <div className="reply">
-                      <input type="text" name="" id="" placeholder="Nhập câu trả lời" />
-                      <SendIcon color="" />
-                    </div>
-                    <span>Bạn chỉ được phản hồi đánh giá một lần</span>
-                  </>
-                  <>
-                    {/* <div className="content">Cảm ơn ông nha</div>
-                    <div className="date">06/02/2023</div> */}
-                  </>
-                </div>
+              <div className="feedback-container">
+                {feedbackListByPackage &&
+                  feedbackListByPackage.map((item, index) => {
+                    return (
+                      <div className="feedback-content">
+                        <div className="content-up">
+                          <FeedbackItem key={index} feedbackInfo={item} />
+                        </div>
+                        <div className="content-down">
+                          {item?.feedback?.reply ? (
+                            <>
+                              <div className="content">Cảm ơn ông nha</div>
+                              <div className="date">06/02/2023</div>
+                            </>
+                          ) : (
+                            <>
+                              <p>Phản hồi của nhà cung cấp</p>
+                              <div className="reply">
+                                <input type="text" name="" id="" placeholder="Nhập câu trả lời" />
+                                <SendIcon color="" />
+                              </div>
+                              <span>Bạn chỉ được phản hồi đánh giá một lần</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           </div>

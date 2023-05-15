@@ -3,6 +3,7 @@ import './FeedbackItem.scss';
 import { ThumbUpOffAlt } from '@mui/icons-material';
 import DefaultAvatar from '../../../assets/images/default-avatar.png';
 import Rating from '../Rating';
+import moment from 'moment';
 
 const FeedbackItem = (props) => {
   const { feedbackInfo } = props;
@@ -30,7 +31,7 @@ const FeedbackItem = (props) => {
         </div>
       </div>
       <div className="content">{feedbackInfo?.feedback.comment}. </div>
-      <div className="date">{feedbackInfo?.feedback.created_at}</div>
+      <div className="date">{moment(feedbackInfo?.feedback.created_at).format('DD/MM/YYYY')}</div>
     </div>
   );
 };
