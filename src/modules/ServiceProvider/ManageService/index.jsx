@@ -34,7 +34,7 @@ const ManageService = () => {
   const [openDialogAdd, setOpenDialogAdd] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState();
   const [service, setService] = useState(null);
-  const [categoryDelete, setCategoryDelete] = useState(null);
+  const [categoryChoose, setCategoryChoose] = useState(null);
   const navigate = useNavigate();
   const handleClickSetting = (event) => {
     setAnchorEl(event.currentTarget);
@@ -65,7 +65,7 @@ const ManageService = () => {
   };
 
   const handleRemoveService = async () => {
-    const res = await serviceApi.deleteByCategoryId(categoryDelete);
+    const res = await serviceApi.deleteByCategoryId(categoryChoose);
     if (res.statusCode === 200) {
       dispatch(getCategoriesForProvider(currentUserId));
       setAnchorEl(null);
@@ -134,7 +134,7 @@ const ManageService = () => {
                     className="item-right"
                     onClick={(event) => {
                       handleClickSetting(event);
-                      setCategoryDelete(item.dataCategory[0]?.id);
+                      setCategoryChoose(item.dataCategory[0]?.id);
                     }}
                   >
                     <SettingsIcon />
@@ -158,7 +158,7 @@ const ManageService = () => {
                   >
                     <ul className="profile-popover">
                       <li>
-                        <NavLink to="/provider/services/1">Bảng báo giá</NavLink>
+                        <NavLink to={`/provider/services/${categoryChoose}`}>Bảng báo giá</NavLink>
                       </li>
                       <li>
                         <NavLink to="" onClick={handleRemoveClick}>

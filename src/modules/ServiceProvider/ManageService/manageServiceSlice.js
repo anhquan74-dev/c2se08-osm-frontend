@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import providerApi from '../../../api/providerApi';
 import { LIMIT_DEFAULT, PAGE_DEFAULT } from '../../../utils/constants';
 import categoryApi from '../../../api/categoryApi';
+import packageApi from '../../../api/packageApi';
 
 export const getCategoriesForProvider = createAsyncThunk('manageService/getCategoriesForProvider', async (request) => {
   const res = await categoryApi.getCategoriesForProvider(request);
@@ -20,17 +21,29 @@ export const getCategoriesProviderNotHave = createAsyncThunk(
     return options;
   }
 );
-
+export const getAllPackageByProviderCategory = createAsyncThunk(
+  'manageService/getAllPackageByProviderCategory',
+  async (request) => {
+    const res = await packageApi.getAllPackageByProviderCategory(request);
+    return res.data;
+  }
+);
 //setup state
 const initialState = {
   loading: false,
   serviceList: [],
+  currentCategoryId: null,
   serviceProviderNotHaveList: [],
+  packageByProviderCategory: [],
 };
 export const manageServiceSlice = createSlice({
   name: 'manageService',
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentCategoryId: (state, action) => {
+      state.currentCategoryId = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     //get categories for service screen
     builder.addCase(getCategoriesForProvider.pending, (state, action) => {
@@ -58,11 +71,25 @@ export const manageServiceSlice = createSlice({
     builder.addCase(getCategoriesProviderNotHave.rejected, (state, action) => {
       state.loading = false;
     });
+    // package by provider_id category_id
+    builder.addCase(getAllPackageByProviderCategory.pending, (state, action) => {
+      state.loading = true;
+    });
+
+    builder.addCase(getAllPackageByProviderCategory.fulfilled, (state, action) => {
+      state.loading = false;
+      state.packageByProviderCategory = action.payload;
+    });
+
+    builder.addCase(getAllPackageByProviderCategory.rejected, (state, action) => {
+      state.loading = false;
+    });
   },
 });
 
 //actions
 export const manageServiceActions = manageServiceSlice.actions;
+export const { setCurrentCategoryId } = manageServiceSlice.actions;
 
 //selectors
 

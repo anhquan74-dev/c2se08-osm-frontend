@@ -8,6 +8,8 @@ import FeedbackItem from '../../../../../components/Common/FeedbackItem';
 import SendIcon from '@mui/icons-material/Send';
 
 const PackageItem = (props) => {
+  const packageInfo = props.packageInfo;
+  console.log('🚀 ~ file: index.jsx:12 ~ PackageItem ~ packageInfo:', packageInfo);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDetailDialog, setOpenDetailDialog] = useState(false);
   const [openDialogRemove, setOpenDialogRemove] = useState(false);
@@ -43,15 +45,15 @@ const PackageItem = (props) => {
   return (
     <div className="package-item">
       <div className="item-left">
-        <h4 onClick={handleClickPackageItem}>Đi dây điện âm tường</h4>
+        <h4 onClick={handleClickPackageItem}>{packageInfo?.name}</h4>
         {/* check star */}
         <div className="star">
           <Star sx={{ color: '#ffbe17' }} />
-          <span>5/5</span>
+          <span>{packageInfo?.avg_start}/5</span>
         </div>
         {/* <span>Chưa có đánh giá</span> */}
-        <p>Cần gì cứ alo tôi</p>
-        <strong>150.000 đ</strong>
+        <p>{packageInfo?.description}</p>
+        <strong>{packageInfo?.price} đ</strong>
       </div>
       <div className="item-right" onClick={handleClickSetting}>
         <SettingsIcon />
