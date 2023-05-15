@@ -8,6 +8,7 @@ import Rating from '../Rating';
 const FeedbackDialog = (props) => {
   const { onClose, type, open } = props;
   const services = ['Sửa điện và nước', 'Sửa đồ điện gia dụng'];
+  const handleChangeService =() => {}
   return (
     <Dialog onClose={onClose} open={open} maxWidth="md">
       <div className="feedback-dialog">
@@ -19,7 +20,7 @@ const FeedbackDialog = (props) => {
           </div>
           <p onClick={onClose}>Đóng</p>
         </div>
-        <ServicePicker services={services} />
+        <ServicePicker services={services} handleChangeService={handleChangeService}/>
         <div className="feedback-content">
           <FeedbackItem />
           <hr class="horizontal-line"></hr>
