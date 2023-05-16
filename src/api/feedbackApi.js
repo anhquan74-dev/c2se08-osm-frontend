@@ -5,6 +5,15 @@ const feedbackApi = {
     const url = `/feedbacks-by-package/${id}`;
     return axiosClient.get(url);
   },
+  update(id, data) {
+    const url = `/feedbacks/${id}`;
+    return axiosClient.post(url, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Cần thiết lập Content-Type là multipart/form-data để server có thể hiểu được dữ liệu gửi lên
+      },
+    });
+  },
+
   // getAllPackageByProviderCategory(request) {
   //   const url = `packages-by-service-category?category_id=${request.category_id}&provider_id=${request.provider_id}`;
   //   return axiosClient.get(url);
@@ -28,14 +37,6 @@ const feedbackApi = {
   // delete(id) {
   //   const url = `hard-delete-package/${id}`;
   //   return axiosClient.post(url);
-  // },
-  // update(id, data) {
-  //   const url = `/packages/${id}`;
-  //   return axiosClient.post(url, data, {
-  //     headers: {
-  //       'Content-Type': 'multipart/form-data', // Cần thiết lập Content-Type là multipart/form-data để server có thể hiểu được dữ liệu gửi lên
-  //     },
-  //   });
   // },
 };
 
