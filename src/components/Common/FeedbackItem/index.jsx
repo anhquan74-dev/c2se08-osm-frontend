@@ -7,7 +7,6 @@ import moment from 'moment';
 
 const FeedbackItem = (props) => {
   const { feedbackInfo } = props;
-  console.log('🚀 ~ file: index.jsx:9 ~ FeedbackItem ~ feedbackInfo:', feedbackInfo);
   return (
     <div className="feedback-item">
       <div className="heading">
@@ -25,10 +24,10 @@ const FeedbackItem = (props) => {
             </p>
           </div>
         </div>
-        <div className="left">
+        {/* <div className="left">
           <span>1</span>
           <ThumbUpOffAlt />
-        </div>
+        </div> */}
       </div>
       <div className="content">{feedbackInfo?.feedback.comment}. </div>
       <div className="date">{moment(feedbackInfo?.feedback.created_at).format('DD/MM/YYYY')}</div>

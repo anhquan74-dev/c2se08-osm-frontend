@@ -23,7 +23,7 @@ import './ManageService.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategoriesForProvider, getCategoriesProviderNotHave } from './manageServiceSlice';
 import serviceApi from '../../../api/serviceApi';
-
+import { toast } from 'react-toastify';
 const ManageService = () => {
   const currentUserId = useSelector((state) => state.auth.currentUser.id);
   const serviceList = useSelector((state) => state.manageService.serviceList);
@@ -67,6 +67,7 @@ const ManageService = () => {
   const handleRemoveService = async () => {
     const res = await serviceApi.deleteByCategoryId(categoryChoose);
     if (res.statusCode === 200) {
+      toast.success('Dịch vụ đã được xóa!');
       dispatch(getCategoriesProviderNotHave(currentUserId));
       dispatch(getCategoriesForProvider(currentUserId));
       setAnchorEl(null);
@@ -90,7 +91,7 @@ const ManageService = () => {
       };
       await serviceApi.create(dataSend);
     }
-
+    toast.success('Dịch vụ đã được thêm thành công!');
     dispatch(getCategoriesForProvider(currentUserId));
     dispatch(getCategoriesProviderNotHave(currentUserId));
   };
@@ -123,7 +124,7 @@ const ManageService = () => {
         </Stack>
         <h3>Dịch vụ</h3>
         <div className="service-content">
-          {serviceList &&
+          {serviceList && serviceList.length > 0 ? (
             serviceList.map((item, index) => {
               return (
                 <div key={index} className="service-item" onClick={handleClickService}>
@@ -170,7 +171,10 @@ const ManageService = () => {
                   </Popover>
                 </div>
               );
-            })}
+            })
+          ) : (
+            <p>Chưa có dịch vụ nào, hãy thêm mới một dịch vụ!</p>
+          )}
           <div
             className={selectCategory.length === 0 ? 'disable' : 'service-item add-service'}
             onClick={handleAddClick}

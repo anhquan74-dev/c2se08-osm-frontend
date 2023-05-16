@@ -32,7 +32,6 @@ const AddEditPackagePage = () => {
   }, []);
 
   const { name, description, price, is_negotiable } = providerPackage;
-  console.log('providerPackage:', providerPackage);
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     let formValue = { ...providerPackage, service_id: service_id };

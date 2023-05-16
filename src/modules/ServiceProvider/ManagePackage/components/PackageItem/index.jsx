@@ -7,19 +7,21 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import FeedbackItem from '../../../../../components/Common/FeedbackItem';
 import SendIcon from '@mui/icons-material/Send';
 import packageApi from '../../../../../api/packageApi';
+import feedbackApi from '../../../../../api/feedbackApi';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import { getAllFeedbackByPackage, getAllPackageByProviderCategory } from '../../../ManageService/manageServiceSlice';
 
 const PackageItem = (props) => {
   // const navigate = useNavigate();
   const feedbackListByPackage = useSelector((state) => state.manageService.feedbackByPackage);
-  console.log(' feedbackList::::::', feedbackListByPackage);
   const dispatch = useDispatch();
   const { packageInfo, provider_id, category_id } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDetailDialog, setOpenDetailDialog] = useState(false);
   const [openDialogRemove, setOpenDialogRemove] = useState(false);
+  const [providerReply, setProviderReply] = useState('');
   const handleClickSetting = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -56,6 +58,18 @@ const PackageItem = (props) => {
           category_id,
         })
       );
+    }
+  };
+  const handleSubmitProviderReply = async (feedbackReply) => {
+    const dataSend = {
+      reply: providerReply,
+      reply_at: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+    };
+    const feedback_id = feedbackReply.feedback.id;
+    const res = await feedbackApi.update(feedback_id, dataSend);
+    if (res.statusCode == 200) {
+      dispatch(getAllFeedbackByPackage(packageInfo.id));
+      toast.success('Phản hồi của bạn đã được gửi!');
     }
   };
   return (
@@ -130,7 +144,7 @@ const PackageItem = (props) => {
             <div className="feedback">
               <h4>Đánh giá</h4>
               <div className="feedback-container">
-                {feedbackListByPackage &&
+                {feedbackListByPackage && feedbackListByPackage.length > 0 ? (
                   feedbackListByPackage.map((item, index) => {
                     return (
                       <div className="feedback-content">
@@ -140,15 +154,23 @@ const PackageItem = (props) => {
                         <div className="content-down">
                           {item?.feedback?.reply ? (
                             <>
-                              <div className="content">Cảm ơn ông nha</div>
-                              <div className="date">06/02/2023</div>
+                              <div className="content">{item?.feedback?.reply}</div>
+                              <div className="date">{moment(item?.feedback?.reply_at).format('DD/MM/YYYY')}</div>
                             </>
                           ) : (
                             <>
                               <p>Phản hồi của nhà cung cấp</p>
                               <div className="reply">
-                                <input type="text" name="" id="" placeholder="Nhập câu trả lời" />
-                                <SendIcon color="" />
+                                <input
+                                  type="text"
+                                  name=""
+                                  onChange={(e) => {
+                                    setProviderReply(e.target.value);
+                                  }}
+                                  id=""
+                                  placeholder="Nhập câu trả lời"
+                                />
+                                <SendIcon color="" onClick={() => handleSubmitProviderReply(item)} />
                               </div>
                               <span>Bạn chỉ được phản hồi đánh giá một lần</span>
                             </>
@@ -156,7 +178,10 @@ const PackageItem = (props) => {
                         </div>
                       </div>
                     );
-                  })}
+                  })
+                ) : (
+                  <p>Chưa có đánh giá</p>
+                )}
               </div>
             </div>
           </div>

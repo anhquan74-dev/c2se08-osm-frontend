@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import categoryApi from '../../../api/categoryApi';
 import packageApi from '../../../api/packageApi';
 import feedbackApi from '../../../api/feedbackApi';
+import serviceApi from '../../../api/serviceApi';
 
 export const getCategoriesForProvider = createAsyncThunk('manageService/getCategoriesForProvider', async (request) => {
   const res = await categoryApi.getCategoriesForProvider(request);
@@ -25,7 +26,6 @@ export const getAllPackageByProviderCategory = createAsyncThunk(
   async (request) => {
     const res = await packageApi.getAllPackageByProviderCategory(request);
     return res.data[0].package;
-    console.log('🚀 ~ file: manageServiceSlice.js:28 ~ res.data[0].package:', res.data[0].package);
   }
 );
 export const getAllFeedbackByPackage = createAsyncThunk('manageService/getAllFeedbackByPackage', async (request) => {
@@ -34,6 +34,12 @@ export const getAllFeedbackByPackage = createAsyncThunk('manageService/getAllFee
     return res.feedbackList;
   }
   return [];
+});
+export const getCurrentService = createAsyncThunk('manageService/getCurrentService', async (request) => {
+  const provider_id = request.currentUserId;
+  const category_id = request.service_id;
+  const res = await serviceApi.getByProviderCategory(provider_id, category_id);
+  return res.data[0].id;
 });
 //setup state
 const initialState = {
@@ -104,6 +110,11 @@ export const manageServiceSlice = createSlice({
     });
     builder.addCase(getAllFeedbackByPackage.rejected, (state, action) => {
       state.loading = false;
+    });
+    // current service_id
+    builder.addCase(getCurrentService.fulfilled, (state, action) => {
+      state.loading = false;
+      state.currentServiceId = action.payload;
     });
   },
 });
