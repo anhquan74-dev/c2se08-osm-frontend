@@ -11,7 +11,10 @@ export const getCategoriesPagination = createAsyncThunk(
 );
 
 export const getCategories = createAsyncThunk('categories/getCategories', async (thunkAPI) => {
-  const res = await categoryApi.getAll();
+  const res = await categoryApi.getAllPagination({
+    page: 1,
+    limit: 15,
+  });
   return res?.data;
 });
 

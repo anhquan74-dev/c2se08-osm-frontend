@@ -45,7 +45,6 @@
     background: #fff;
     border: 1px solid #f3f3f3;
     border-radius: 16px;
-    cursor: pointer;
     padding: 14px;
     h3 {
       -webkit-line-clamp: 2;
@@ -64,6 +63,7 @@
     .rating {
       bottom: 7px;
       position: relative;
+      cursor: pointer;
       > span {
         font-size: 12px;
         color: #c1c1c1;

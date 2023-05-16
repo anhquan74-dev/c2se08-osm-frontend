@@ -4,6 +4,7 @@ import FeedbackItem from '../FeedbackItem';
 import ServicePicker from '../ServicePicker';
 import './FeedbackDialog.scss';
 import Rating from '../Rating';
+import moment from 'moment';
 import feedbackApi from '../../../api/feedbackApi';
 
 const FeedbackDialog = (props) => {
@@ -44,8 +45,22 @@ const FeedbackDialog = (props) => {
             feedbackList?.map((item, index) => {
               return (
                 <>
-                  <FeedbackItem key={item?.id} feedbackInfo={item} />
-                  <hr class="horizontal-line"></hr>
+                  <div className="feedback-group">
+                    <div className="content-up">
+                      <FeedbackItem key={index} feedbackInfo={item} />
+                      <hr class="horizontal-line"></hr>
+                    </div>
+                    <div className="content-down">
+                      {item?.feedback?.reply && (
+                        <>
+                          <p>Phản hồi của nhà cung cấp</p>
+                          <div className="content">{item?.feedback?.reply}</div>
+                          <div className="date">{moment(item?.feedback?.reply_at).format('DD/MM/YYYY')}</div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  {item?.feedback?.reply && <hr class="horizontal-line"></hr>}
                 </>
               );
             })}

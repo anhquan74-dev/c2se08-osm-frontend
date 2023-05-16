@@ -5,6 +5,10 @@ const feedbackApi = {
     const url = `/feedbacks-by-package/${id}`;
     return axiosClient.get(url);
   },
+  add(request) {
+    const url = '/feedbacks';
+    return axiosClient.post(url, request);
+  },
   update(id, data) {
     const url = `/feedbacks/${id}`;
     return axiosClient.post(url, data, {
@@ -14,10 +18,11 @@ const feedbackApi = {
     });
   },
 
-  // getAllPackageByProviderCategory(request) {
-  //   const url = `packages-by-service-category?category_id=${request.category_id}&provider_id=${request.provider_id}`;
-  //   return axiosClient.get(url);
-  // },
+  getTotalFeedbackByProviderId(providerId) {
+    const url = `/feedbacks-provider-count/${providerId}`;
+    return axiosClient.get(url);
+  },
+
   getAllFeedbackByServiceId(id) {
     const url = `/feedbacks-by-service/${id}`;
     return axiosClient.get(url);

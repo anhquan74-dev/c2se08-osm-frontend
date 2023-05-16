@@ -33,13 +33,17 @@ const Appointment = () => {
   }, []);
 
   useEffect(() => {
-    (async () => {
-      setLoading(true);
-      const res = await appointmentApi.getByStatus(statusPicker);
-      setLoading(false);
-      console.log(res);
-      setListAppointment(res.data);
-    })();
+    if (statusPicker === '1') {
+      setStatusPicker('done');
+    } else {
+      (async () => {
+        setLoading(true);
+        const res = await appointmentApi.getByStatus(statusPicker);
+        setLoading(false);
+        console.log(res);
+        setListAppointment(res.data);
+      })();
+    }
   }, [statusPicker]);
   console.log(listAppointment);
   return (

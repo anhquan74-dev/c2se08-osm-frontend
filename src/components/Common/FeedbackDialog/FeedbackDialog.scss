@@ -36,7 +36,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     .horizontal-line {
-      border-top: 2px solid rgba(0, 0, 0, 0.1);
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
       width: calc(100% - 40px);
       margin: 16px 0;
       margin-left: 40px;
@@ -50,6 +50,24 @@
       span {
         color: #9c9c9c;
         font-size: 14px;
+      }
+    }
+
+    .feedback-group {
+      .content-down {
+        p {
+          font-size: 14px;
+          font-weight: 700;
+        }
+        .content {
+          font-size: 14px;
+          white-space: break-spaces;
+          word-break: break-word;
+        }
+        .date {
+          color: #999;
+          font-size: 12px;
+        }
       }
     }
   }

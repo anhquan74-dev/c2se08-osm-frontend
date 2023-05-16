@@ -9,12 +9,14 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import Star from '@mui/material/Rating';
 import appointmentApi from '../../../../../api/appointmentApi';
 import { isTimeBeforeNow } from '../../../../../utils/common';
+import feedbackApi from '../../../../../api/feedbackApi';
 
 const AppointmentItem = (props) => {
   const { status, appointment, setStatusPicker } = props;
   const [openRateDialog, setOpenRateDialog] = useState(false);
   const [star, setStar] = useState();
   const [comment, setComment] = useState();
+  const [render, setRender] = useState();
   console.log(status, appointment);
 
   const handleCloseRateDialog = () => {
@@ -22,8 +24,19 @@ const AppointmentItem = (props) => {
   };
 
   const handleRating = () => {
+    console.log(star, comment, appointment.id);
+    (async () => {
+      const res = await feedbackApi.add({
+        appointment_id: appointment.id,
+        comment,
+        star,
+      });
+      console.log(res);
+    })();
     setOpenRateDialog(false);
-    alert(star, comment);
+    setComment('');
+    setStar(0);
+    setStatusPicker('1');
   };
 
   // xu ly chap nhan bao gia
@@ -77,12 +90,12 @@ const AppointmentItem = (props) => {
         <div className="group">
           <div className="left">
             <div>
-              <img src={appointment?.service?.provider?.avatar?.url} alt="avatar" className="avatar" />
+              <img src={appointment?.provider?.avatar?.url} alt="avatar" className="avatar" />
             </div>
           </div>
           <div className="right">
             <div>Thợ</div>
-            <div>{appointment?.service?.provider?.full_name}</div>
+            <div>{appointment?.provider?.full_name}</div>
           </div>
         </div>
         <div className="group">
@@ -168,7 +181,7 @@ const AppointmentItem = (props) => {
           {appointment?.price && appointment?.status === 'appointed' && (
             <button
               className="done-btn"
-              disabled={appointment?.job_status === 'new' && !isTimeBeforeNow(appointment?.date)}
+              disabled={appointment?.job_status === 'new'}
               onClick={handleAppointmentCompleted}
             >
               Hoàn thành lịch hẹn
@@ -201,10 +214,10 @@ const AppointmentItem = (props) => {
             </div>
             <div className="rating-content">
               <div className="provider-image">
-                <img src={appointment?.service?.provider?.avatar?.url} alt="" />
+                <img src={appointment?.provider?.avatar?.url} alt="" />
               </div>
               <p>Thợ</p>
-              <h4>{appointment?.service?.provider?.full_name}</h4>
+              <h4>{appointment?.provider?.full_name}</h4>
               <Star
                 name="simple-controlled"
                 value={star}

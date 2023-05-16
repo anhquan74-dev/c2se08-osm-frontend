@@ -20,11 +20,11 @@ const ManageAppointment = () => {
   const [listAppointment, setListAppointment] = useState();
   const [loading, setLoading] = useState(true);
   const [totalAppointment, setTotalAppointment] = useState({
-    new: 0,
-    offered: 0,
-    appointed: 0,
-    done: 0,
-    canceled: 0,
+    new: null,
+    offered: null,
+    appointed: null,
+    done: null,
+    canceled: null,
   });
 
   useEffect(() => {

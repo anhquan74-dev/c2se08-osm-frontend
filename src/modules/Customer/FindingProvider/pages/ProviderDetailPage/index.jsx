@@ -2,7 +2,7 @@ import { Chat, LocationOn, Search } from '@mui/icons-material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Breadcrumbs, FormControl, InputLabel, Link, OutlinedInput, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Slider from 'react-slick';
 import FeedbackDialog from '../../../../../components/Common/FeedbackDialog';
 import { categoryList } from '../../../Home/categoryList';
@@ -13,6 +13,7 @@ import providerApi from '../../../../../api/providerApi';
 import Skeleton from 'react-loading-skeleton';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProviderById } from '../../providerCustomerSlice';
+import feedbackApi from '../../../../../api/feedbackApi';
 
 const ProviderDetailPage = () => {
   const starArr = [1, 2, 3, 4, 5];
@@ -25,26 +26,25 @@ const ProviderDetailPage = () => {
     autoplay: true,
     autoplaySpeed: 2500,
   };
-
   const { providerId } = useParams();
-  // const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-  // const [provider, setProvider] = useState(null);
+  const [totalFeedback, setTotalFeedback] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { provider, loading, services } = useSelector((state) => state.providerCustomer);
-
   useEffect(() => {
     if (!providerId) return;
-    // (async () => {
-    //   const res = await providerApi.get(providerId);
-    //   setLoading(false);
-    //   setProvider(res);
-    // })();
+    console.log('vaof ddaay');
     dispatch(getProviderById(providerId));
+    (async () => {
+      const res = await feedbackApi.getTotalFeedbackByProviderId(providerId);
+      console.log(res);
+
+      setTotalFeedback(res.data);
+    })();
   }, [providerId]);
 
-  console.log(provider);
+  console.log(totalFeedback);
 
   const handleClick = (event) => {
     event.preventDefault();
@@ -103,7 +103,8 @@ const ProviderDetailPage = () => {
             </div>
             {loading && <Skeleton width={140} height={24} />}
             {!loading && <Rating starNumber={provider?.avg_star} size="large" />}
-            <div onClick={handleOpenFeedbackDialog}>11 phản hồi</div>
+            {loading && <Skeleton width={80} height={30} />}
+            {!loading && <div onClick={handleOpenFeedbackDialog}>{totalFeedback} phản hồi</div>}
             <FeedbackDialog
               type="provider"
               open={open}

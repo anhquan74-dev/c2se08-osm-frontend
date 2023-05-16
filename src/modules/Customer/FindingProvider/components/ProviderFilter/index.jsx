@@ -9,6 +9,7 @@ import { PAGE_DEFAULT } from '../../../../../utils/constants';
 import { FormControl } from '@mui/material';
 import { convertDistrictIdToDistrictName, convertProvinceIdToProvinceName } from '../../../../../utils/common';
 import locationApi from '../../../../../api/locationApi';
+import categoryApi from '../../../../../api/categoryApi';
 
 const ProviderFilter = ({ onChange, conditions }) => {
   const [categoryPick, setCategoryPick] = useState(0);
@@ -19,10 +20,12 @@ const ProviderFilter = ({ onChange, conditions }) => {
   const [starPick, setStarPick] = useState(0);
   const [priceMin, setPriceMin] = useState(0);
   const [priceMax, setPriceMax] = useState(99999999);
+  const [loading, setLoading] = useState(true);
+  const [categoryList, setCategoryList] = useState();
   const rateArr = [5, 4, 3, 2, 1];
 
   const dispatch = useDispatch();
-  const { list, loading } = useSelector((state) => state.category);
+  // const { list, loading } = useSelector((state) => state.category);
 
   useEffect(() => {
     const getPublicProvinces = async () => {
@@ -33,7 +36,12 @@ const ProviderFilter = ({ onChange, conditions }) => {
   }, []);
 
   useEffect(() => {
-    if (list.length === 0) dispatch(getCategories());
+    // if (list.length === 0) dispatch(getCategories());
+    (async () => {
+      const res = await categoryApi.getAll();
+      setLoading(false);
+      setCategoryList(res.data);
+    })();
   }, []);
 
   useEffect(() => {
@@ -171,7 +179,7 @@ const ProviderFilter = ({ onChange, conditions }) => {
               .map(() => {
                 return <Skeleton width={150} height={45} style={{ margin: '8px 0' }} />;
               })}
-          {list.map((item, index) => {
+          {categoryList?.map((item, index) => {
             return (
               <li
                 key={index}

@@ -78,3 +78,13 @@ export const isTimeBeforeNow = (datetime) => {
   console.log(moment(datetime).isBefore(new Date()));
   return moment(datetime).isBefore(new Date());
 };
+
+export const avgStar = (feedbacks) => {
+  if (feedbacks.length === 0) return 0;
+  let sumStar = 0;
+  const feedbackLength = feedbacks.length;
+  for (let i = 0; i < feedbackLength; i++) {
+    sumStar = sumStar + feedbacks[i].star;
+  }
+  return Math.ceil(sumStar / feedbackLength);
+};

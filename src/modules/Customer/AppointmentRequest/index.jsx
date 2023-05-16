@@ -1,25 +1,26 @@
 import { AccessTimeFilled, AddAPhoto, LocationOn } from '@mui/icons-material';
+import { Fab, TextField, Typography } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import './AppointmentRequest.scss';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
+import appointmentApi from '../../../api/appointmentApi';
 import packageApi from '../../../api/packageApi';
 import LocationPickDialog from '../../../components/Common/LocationPickDialog';
-import moment from 'moment';
-import { Fab, TextField, Typography } from '@mui/material';
-import appointmentApi from '../../../api/appointmentApi';
+import './AppointmentRequest.scss';
 
 const AppointmentRequest = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.auth);
+  const { services } = useSelector((state) => state.providerCustomer);
   const providerId = searchParams.get('providerId');
   const serviceId = searchParams.get('serviceId');
   const packageId = searchParams.get('packageId');
-
   const [packages, setPackages] = useState();
   const [servicePick, setServicePick] = useState(serviceId);
   const [packagePick, setPackagePick] = useState(packageId);
@@ -27,10 +28,10 @@ const AppointmentRequest = () => {
   const [location, setLocation] = useState();
   const [attachPhoto, setAttachPhoto] = useState();
   const [noteForProvider, setNoteForProvider] = useState();
-  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [avatarPick, setAvatarPick] = useState();
 
-  const { services } = useSelector((state) => state.providerCustomer);
-  console.log(services);
+  if (!services) return <Navigate to={`/finding-provider/${providerId}`} />;
 
   useEffect(() => {
     (async () => {
@@ -39,6 +40,12 @@ const AppointmentRequest = () => {
       setPackages(res.data);
     })();
   }, [serviceId]);
+
+  useEffect(() => {
+    return () => {
+      avatarPick && URL.revokeObjectURL(avatarPick);
+    };
+  }, [avatarPick]);
 
   const handleChangeService = (e) => {
     console.log(e.target.value);
@@ -55,10 +62,10 @@ const AppointmentRequest = () => {
     setPackagePick(e.target.value);
   };
 
-  const [open, setOpen] = useState(false);
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleSetLocation = (location) => {
     console.log(location);
     setLocation(location);
@@ -96,26 +103,18 @@ const AppointmentRequest = () => {
       formData.append('attach_photos', formValues?.attach_photos);
     }
 
-    // (async () => {
-    //   const res = await appointmentApi.add(formData);
-    //   console.log(res);
-    // })();
-    console.log(navigate);
+    (async () => {
+      const res = await appointmentApi.add(formData);
+    })();
     navigate('/me/appointment');
   };
 
-  const [avatarPick, setAvatarPick] = useState();
   const handlePreviewAvatar = (e) => {
     const file = e.target.files[0];
     setAttachPhoto(file);
     console.log('file: ', file, 'value: ', avatarPick);
     setAvatarPick(URL.createObjectURL(file));
   };
-  useEffect(() => {
-    return () => {
-      avatarPick && URL.revokeObjectURL(avatarPick);
-    };
-  }, [avatarPick]);
 
   return (
     <div className="appointment-request container">
@@ -139,8 +138,8 @@ const AppointmentRequest = () => {
             <option value="">Tất cả báo giá</option>
             {packages?.map((item, index) => {
               return (
-                <option key={item.id} value={item.id}>
-                  {item.name}
+                <option key={item?.package?.id} value={item?.package?.id}>
+                  {item?.package?.name}
                 </option>
               );
             })}

@@ -7,6 +7,7 @@ import packageApi from '../../../../../api/packageApi';
 import Empty from '../../../../../assets/images/wallet.png';
 import Skeleton from 'react-loading-skeleton';
 import { useSelector } from 'react-redux';
+import { avgStar } from '../../../../../utils/common';
 
 const ProviderPackage = () => {
   const starArr = [1, 2, 3, 4, 5];
@@ -17,6 +18,7 @@ const ProviderPackage = () => {
   const handleChangeService = (serviceId) => {
     setServiceId(serviceId);
     (async () => {
+      setLoading(true);
       const res = await packageApi.getAllByServiceId(serviceId);
       setLoading(false);
       setPackages(res?.data);
@@ -34,23 +36,35 @@ const ProviderPackage = () => {
           <span></span>
         </div>
       )}
-      {loading && <Skeleton width={840} height={250} />}
+      {loading && (
+        <div className="content">
+          {Array(2)
+            .fill(0)
+            .map(() => {
+              return <Skeleton width={400} height={180} />;
+            })}
+        </div>
+      )}
       {!loading && (
         <div className="content">
           {packages?.map((item) => {
             return (
-              <div className="package-item" key={item?.id}>
-                <h3>{item?.name}</h3>
+              <div className="package-item" key={item?.package?.id}>
+                <h3>{item?.package?.name}</h3>
                 <div className="price">
-                  {item?.is_negotiable ? <span>Giá thương lượng </span> : <span>{item.price}</span>}
+                  {item?.package?.is_negotiable ? <span>Giá thương lượng </span> : <span>{item?.package?.price}</span>}
                 </div>
                 <div className="rating">
-                  {item?.avg_star ? <Rating starNumber={item?.avg_star} size="small" /> : <span>Chưa có đánh giá</span>}
+                  {item?.feedbacks.length !== 0 ? (
+                    <Rating starNumber={avgStar(item?.feedbacks)} size="small" />
+                  ) : (
+                    <span>Chưa có đánh giá</span>
+                  )}
                 </div>
-                <div className="desc">{item?.description}</div>
+                <div className="desc">{item?.package?.description}</div>
                 <NavLink
                   className="quotation-btn"
-                  to={`/appointment-request-form?providerId=${provider?.id}&serviceId=${serviceId}&packageId=${item?.id}`}
+                  to={`/appointment-request-form?providerId=${provider?.id}&serviceId=${serviceId}&packageId=${item?.package?.id}`}
                 >
                   Lấy báo giá
                 </NavLink>

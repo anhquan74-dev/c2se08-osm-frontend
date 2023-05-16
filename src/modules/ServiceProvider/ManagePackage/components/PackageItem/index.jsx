@@ -122,6 +122,7 @@ const PackageItem = (props) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         fullWidth
+        maxWidth="md"
       >
         <DialogTitle id="alert-dialog-title">Chi tiết Báo giá</DialogTitle>
         <DialogContent>

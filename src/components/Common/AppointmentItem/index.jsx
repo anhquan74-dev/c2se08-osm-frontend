@@ -11,12 +11,12 @@ import { isTimeBeforeNow } from '../../../utils/common';
 import appointmentApi from '../../../api/appointmentApi';
 
 const AppointmentItem = (props) => {
-  const { status, appointment, type } = props;
+  const { status, appointment, type, setStatusPicker } = props;
   const RenderAppointment =
     type === 'provider' ? (
-      <AppointmentProviderItem status={status} appointment={appointment} />
+      <AppointmentProviderItem status={status} appointment={appointment} setStatusPicker={setStatusPicker} />
     ) : (
-      <AppointmentCustomerItem status={status} appointment={appointment} />
+      <AppointmentCustomerItem status={status} appointment={appointment} setStatusPicker={setStatusPicker} />
     );
   return <>{RenderAppointment}</>;
 };
@@ -175,12 +175,13 @@ const AppointmentProviderItem = (props) => {
       const res = await appointmentApi.update({
         id,
         price,
-        status: 'done',
+        status: 'appointed',
         job_status: 'finished',
         complete_date,
         cancel_date,
       });
       console.log(res);
+      setStatusPicker((prev) => '1');
       setStatusPicker('appointed');
     })();
   };
@@ -203,12 +204,12 @@ const AppointmentProviderItem = (props) => {
         <div className="group">
           <div className="left">
             <div>
-              <img src={appointment?.service?.provider?.avatar?.url} alt="avatar" className="avatar" />
+              <img src={appointment?.provider?.avatar?.url} alt="avatar" className="avatar" />
             </div>
           </div>
           <div className="right">
             <div>Khách hàng</div>
-            <div>{appointment?.service?.provider?.full_name}</div>
+            <div>{appointment?.provider?.full_name}</div>
           </div>
         </div>
         <div className="group">
