@@ -2,16 +2,19 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import Switch from '@mui/material/Switch';
 import '@reach/combobox/styles.css';
 import { GoogleMap, InfoWindow, Marker, useLoadScript } from '@react-google-maps/api';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CustomMarker from '../../../assets/images/pin-icon.png';
 import FeedbackDialog from '../../../components/Common/FeedbackDialog';
 import Rating from '../../../components/Common/Rating';
 import './Information.scss';
 import Slider from 'react-slick';
 import { categoryList } from '../../Customer/Home/categoryList';
-import { useNavigate } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
 import { Breadcrumbs, Stack, Typography, Link } from '@mui/material';
 import { NavigateNext } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
+import feedbackApi from '../../../api/feedbackApi';
+import { updateWorkingStatus } from '../../Auth/authSlice';
 
 const Information = () => {
   const { isLoaded } = useLoadScript({
@@ -19,7 +22,6 @@ const Information = () => {
     libraries: ['places'],
   });
   const [open, setOpen] = useState(false);
-  const [checked, setChecked] = useState(true);
   const [activeMarker, setActiveMarker] = useState(null);
   const navigate = useNavigate();
 
@@ -33,6 +35,20 @@ const Information = () => {
     autoplaySpeed: 2500,
   };
 
+  const { currentUser } = useSelector((state) => state.auth);
+  const [checked, setChecked] = useState(Boolean(currentUser?.is_working));
+  console.log(currentUser);
+  const [totalFeedback, setTotalFeedback] = useState();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!currentUser) return;
+    (async () => {
+      const res = await feedbackApi.getTotalFeedbackByProviderId(currentUser?.id);
+      setTotalFeedback(res.data);
+    })();
+  }, [currentUser]);
+
   const handleOpenFeedbackDialog = () => {
     setOpen(true);
   };
@@ -42,7 +58,8 @@ const Information = () => {
   };
 
   const handleChange = (event) => {
-    setChecked(event.target.checked);
+    // setChecked(event.target.checked);
+    dispatch(updateWorkingStatus(currentUser?.id));
   };
 
   const handleClickEditBtn = () => {
@@ -61,7 +78,7 @@ const Information = () => {
   return (
     <div className="provider-info container">
       <div className="break-crum">
-        <Stack spacing={2}>
+        <Stack spacing={2} marginTop={3}>
           <Breadcrumbs separator={<NavigateNext fontSize="medium" />} aria-label="breadcrumb">
             <Link underline="hover" key="1" color="inherit" href="/provider" onClick={handleClickBreadCrum}>
               Trang chủ
@@ -77,26 +94,30 @@ const Information = () => {
       <div className="info-name">
         <div className="name-left">
           <div className="name">
-            <p>Trần Anh Quân</p>
+            <p>{currentUser?.full_name}</p>
             <span className="edit-btn" onClick={handleClickEditBtn}>
               Sửa tên
             </span>
           </div>
           <div className="rate-avatar">
             <div className="avatar">
-              <img
-                src="https://lh3.googleusercontent.com/a/AGNmyxbPNpE4pGT68pfoJVUum2R2QRwenWcQ1aYUTqk4=s96-c"
-                alt=""
-              />
+              <img src={currentUser?.avatar?.url} alt="" />
               <label htmlFor="file-avatar">
                 <CameraAltIcon />
                 <input type="file" id="file-avatar" />
               </label>
             </div>
             <div className="rate">
-              <Rating starNumber={4} size="large" />
-              <div onClick={handleOpenFeedbackDialog}>11 phản hồi</div>
-              <FeedbackDialog type="provider" open={open} onClose={handleClose} />
+              <Rating starNumber={currentUser?.avg_star} size="large" />
+              <div onClick={handleOpenFeedbackDialog}>{totalFeedback} phản hồi</div>
+              <FeedbackDialog
+                type="provider"
+                open={open}
+                onClose={handleClose}
+                services={currentUser?.service}
+                star={currentUser?.avg_star}
+                provider={currentUser}
+              />
             </div>
           </div>
         </div>
@@ -104,7 +125,7 @@ const Information = () => {
           <div>
             <Switch
               color="success"
-              checked={checked}
+              checked={currentUser?.is_working}
               onChange={handleChange}
               inputProps={{ 'aria-label': 'controlled' }}
             />
@@ -130,29 +151,29 @@ const Information = () => {
             Sửa địa chỉ
           </span>
         </h4>
-        <span>654 Trung Nu Vuong, phuong Hoa Thuan Tay, quan Hai Chau, thanh pho Da Nang</span>
+        <span>{currentUser?.location?.[0]?.address}</span>
         {isLoaded && (
           <GoogleMap
             // onLoad={onMapLoad}
             onClick={() => setActiveMarker(null)}
             mapContainerStyle={{ width: '80%', height: '340px', margin: '0 auto' }}
             center={{
-              lat: 16.0238326,
-              lng: 108.2125453,
+              lat: parseFloat(currentUser?.location?.[0]?.coords_latitude),
+              lng: parseFloat(currentUser?.location?.[0]?.coords_longitude),
             }}
             zoom={13}
           >
             <Marker
               position={{
-                lat: 16.0238326,
-                lng: 108.2125453,
+                lat: parseFloat(currentUser?.location?.[0]?.coords_latitude),
+                lng: parseFloat(currentUser?.location?.[0]?.coords_longitude),
               }}
               options={{ icon: CustomMarker }}
               onClick={() => setActiveMarker(true)}
             >
               {activeMarker ? (
                 <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-                  <div>654 Trung Nu Vuong, phuong Hoa Thuan Tay, quan Hai Chau, thanh pho Da Nang</div>
+                  <div>{currentUser?.location?.[0]?.address}</div>
                 </InfoWindow>
               ) : null}
             </Marker>
@@ -167,9 +188,9 @@ const Information = () => {
           </span>
         </h4>
         <div className="services">
-          <div>Sửa điện nước</div>
-          <div>Sửa xe</div>
-          <div>Sửa đồ điện gia dụng</div>
+          {currentUser?.service?.map((item) => {
+            return <div key={item.id}>{item?.name}</div>;
+          })}
         </div>
       </div>
       <div className="info-item info-intro">
@@ -180,23 +201,13 @@ const Information = () => {
           </span>
         </h4>
         <div className="intro">
-          <div>
-            👨‍🔧ĐIỆN LẠNH HƯNG THỊNH - HOTLINE: 0987.880.307 📌 Chúng tôi chuyên: ✓ Sữa chữa, vệ sinh, lắp đặt các thiết
-            bị điện lạnh: tủ lạnh, máy giặt, máy lạnh, máy nước nóng... ✓ Mua bán trao đổi các mặt hàng điện máy mới và
-            cũ.... ✓ Nhận bảo trì thi công Điện - Nước cho công ty, khách sạn, nhà hàng..... -----------------------
-            LIÊN HỆ SỬA CHỮA ĐIỆN LẠNH TẠI NHÀ - ĐIỆN LẠNH HƯNG THỊNH ☎️ Hotline | zalo: 0987.880.307 🏠 Địa chỉ | L7
-            688/57 - Lê Đức Thọ- P17 Gò Vấp
-          </div>
+          <div>{currentUser?.introduction}</div>
           <div className="provider-slick">
             <Slider {...settings}>
-              {categoryList.map((item, index) => {
+              {currentUser?.banner?.map((item, index) => {
                 return (
                   <>
-                    <img
-                      key={index}
-                      src="https://icdn.dantri.com.vn/thumb_w/680/2023/04/01/afp-messi-1-167911043942020387261-75-0-625-881-crop-1679110702236160038944-1679118122610-1680330659064.jpeg"
-                      alt="image"
-                    />
+                    <img key={index} src={item?.url} alt="image" />
                   </>
                 );
               })}
@@ -214,11 +225,11 @@ const Information = () => {
         <div className="contacts">
           <div>
             <h5>Số điện thoại</h5>
-            <span>+84362474855</span>
+            <span>(+84){currentUser?.phone_number}</span>
           </div>
           <div>
             <h5>Email</h5>
-            <span>trananhquan0704@gmail.com</span>
+            <span>{currentUser?.email}</span>
           </div>
         </div>
       </div>

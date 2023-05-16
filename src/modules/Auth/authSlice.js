@@ -42,6 +42,12 @@ export const logOut = createAsyncThunk('auths/logOut', async (request, thunkAPI)
   return res;
 });
 
+export const updateWorkingStatus = createAsyncThunk('auths/updateWorkingStatus', async (request, thunkAPI) => {
+  const res = await providerApi.updateWorkingStatus(request);
+  console.log(res);
+  return res?.data;
+});
+
 const user = authApi.getUser();
 
 //setup state
@@ -77,6 +83,17 @@ export const authSlice = createSlice({
     builder.addCase(logOut.fulfilled, (state, action) => {
       state.isLoggedIn = false;
       state.currentUser = null;
+    });
+    builder.addCase(updateWorkingStatus.fulfilled, (state, action) => {
+      state.isLoggedIn = true;
+      state.currentUser = {
+        ...state.currentUser,
+        is_working: action.payload,
+      };
+      authApi.setUser({
+        ...state.currentUser,
+        is_working: action.payload,
+      });
     });
   },
 });

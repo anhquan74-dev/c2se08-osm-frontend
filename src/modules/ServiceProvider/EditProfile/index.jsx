@@ -13,10 +13,15 @@ import {
 } from '../../../components/Common';
 import InputFileField from '../../../components/Common/InputFileField';
 import SelectField from '../../../components/Common/SelectField';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Breadcrumbs, Stack, Typography, Link } from '@mui/material';
 import { NavigateNext } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import providerApi from '../../../api/providerApi';
+import { toast } from 'react-toastify';
+import { getMe } from '../../Auth/authSlice';
+import jwt_decode from 'jwt-decode';
 
 // const schema = yup
 // .object({
@@ -32,7 +37,7 @@ import { useNavigate } from 'react-router-dom';
 // .required();
 
 const EditProfile = () => {
-  // lấy provider từ redux
+  const { currentUser } = useSelector((state) => state.auth);
   const initialValues = {
     email: '',
     full_name: '',
@@ -50,26 +55,93 @@ const EditProfile = () => {
     clicks: '',
     views: '',
     click_rate: '',
-    // ...provider,
+    ...currentUser,
   };
   const [location, setLocation] = useState();
-
   const {
     control,
     handleSubmit,
     formState: { isSubmitting },
+    watch,
   } = useForm({
     defaultValues: initialValues,
     // resolver: yupResolver(schema),
   });
+  const [isDirty, setIsDirty] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setLocation(initialValues?.location?.[0]);
+  }, []);
+
+  useEffect(() => {
+    const subscription = watch((data) => {
+      console.log(data);
+      console.log('initialValues: ', initialValues);
+      console.log(JSON.stringify(initialValues) !== JSON.stringify(data));
+      setIsDirty(JSON.stringify(initialValues) !== JSON.stringify(data));
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [watch]);
 
   const handleSetLocation = (location) => {
     console.log(location);
     setLocation(location);
   };
   const handleFormSubmit = (formValues) => {
+    console.log('formValues: ', formValues);
+    let user = {
+      ...formValues,
+      location: { ...location, is_primary: 1 },
+    };
     console.log(formValues);
+    const formData = new FormData();
+    formData.append('phone_number', user.phone_number);
+    formData.append('gender', user.gender);
+    formData.append('birthday', user.birthday);
+    formData.append('full_name', user.full_name);
+    formData.append('email', user.email);
+    formData.append('password', user.password);
+    formData.append('is_valid', user.is_valid);
+    formData.append('introduction', user.introduction);
+    formData.append('location[address]', user.location.address);
+    formData.append('location[province_name]', user.location.province_name);
+    formData.append('location[district_name]', user.location.district_name);
+    formData.append('location[country_name]', user.location.country_name);
+    formData.append('location[coords_latitude]', user.location.coords_latitude);
+    formData.append('location[coords_longitude]', user.location.coords_longitude);
+    formData.append('location[is_primary]', user.location.is_primary);
+    formData.append('is_favorite', user.is_favorite);
+    formData.append('is_working', user.is_working);
+    formData.append('total_rate', user.total_rate);
+    formData.append('total_star', user.total_star);
+    formData.append('avg_star', user.avg_star);
+    formData.append('clicks', user.clicks);
+    formData.append('views', user.views);
+    formData.append('click_rate', user.click_rate);
+    // Thêm avatar vào formData nếu có
+    if (user.avatar && user.avatar instanceof File) {
+      formData.append('avatar', user.avatar);
+    }
+
+    if (user.banner) {
+      for (let i = 0; i < user.banner.length; i++) {
+        formData.append('banner[]', user.banner[i]);
+      }
+    }
+
+    formData.append('id', user.id);
+    (async () => {
+      const res = await providerApi.update(formData);
+      toast.success('Cập nhật thành công!');
+      let access_token = localStorage.getItem('access_token');
+      let decoded = jwt_decode(access_token);
+      dispatch(getMe(decoded));
+      navigate('/provider/information');
+    })();
   };
   const handleClickBreadCrum = (event) => {
     console.log(event.target.href);
@@ -79,7 +151,7 @@ const EditProfile = () => {
   return (
     <div className="provider-edit-profile container">
       <div className="break-crum">
-        <Stack spacing={2}>
+        <Stack spacing={2} marginTop={3}>
           <Breadcrumbs separator={<NavigateNext fontSize="medium" />} aria-label="breadcrumb">
             <Link underline="hover" key="1" color="inherit" href="/provider" onClick={handleClickBreadCrum}>
               Trang chủ
@@ -114,7 +186,8 @@ const EditProfile = () => {
           <InputFileField name="avatar" control={control} label="Ảnh đại diện" />
         </Box>
         <LocationPickField
-          name="location[0].address"
+          // name="location[0].address"
+          name="location"
           control={control}
           handleSetLocation={handleSetLocation}
           location={location}
@@ -136,7 +209,7 @@ const EditProfile = () => {
             type="submit"
             variant="contained"
             color="primary"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isDirty}
           >
             {isSubmitting && (
               <>

@@ -111,6 +111,7 @@ const ProviderDetailPage = () => {
               onClose={handleClose}
               services={services}
               star={provider?.avg_star}
+              provider={provider}
             />
           </div>
           <div className="pd-left-item">

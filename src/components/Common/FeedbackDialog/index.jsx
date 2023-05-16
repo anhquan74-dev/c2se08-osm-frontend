@@ -8,7 +8,7 @@ import moment from 'moment';
 import feedbackApi from '../../../api/feedbackApi';
 
 const FeedbackDialog = (props) => {
-  const { onClose, type, open, services, star } = props;
+  const { onClose, type, open, services, star, provider } = props;
   const [feedbackList, setFeedbackList] = useState();
   const [loading, setLoading] = useState(true);
   const handleChangeService = (serviceId) => {
@@ -21,14 +21,14 @@ const FeedbackDialog = (props) => {
     })();
   };
   console.log(feedbackList);
-
+  console.log(provider);
   return (
     <Dialog onClose={onClose} open={open} fullWidth maxWidth="md">
       <div className="feedback-dialog">
         <div className="header">
           <div className="title">
             <h3>Đánh giá</h3>
-            <p>Điện lạnh Hưng Thịnh</p>
+            <p>{provider?.full_name}</p>
             <Rating starNumber={star} />
           </div>
           <p onClick={onClose}>Đóng</p>

@@ -33,6 +33,10 @@ const providerApi = {
       },
     });
   },
+  updateWorkingStatus(id) {
+    const url = `/provider-working-status/${id}`;
+    return axiosClient.post(url);
+  },
   // remove(id) {
   //   const url = `/hard-delete-provider/${id}`;
   //   return axiosClient.delete(url);
