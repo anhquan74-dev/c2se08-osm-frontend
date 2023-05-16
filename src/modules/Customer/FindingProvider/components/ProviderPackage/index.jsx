@@ -27,7 +27,7 @@ const ProviderPackage = () => {
   return (
     <div className="provider-package-wrapper">
       <ServicePicker handleChangeService={handleChangeService} services={services} />
-      {!packages && (
+      {!loading && !packages && (
         <div className="empty">
           <img src={Empty} alt="" />
           Chưa có báo giá

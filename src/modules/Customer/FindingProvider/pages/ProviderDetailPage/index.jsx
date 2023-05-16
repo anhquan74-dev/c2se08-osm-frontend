@@ -32,7 +32,7 @@ const ProviderDetailPage = () => {
   // const [provider, setProvider] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { provider, loading } = useSelector((state) => state.providerCustomer);
+  const { provider, loading, services } = useSelector((state) => state.providerCustomer);
 
   useEffect(() => {
     if (!providerId) return;
@@ -101,9 +101,16 @@ const ProviderDetailPage = () => {
               {loading && <Skeleton width={205} height={205} />}
               {!loading && <img src={provider?.avatar?.url} alt="avatar" />}
             </div>
-            <Rating starNumber={provider?.avg_star} size="large" />
+            {loading && <Skeleton width={140} height={24} />}
+            {!loading && <Rating starNumber={provider?.avg_star} size="large" />}
             <div onClick={handleOpenFeedbackDialog}>11 phản hồi</div>
-            <FeedbackDialog type="provider" open={open} onClose={handleClose} />
+            <FeedbackDialog
+              type="provider"
+              open={open}
+              onClose={handleClose}
+              services={services}
+              star={provider?.avg_star}
+            />
           </div>
           <div className="pd-left-item">
             <h3>Địa điểm</h3>

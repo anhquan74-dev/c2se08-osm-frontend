@@ -9,10 +9,10 @@ const feedbackApi = {
   //   const url = `packages-by-service-category?category_id=${request.category_id}&provider_id=${request.provider_id}`;
   //   return axiosClient.get(url);
   // },
-  // getAllByServiceId(id) {
-  //   const url = `/packages-by-service/${id}`;
-  //   return axiosClient.get(url);
-  // },
+  getAllFeedbackByServiceId(id) {
+    const url = `/feedbacks-by-service/${id}`;
+    return axiosClient.get(url);
+  },
   // get(id) {
   //   const url = `/packages/${id}`;
   //   return axiosClient.get(url);

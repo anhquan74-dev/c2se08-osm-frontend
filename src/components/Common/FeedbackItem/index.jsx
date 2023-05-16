@@ -14,7 +14,7 @@ const FeedbackItem = (props) => {
         <div className="right">
           <div className="avatar">
             <img
-              src={feedbackInfo.customerInfo.avatar !== null ? feedbackInfo?.customerInfo.avatar?.url : DefaultAvatar}
+              src={feedbackInfo?.customerInfo.avatar !== null ? feedbackInfo?.customerInfo.avatar?.url : DefaultAvatar}
               alt=""
             />
           </div>
