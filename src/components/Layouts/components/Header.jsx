@@ -126,10 +126,14 @@ const Header = () => {
           >
             <ul className="profile-popover">
               <li>
-                <NavLink to="/me">Tài khoản</NavLink>
+                <NavLink to={currentUser?.roles[0]?.name === 'provider' ? '/provider/information' : '/me'}>
+                  Tài khoản
+                </NavLink>
               </li>
               <li>
-                <NavLink to="/me/appointment">Quản lý lịch hẹn</NavLink>
+                <NavLink to={currentUser?.roles[0]?.name === 'provider' ? '/provider/appointments' : '/me/appointment'}>
+                  Quản lý lịch hẹn
+                </NavLink>
               </li>
               <li>
                 <a onClick={handleLogout}>Đăng xuất</a>

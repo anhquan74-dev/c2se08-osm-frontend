@@ -9,20 +9,24 @@ const serviceApi = {
     const url = `/services/${id}`;
     return axiosClient.get(url);
   },
+  getByProvider(providerId) {
+    const url = `/services-by-provider/${providerId}`;
+    return axiosClient.get(url);
+  },
   getByProviderCategory(provider_id, category_id) {
     const url = `/service-by-provider-category?provider_id=${provider_id}&category_id=${category_id}`;
     return axiosClient.get(url);
   },
   create(data) {
     const url = '/services';
-    return axiosClient.post(url, data, {
-      headers: {
-        'Content-Type': 'multipart/form-data', // Cần thiết lập Content-Type là multipart/form-data để server có thể hiểu được dữ liệu gửi lên
-      },
-    });
+    return axiosClient.post(url, data);
   },
   deleteByCategoryId(id) {
     const url = `/hard-delete-service-by-category-id/${id}`;
+    return axiosClient.post(url);
+  },
+  delete(serviceId) {
+    const url = `/hard-delete-service/${serviceId}`;
     return axiosClient.post(url);
   },
 };

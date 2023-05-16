@@ -4,6 +4,8 @@ import './AddEditPackagePage.scss';
 import packageApi from '../../../../../api/packageApi';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { Breadcrumbs, Stack, Typography, Link } from '@mui/material';
+import { NavigateNext } from '@mui/icons-material';
 
 const AddEditPackagePage = () => {
   const { package_id } = useParams();
@@ -35,7 +37,7 @@ const AddEditPackagePage = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     let formValue = { ...providerPackage, service_id: service_id };
-    if (providerPackage.is_negotiable) {
+    if (is_negotiable) {
       formValue = { ...formValue, price: 0, is_negotiable: 1 };
       if (isEdit) {
         await packageApi.update(package_id, formValue);
@@ -70,8 +72,26 @@ const AddEditPackagePage = () => {
     });
   };
 
+  const handleClickBreadCrum = (event) => {
+    event.preventDefault();
+    navigate(event.target.href.slice(21));
+  };
+
   return (
     <div className="add-edit-package container">
+      <Stack spacing={2} marginTop={3}>
+        <Breadcrumbs separator={<NavigateNext fontSize="medium" />} aria-label="breadcrumb">
+          <Link underline="hover" key="1" color="inherit" href="/provider" onClick={handleClickBreadCrum}>
+            Trang chủ
+          </Link>
+          <Link underline="hover" key="1" color="inherit" href="/provider/services" onClick={handleClickBreadCrum}>
+            Dịch vụ
+          </Link>
+          <Typography key="3" color="text.primary">
+            {isEdit ? <>Sửa</> : <>Thêm</>} báo giá
+          </Typography>
+        </Breadcrumbs>
+      </Stack>
       <h2>{isEdit ? <>Sửa</> : <>Thêm</>} báo giá</h2>
       <form onSubmit={handleFormSubmit}>
         <div className="form-group">

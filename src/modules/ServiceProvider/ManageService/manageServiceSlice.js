@@ -12,13 +12,13 @@ export const getCategoriesProviderNotHave = createAsyncThunk(
   'manageService/getCategoriesProviderNotHave',
   async (request) => {
     const res = await categoryApi.getCategoriesProviderNotHave(request);
-    const options = res.data.map((item) => {
-      return {
-        value: item[0].id,
-        label: item[0].name,
-      };
-    });
-    return options;
+    // const options = res.data.map((item) => {
+    //   return {
+    //     value: item[0].id,
+    //     label: item[0].name,
+    //   };
+    // });
+    return res.data;
   }
 );
 export const getAllPackageByProviderCategory = createAsyncThunk(
@@ -26,6 +26,13 @@ export const getAllPackageByProviderCategory = createAsyncThunk(
   async (request) => {
     const res = await packageApi.getAllPackageByProviderCategory(request);
     return res.data[0].package;
+  }
+);
+export const getAllPackagesByServiceId = createAsyncThunk(
+  'manageService/getAllPackagesByServiceId',
+  async (request) => {
+    const res = await packageApi.getAllByServiceId(request);
+    return res.data;
   }
 );
 export const getAllFeedbackByPackage = createAsyncThunk('manageService/getAllFeedbackByPackage', async (request) => {
@@ -41,9 +48,19 @@ export const getCurrentService = createAsyncThunk('manageService/getCurrentServi
   const res = await serviceApi.getByProviderCategory(provider_id, category_id);
   return res.data[0].id;
 });
+
+export const getServicesByProvider = createAsyncThunk('manageService/getServicesByProvider', async (request) => {
+  const res = await serviceApi.getByProvider(request);
+  return res.data;
+});
+
 //setup state
 const initialState = {
+  loadingPackages: false,
+  loadingServices: false,
   loading: false,
+  services: [],
+  packages: [],
   serviceList: [],
   currentServiceId: null,
   currentCategoryId: null,
@@ -91,14 +108,14 @@ export const manageServiceSlice = createSlice({
     });
     // package by provider_id category_id
     builder.addCase(getAllPackageByProviderCategory.pending, (state, action) => {
-      state.loading = true;
+      state.loadingPackages = true;
     });
     builder.addCase(getAllPackageByProviderCategory.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loadingPackages = false;
       state.packageByProviderCategory = action.payload;
     });
     builder.addCase(getAllPackageByProviderCategory.rejected, (state, action) => {
-      state.loading = false;
+      state.loadingPackages = false;
     });
     // feedback by package_id
     builder.addCase(getAllFeedbackByPackage.pending, (state, action) => {
@@ -115,6 +132,30 @@ export const manageServiceSlice = createSlice({
     builder.addCase(getCurrentService.fulfilled, (state, action) => {
       state.loading = false;
       state.currentServiceId = action.payload;
+    });
+
+    // getServicesByProvider
+    builder.addCase(getServicesByProvider.pending, (state, action) => {
+      state.loadingServices = true;
+    });
+    builder.addCase(getServicesByProvider.fulfilled, (state, action) => {
+      state.loadingServices = false;
+      state.services = action.payload;
+    });
+    builder.addCase(getServicesByProvider.rejected, (state, action) => {
+      state.loadingServices = false;
+    });
+
+    // getAllPackagesByServiceId
+    builder.addCase(getAllPackagesByServiceId.pending, (state, action) => {
+      state.loadingPackages = true;
+    });
+    builder.addCase(getAllPackagesByServiceId.fulfilled, (state, action) => {
+      state.loadingPackages = false;
+      state.packages = action.payload;
+    });
+    builder.addCase(getAllPackagesByServiceId.rejected, (state, action) => {
+      state.loadingPackages = false;
     });
   },
 });

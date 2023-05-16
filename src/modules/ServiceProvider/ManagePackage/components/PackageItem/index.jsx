@@ -1,9 +1,19 @@
 import SettingsIcon from '@mui/icons-material/Settings';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './PackageItem.scss';
 import { Star } from '@mui/icons-material';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Popover } from '@mui/material';
-import { NavLink, useNavigate } from 'react-router-dom';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Popover,
+} from '@mui/material';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import FeedbackItem from '../../../../../components/Common/FeedbackItem';
 import SendIcon from '@mui/icons-material/Send';
 import packageApi from '../../../../../api/packageApi';
@@ -11,17 +21,25 @@ import feedbackApi from '../../../../../api/feedbackApi';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { getAllFeedbackByPackage, getAllPackageByProviderCategory } from '../../../ManageService/manageServiceSlice';
+import {
+  getAllFeedbackByPackage,
+  getAllPackageByProviderCategory,
+  getAllPackagesByServiceId,
+} from '../../../ManageService/manageServiceSlice';
+import { avgStar } from '../../../../../utils/common.js';
 
 const PackageItem = (props) => {
   // const navigate = useNavigate();
-  const feedbackListByPackage = useSelector((state) => state.manageService.feedbackByPackage);
+  const { service_id } = useParams();
   const dispatch = useDispatch();
   const { packageInfo, provider_id, category_id } = props;
   const [anchorEl, setAnchorEl] = useState(null);
+  const [feedbackList, setFeedbackList] = useState(null);
   const [openDetailDialog, setOpenDetailDialog] = useState(false);
   const [openDialogRemove, setOpenDialogRemove] = useState(false);
   const [providerReply, setProviderReply] = useState('');
+  const [loading, setLoading] = useState(true);
+
   const handleClickSetting = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -40,7 +58,12 @@ const PackageItem = (props) => {
 
   const handleClickPackageItem = () => {
     setOpenDetailDialog(true);
-    dispatch(getAllFeedbackByPackage(packageInfo.id));
+    (async () => {
+      setLoading(true);
+      const res = await feedbackApi.getAllFeedbackByPackage(packageInfo?.package?.id);
+      setLoading(false);
+      setFeedbackList(res.feedbackList);
+    })();
   };
 
   const handleRemoveClick = () => {
@@ -48,18 +71,14 @@ const PackageItem = (props) => {
   };
 
   const handleRemovePackage = async () => {
-    const res = await packageApi.delete(packageInfo.id);
+    const res = await packageApi.delete(packageInfo?.package?.id);
     if (res.statusCode == 200) {
       setAnchorEl(null);
       toast.success('Xóa báo giá thành công!');
-      dispatch(
-        getAllPackageByProviderCategory({
-          provider_id,
-          category_id,
-        })
-      );
+      dispatch(getAllPackagesByServiceId(service_id));
     }
   };
+
   const handleSubmitProviderReply = async (feedbackReply) => {
     const dataSend = {
       reply: providerReply,
@@ -75,15 +94,23 @@ const PackageItem = (props) => {
   return (
     <div className="pro-package-item">
       <div className="item-left">
-        <h4 onClick={handleClickPackageItem}>{packageInfo?.name}</h4>
-        {/* check star */}
+        <h4 onClick={handleClickPackageItem}>{packageInfo?.package?.name}</h4>
         <div className="star">
           <Star sx={{ color: '#ffbe17' }} />
-          <span>{packageInfo?.avg_start}/5</span>
+          {packageInfo?.feedbacks.length === 0 ? (
+            <small>Chưa có đánh giá</small>
+          ) : (
+            <span>{avgStar(packageInfo?.feedbacks)}/5</span>
+          )}
         </div>
-        {/* <span>Chưa có đánh giá</span> */}
-        <p>{packageInfo?.description}</p>
-        <strong>{packageInfo?.price} đ</strong>
+        <p>{packageInfo?.package?.description}</p>
+        <strong>
+          {packageInfo?.package?.is_negotiable === 1 ? (
+            <span>Giá thương lượng </span>
+          ) : (
+            <span>{packageInfo?.package?.price} đ</span>
+          )}
+        </strong>
       </div>
       <div className="item-right" onClick={handleClickSetting}>
         <SettingsIcon />
@@ -107,7 +134,7 @@ const PackageItem = (props) => {
       >
         <ul className="profile-popover">
           <li>
-            <NavLink to={`/provider/packages/${packageInfo.id}`}>Chỉnh sửa</NavLink>
+            <NavLink to={`/provider/packages/${packageInfo?.package?.id}`}>Chỉnh sửa</NavLink>
           </li>
           <li>
             <NavLink to="" onClick={handleRemoveClick}>
@@ -127,62 +154,75 @@ const PackageItem = (props) => {
         <DialogTitle id="alert-dialog-title">Chi tiết Báo giá</DialogTitle>
         <DialogContent>
           <div className="package-detail-dialog">
-            <h3>{packageInfo?.name}</h3>
+            <h3>{packageInfo?.package?.name}</h3>
             <div className="rate-price">
-              <strong>{packageInfo?.price}đ</strong>
+              <strong>
+                {packageInfo?.package?.is_negotiable === 1 ? (
+                  <span>Giá thương lượng </span>
+                ) : (
+                  <span>{packageInfo?.package?.price} đ</span>
+                )}
+              </strong>
               <span></span>
               <div className="star">
                 <Star sx={{ color: '#ffbe17' }} />
-                <span>{packageInfo?.avg_star}/5</span>
+                <span>{avgStar(packageInfo?.feedbacks)}/5</span>
               </div>
             </div>
             <hr />
             <div className="desc">
               <h4>Thêm chi tiết</h4>
-              <div>{packageInfo?.description}</div>
+              <div>{packageInfo?.package?.description}</div>
             </div>
             <hr />
             <div className="feedback">
               <h4>Đánh giá</h4>
               <div className="feedback-container">
-                {feedbackListByPackage && feedbackListByPackage.length > 0 ? (
-                  feedbackListByPackage.map((item, index) => {
-                    return (
-                      <div className="feedback-content">
-                        <div className="content-up">
-                          <FeedbackItem key={index} feedbackInfo={item} />
-                        </div>
-                        <div className="content-down">
-                          {item?.feedback?.reply ? (
-                            <>
-                              <div className="content">{item?.feedback?.reply}</div>
-                              <div className="date">{moment(item?.feedback?.reply_at).format('DD/MM/YYYY')}</div>
-                            </>
-                          ) : (
-                            <>
-                              <p>Phản hồi của nhà cung cấp</p>
-                              <div className="reply">
-                                <input
-                                  type="text"
-                                  name=""
-                                  onChange={(e) => {
-                                    setProviderReply(e.target.value);
-                                  }}
-                                  id=""
-                                  placeholder="Nhập câu trả lời"
-                                />
-                                <SendIcon color="" onClick={() => handleSubmitProviderReply(item)} />
-                              </div>
-                              <span>Bạn chỉ được phản hồi đánh giá một lần</span>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <p>Chưa có đánh giá</p>
+                {loading && (
+                  <Box sx={{ display: 'flex', justifyContent: 'center', minHeight: '220px', alignItems: 'center' }}>
+                    <CircularProgress />
+                  </Box>
                 )}
+                {!loading &&
+                  feedbackList &&
+                  (feedbackList?.length > 0 ? (
+                    feedbackList?.map((item, index) => {
+                      return (
+                        <div className="feedback-content">
+                          <div className="content-up">
+                            <FeedbackItem key={index} feedbackInfo={item} />
+                          </div>
+                          <div className="content-down">
+                            {item?.reply ? (
+                              <>
+                                <div className="content">{item?.reply}</div>
+                                <div className="date">{moment(item?.reply_at).format('DD/MM/YYYY')}</div>
+                              </>
+                            ) : (
+                              <>
+                                <p>Phản hồi của nhà cung cấp</p>
+                                <div className="reply">
+                                  <input
+                                    type="text"
+                                    name=""
+                                    onChange={(e) => {
+                                      setProviderReply(e.target.value);
+                                    }}
+                                    id=""
+                                    placeholder="Nhập câu trả lời"
+                                  />
+                                  <SendIcon color="" onClick={() => handleSubmitProviderReply(item)} />
+                                </div>
+                                <span>Bạn chỉ được phản hồi đánh giá một lần</span>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p>Chưa có đánh giá</p>
+                  ))}
               </div>
             </div>
           </div>
