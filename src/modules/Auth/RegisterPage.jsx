@@ -1,26 +1,36 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { InputField, RadioGroupField, DatePickerField, LocationPickField } from '../../components/Common';
 import './Auth.scss';
 import { Box, CircularProgress } from '@mui/material';
+import authApi from '../../api/authApi';
+import { toast } from 'react-toastify';
 
 const schema = yup
   .object({
-    email: yup.string().required('Vui lòng nhập email'),
+    email: yup.string().email('Email không đúng định dạng').required('Vui lòng nhập email'),
+    password: yup
+      .string()
+      .min(6, 'Mật khẩu phải có ít nhất 6 ký tự')
+      .max(20, 'Mật khẩu không vượt quá 20 ký tự')
+      .required('Vui lòng nhập mật khẩu'),
     full_name: yup.string().required('Vui lòng nhập Họ và tên'),
     birthday: yup.string().required('Vui lòng nhập ngày sinh'),
     gender: yup.string().oneOf(['male', 'female'], 'Vui lòng chọn giới tính').required(),
-    phone_number: yup.number().positive().integer().required('Vui lòng nhập số điện thoại'),
-    // avatar: yup.string().required(),
-    // is_valid: yup.string().oneOf(['male', 'female'], 'Vui lòng chọn trạng thái tài khoản').required(),
-    // introduction: yup.string().required(),
+    phone_number: yup
+      .string()
+      .required('Vui lòng nhập số điện thoại')
+      .matches(/^[0-9]+$/, 'Vui lòng nhập số')
+      .min(10, 'Vui lòng nhập ít nhất 10 chữ số')
+      .max(10, 'Vui lòng nhập nhiều nhất 10 chữ số'),
   })
   .required();
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
   const initialValues = {
     email: '',
     password: '',
@@ -28,8 +38,7 @@ const RegisterPage = () => {
     birthday: '',
     gender: 'male',
     phone_number: '',
-    avatar: '',
-    is_valid: '',
+    is_valid: true,
   };
   const {
     control,
@@ -39,13 +48,25 @@ const RegisterPage = () => {
     defaultValues: initialValues,
     resolver: yupResolver(schema),
   });
+  const handleRegister = async (formValues) => {
+    // console.log('formValues', formValues);
+    const res = await authApi.register(formValues);
+    console.log('res register', res);
+    if (res.statusCode && res.statusCode == 201) {
+      toast.success('Đăng ký thành công!');
+      navigate('/login');
+    } else {
+      toast.error('Email này đã tồn tại, vui lòng nhập email khác!');
+      return;
+    }
+  };
   return (
     <div className="register-page">
       <div className="register-logo">ONLINE SERVICE MARKET</div>
       <div className="register-content">
         <div className="register-header">Tạo mới tài khoản</div>
         <div className="register-slogan">Nhanh chóng và dễ dàng</div>
-        <form className="register-form">
+        <form className="register-form" onSubmit={handleSubmit(handleRegister)}>
           <InputField name="email" control={control} label="Email" />
           <InputField name="password" control={control} label="Mật khẩu" type="password" />
           <InputField name="full_name" control={control} label="Họ và tên" />
@@ -60,12 +81,6 @@ const RegisterPage = () => {
               { label: 'Nam', value: 'male' },
               { label: 'Nữ', value: 'female' },
             ]}
-          />
-          <LocationPickField
-            name="location[0].address"
-            control={control}
-            // handleSetLocation={handleSetLocation}
-            // location={location}
           />
           <button type="submit">
             {isSubmitting && (

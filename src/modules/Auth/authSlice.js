@@ -4,10 +4,15 @@ import authApi from '../../api/authApi';
 import customerApi from '../../api/customerApi';
 import providerApi from '../../api/providerApi';
 import axiosClient from '../../api/axiosClient';
+import { toast } from 'react-toastify';
 
 export const logIn = createAsyncThunk('auths/logIn', async (request, thunkAPI) => {
   const res = await authApi.login(request);
-  console.log(res.result);
+  console.log('res login ', res);
+  if (res.statusCode == 404) {
+    toast.error('Email hoặc mật khẩu không chính xác');
+    return;
+  }
   const { access_token, refresh_token, refresh_ttl } = res.result;
   localStorage.setItem('access_token', access_token);
   localStorage.setItem('refresh_token', refresh_token);

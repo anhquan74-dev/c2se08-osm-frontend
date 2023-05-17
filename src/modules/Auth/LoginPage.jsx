@@ -8,18 +8,16 @@ import './Auth.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { logIn } from './authSlice';
 
-// const schema = yup
-//   .object({
-//     email: yup.string().required('Vui lòng nhập email'),
-//     full_name: yup.string().required('Vui lòng nhập Họ và tên'),
-//     birthday: yup.string().required('Vui lòng nhập ngày sinh'),
-//     gender: yup.string().oneOf(['male', 'female'], 'Vui lòng chọn giới tính').required(),
-//     phone_number: yup.number().positive().integer().required('Vui lòng nhập số điện thoại'),
-//     // avatar: yup.string().required(),
-//     // is_valid: yup.string().oneOf(['male', 'female'], 'Vui lòng chọn trạng thái tài khoản').required(),
-//     // introduction: yup.string().required(),
-//   })
-//   .required();
+const schema = yup
+  .object({
+    email: yup.string().email('Email không đúng định dạng').required('Vui lòng nhập email'),
+    password: yup
+      .string()
+      .min(6, 'Mật khẩu phải có ít nhất 8 kí tự')
+      .max(20, 'Mật khẩu không được vượt quá 20 kí tự')
+      .required('Vui lòng nhập mật khẩu'),
+  })
+  .required();
 
 const LoginPage = () => {
   const initialValues = {
@@ -32,7 +30,7 @@ const LoginPage = () => {
     formState: { isSubmitting },
   } = useForm({
     defaultValues: initialValues,
-    // resolver: yupResolver(schema),
+    resolver: yupResolver(schema),
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
