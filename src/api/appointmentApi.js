@@ -5,8 +5,8 @@ const appointmentApi = {
     const url = `/appointments-customer/${status}`;
     return axiosClient.get(url);
   },
-  getTotalByStatus(status) {
-    const url = `/appointments-count/${status}`;
+  getTotalByUser(userId) {
+    const url = `/appointments-count/${userId}`;
     return axiosClient.get(url);
   },
   add(request) {

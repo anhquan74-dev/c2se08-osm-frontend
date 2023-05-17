@@ -4,31 +4,19 @@ import EmptyAppointment from './EmptyAppointment';
 import AppointmentItem from './AppointmentItem';
 import appointmentApi from '../../../../api/appointmentApi';
 import Skeleton from 'react-loading-skeleton';
+import { useSelector } from 'react-redux';
 
 const Appointment = () => {
   const [statusPicker, setStatusPicker] = useState('new-or-offered');
   const [listAppointment, setListAppointment] = useState();
   const [loading, setLoading] = useState(true);
-  const [totalAppoinment, setTotalAppointment] = useState({
-    newOrOffered: 0,
-    appointed: 0,
-    done: 0,
-    canceled: 0,
-  });
-
+  const [totalAppoinment, setTotalAppointment] = useState();
+  const { currentUser } = useSelector((state) => state.auth);
+  console.log(currentUser);
   useEffect(() => {
     (async () => {
-      const newOrOffered = (await appointmentApi.getTotalByStatus('new-or-offered'))?.data;
-      const appointed = (await appointmentApi.getTotalByStatus('appointed'))?.data;
-      const done = (await appointmentApi.getTotalByStatus('done'))?.data;
-      const canceled = (await appointmentApi.getTotalByStatus('canceled'))?.data;
-      setTotalAppointment({
-        ...totalAppoinment,
-        newOrOffered,
-        appointed,
-        done,
-        canceled,
-      });
+      const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
+      setTotalAppointment(data);
     })();
   }, []);
 

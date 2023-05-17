@@ -6,6 +6,7 @@ import { NavigateNext } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import appointmentApi from '../../../api/appointmentApi';
 import Skeleton from 'react-loading-skeleton';
+import { useSelector } from 'react-redux';
 
 const ManageAppointment = () => {
   const [statusPicker, setStatusPicker] = useState('new');
@@ -19,29 +20,13 @@ const ManageAppointment = () => {
 
   const [listAppointment, setListAppointment] = useState();
   const [loading, setLoading] = useState(true);
-  const [totalAppointment, setTotalAppointment] = useState({
-    new: null,
-    offered: null,
-    appointed: null,
-    done: null,
-    canceled: null,
-  });
+  const [totalAppointment, setTotalAppointment] = useState();
+  const { currentUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
     (async () => {
-      const newStatus = (await appointmentApi.getTotalByStatus('new'))?.data;
-      const offered = (await appointmentApi.getTotalByStatus('offered'))?.data;
-      const appointed = (await appointmentApi.getTotalByStatus('appointed'))?.data;
-      const done = (await appointmentApi.getTotalByStatus('done'))?.data;
-      const canceled = (await appointmentApi.getTotalByStatus('canceled'))?.data;
-      setTotalAppointment({
-        ...totalAppointment,
-        new: newStatus,
-        offered,
-        appointed,
-        done,
-        canceled,
-      });
+      const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
+      setTotalAppointment(data);
     })();
   }, []);
 
