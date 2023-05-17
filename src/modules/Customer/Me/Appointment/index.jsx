@@ -18,7 +18,7 @@ const Appointment = () => {
       const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
       setTotalAppointment(data);
     })();
-  }, []);
+  }, [statusPicker]);
 
   useEffect(() => {
     if (statusPicker === '1') {

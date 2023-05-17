@@ -221,4 +221,31 @@
       color: rgb(255, 190, 23);
     }
   }
+
+  .cancel-appointment {
+    display: flex;
+    flex-direction: row-reverse;
+    border-top: 1px dashed #ca9100;
+    margin-top: 20px;
+    padding: 20px 20px 10px 0px;
+    div {
+      display: flex;
+      gap: 10px;
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+        color: #ff1717;
+      }
+      svg {
+        size: 40px;
+        color: white;
+        background-color: #ff1717;
+        border-radius: 6px;
+      }
+      p {
+        color: #ff1717;
+        font-weight: 600;
+      }
+    }
+  }
 }

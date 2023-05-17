@@ -9,7 +9,9 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import Star from '@mui/material/Rating';
 import appointmentApi from '../../../../../api/appointmentApi';
 import { isTimeBeforeNow } from '../../../../../utils/common';
+import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import feedbackApi from '../../../../../api/feedbackApi';
+import { toast } from 'react-toastify';
 
 const AppointmentItem = (props) => {
   const { status, appointment, setStatusPicker } = props;
@@ -71,6 +73,24 @@ const AppointmentItem = (props) => {
       console.log(res);
       setStatusPicker('done');
     })();
+  };
+
+  // xu ly huy lich hen
+  const handleCancelAppointment = () => {
+    const { id, price, complete_date, cancel_date, job_status } = appointment;
+    (async () => {
+      const res = await appointmentApi.update({
+        id,
+        price,
+        status: 'canceled',
+        job_status,
+        complete_date,
+        cancel_date,
+      });
+      toast.success('Hủy lịch hẹn thành công!');
+      console.log(res);
+    })();
+    setStatusPicker('canceled');
   };
   return (
     <div className="appointment-item">
@@ -199,6 +219,15 @@ const AppointmentItem = (props) => {
           )}
         </div>
       </div>
+      {(appointment?.status === 'new' || appointment?.status === 'offered') && (
+        <div className="cancel-appointment" onClick={handleCancelAppointment}>
+          <div>
+            <DoDisturbIcon />
+            <p>Hủy lịch hẹn</p>
+          </div>
+        </div>
+      )}
+
       <Dialog
         open={openRateDialog}
         onClose={handleCloseRateDialog}

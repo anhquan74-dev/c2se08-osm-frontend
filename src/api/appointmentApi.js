@@ -21,6 +21,10 @@ const appointmentApi = {
     const url = `/appointments/${request.id}`;
     return axiosClient.post(url, request);
   },
+  delete(id) {
+    const url = `/hard-delete-appointment/${id}`;
+    return axiosClient.post(url);
+  },
 };
 
 export default appointmentApi;

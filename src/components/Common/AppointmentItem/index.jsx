@@ -6,9 +6,10 @@ import BorderColorIcon from '@mui/icons-material/BorderColor';
 import ImageIcon from '@mui/icons-material/Image';
 import Rating from '../Rating';
 import { TextField } from '@mui/material';
-import { Star } from '@mui/icons-material';
+import { DoDisturb, Star } from '@mui/icons-material';
 import { isTimeBeforeNow } from '../../../utils/common';
 import appointmentApi from '../../../api/appointmentApi';
+import { toast } from 'react-toastify';
 
 const AppointmentItem = (props) => {
   const { status, appointment, type, setStatusPicker } = props;
@@ -186,6 +187,24 @@ const AppointmentProviderItem = (props) => {
     })();
   };
 
+  // xu ly huy lich hen
+  const handleCancelAppointment = () => {
+    const { id, price, complete_date, cancel_date, job_status } = appointment;
+    (async () => {
+      const res = await appointmentApi.update({
+        id,
+        price,
+        status: 'canceled',
+        job_status,
+        complete_date,
+        cancel_date,
+      });
+      toast.success('Hủy lịch hẹn thành công!');
+      console.log(res);
+    })();
+    setStatusPicker('canceled');
+  };
+
   return (
     <div className="appointment-item appointment-pro-item">
       <div className="btn-chat">
@@ -337,6 +356,14 @@ const AppointmentProviderItem = (props) => {
           <p>250.000 VND</p>
         </div> */}
       </div>
+      {(appointment?.status === 'new' || appointment?.status === 'offered') && (
+        <div className="cancel-appointment" onClick={handleCancelAppointment}>
+          <div>
+            <DoDisturb />
+            <p>Hủy lịch hẹn</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

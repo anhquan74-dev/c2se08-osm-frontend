@@ -12,6 +12,7 @@ import appointmentApi from '../../../api/appointmentApi';
 import packageApi from '../../../api/packageApi';
 import LocationPickDialog from '../../../components/Common/LocationPickDialog';
 import './AppointmentRequest.scss';
+import { toast } from 'react-toastify';
 
 const AppointmentRequest = () => {
   const [searchParams] = useSearchParams();
@@ -105,8 +106,9 @@ const AppointmentRequest = () => {
 
     (async () => {
       const res = await appointmentApi.add(formData);
+      toast.success('Tạo lịch hẹn thành công!');
     })();
-    // navigate('/me/appointment');
+    navigate('/me/appointment');
   };
 
   const handlePreviewAvatar = (e) => {
