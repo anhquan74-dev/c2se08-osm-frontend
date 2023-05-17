@@ -9,13 +9,9 @@ const feedbackApi = {
     const url = '/feedbacks';
     return axiosClient.post(url, request);
   },
-  update(id, data) {
-    const url = `/feedbacks/${id}`;
-    return axiosClient.post(url, data, {
-      headers: {
-        'Content-Type': 'multipart/form-data', // Cần thiết lập Content-Type là multipart/form-data để server có thể hiểu được dữ liệu gửi lên
-      },
-    });
+  update(data) {
+    const url = `/feedbacks/${data.id}`;
+    return axiosClient.post(url, data);
   },
 
   getTotalFeedbackByProviderId(providerId) {

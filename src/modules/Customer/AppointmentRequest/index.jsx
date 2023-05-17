@@ -106,7 +106,7 @@ const AppointmentRequest = () => {
     (async () => {
       const res = await appointmentApi.add(formData);
     })();
-    navigate('/me/appointment');
+    // navigate('/me/appointment');
   };
 
   const handlePreviewAvatar = (e) => {
