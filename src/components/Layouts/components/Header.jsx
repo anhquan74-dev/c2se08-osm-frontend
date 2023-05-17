@@ -125,17 +125,17 @@ const Header = () => {
             }}
           >
             <ul className="profile-popover">
-              <li>
+              <li onClick={() => setAnchorEl(null)}>
                 <NavLink to={currentUser?.roles[0]?.name === 'provider' ? '/provider/information' : '/me'}>
                   Tài khoản
                 </NavLink>
               </li>
-              <li>
+              <li onClick={() => setAnchorEl(null)}>
                 <NavLink to={currentUser?.roles[0]?.name === 'provider' ? '/provider/appointments' : '/me/appointment'}>
                   Quản lý lịch hẹn
                 </NavLink>
               </li>
-              <li>
+              <li onClick={() => setAnchorEl(null)}>
                 <a onClick={handleLogout}>Đăng xuất</a>
               </li>
             </ul>

@@ -39,6 +39,7 @@ const PackageItem = (props) => {
   const [openDialogRemove, setOpenDialogRemove] = useState(false);
   const [providerReply, setProviderReply] = useState('');
   const [loading, setLoading] = useState(true);
+  const { currentUser } = useSelector((state) => state.auth);
 
   const handleClickSetting = (event) => {
     setAnchorEl(event.currentTarget);
@@ -81,14 +82,19 @@ const PackageItem = (props) => {
 
   const handleSubmitProviderReply = async (feedbackReply) => {
     const dataSend = {
+      id: feedbackReply?.id,
       reply: providerReply,
       reply_at: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
     };
-    const feedback_id = feedbackReply.feedback.id;
-    const res = await feedbackApi.update(feedback_id, dataSend);
+    const res = await feedbackApi.update(dataSend);
     if (res.statusCode == 200) {
-      dispatch(getAllFeedbackByPackage(packageInfo.id));
       toast.success('Phản hồi của bạn đã được gửi!');
+      (async () => {
+        setLoading(true);
+        const res = await feedbackApi.getAllFeedbackByPackage(packageInfo?.package?.id);
+        setLoading(false);
+        setFeedbackList(res.feedbackList);
+      })();
     }
   };
   return (
@@ -187,16 +193,25 @@ const PackageItem = (props) => {
                   feedbackList &&
                   (feedbackList?.length > 0 ? (
                     feedbackList?.map((item, index) => {
+                      console.log(item);
                       return (
                         <div className="feedback-content">
                           <div className="content-up">
                             <FeedbackItem key={index} feedbackInfo={item} />
                           </div>
                           <div className="content-down">
-                            {item?.reply ? (
+                            {item?.feedback?.reply ? (
                               <>
-                                <div className="content">{item?.reply}</div>
-                                <div className="date">{moment(item?.reply_at).format('DD/MM/YYYY')}</div>
+                                <div className="reply-info">
+                                  <div>
+                                    <img src={currentUser?.avatar?.url} alt="" />
+                                  </div>
+                                  <div>
+                                    <p>Phản hồi của nhà cung cấp</p>
+                                    <div className="content">{item?.feedback?.reply}</div>
+                                    <div className="date">{moment(item?.feedback?.reply_at).format('DD/MM/YYYY')}</div>
+                                  </div>
+                                </div>
                               </>
                             ) : (
                               <>
@@ -211,7 +226,7 @@ const PackageItem = (props) => {
                                     id=""
                                     placeholder="Nhập câu trả lời"
                                   />
-                                  <SendIcon color="" onClick={() => handleSubmitProviderReply(item)} />
+                                  <SendIcon color="" onClick={() => handleSubmitProviderReply(item?.feedback)} />
                                 </div>
                                 <span>Bạn chỉ được phản hồi đánh giá một lần</span>
                               </>

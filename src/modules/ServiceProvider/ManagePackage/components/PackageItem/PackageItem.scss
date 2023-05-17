@@ -119,6 +119,45 @@
             line-height: 20px;
           }
 
+          .reply-info {
+            margin-left: 40px;
+            display: flex;
+            width: 100%;
+            padding: 12px 0;
+            gap: 12px;
+            > div {
+              &:first-child {
+                width: 38px;
+                height: 38px;
+                border-radius: 10px;
+                overflow: hidden;
+                img {
+                  object-fit: cover;
+                  width: 100%;
+                  height: 100%;
+                }
+              }
+
+              &:nth-child(2) {
+                width: 80%;
+                display: flex;
+                flex-direction: column;
+                P {
+                  font-size: 14px;
+                  font-weight: 700;
+                }
+              }
+            }
+            .content {
+              margin: 0;
+              width: 100%;
+            }
+            .date {
+              margin: 0;
+              width: 100%;
+            }
+          }
+
           .reply {
             width: max-content;
             position: relative;
