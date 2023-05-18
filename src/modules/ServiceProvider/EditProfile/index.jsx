@@ -22,25 +22,40 @@ import providerApi from '../../../api/providerApi';
 import { toast } from 'react-toastify';
 import { getMe } from '../../Auth/authSlice';
 import jwt_decode from 'jwt-decode';
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
-// const schema = yup
-// .object({
-//   email: yup.string().required('Vui lòng nhập email'),
-//   full_name: yup.string().required('Vui lòng nhập Họ và tên'),
-//   birthday: yup.string().required('Vui lòng nhập ngày sinh'),
-//   gender: yup.string().oneOf(['male', 'female'], 'Vui lòng chọn giới tính').required(),
-//   phone_number: yup.number().positive().integer().required('Vui lòng nhập số điện thoại'),
-//   // avatar: yup.string().required(),
-//   // is_valid: yup.string().oneOf(['male', 'female'], 'Vui lòng chọn trạng thái tài khoản').required(),
-//   // introduction: yup.string().required(),
-// })
-// .required();
+const schema = yup
+  .object({
+    email: yup.string().required('Vui lòng nhập email').email('Vui lòng nhập đúng định dạng!'),
+    full_name: yup.string().required('Vui lòng nhập Họ và tên'),
+    password: yup
+      .string()
+      .min(6, 'Mật khẩu phải có ít nhất 6 kí tự')
+      .max(20, 'Mật khẩu không được vượt quá 20 kí tự')
+      .required('Vui lòng nhập mật khẩu'),
+    birthday: yup
+      .date()
+      .typeError('Vui lòng chọn đúng ngày sinh')
+      // .max(new Date(Date.now() - 567648000000), 'You must be at least 18 years')
+      .max(new Date(Date.now() - 86400000), 'Ngày sinh không được chọn từ ngày hiện tại trở đi')
+      .required('Vui lòng nhập ngày sinh'),
+    gender: yup.string().oneOf(['male', 'female'], 'Vui lòng chọn giới tính').required(),
+    phone_number: yup
+      .string()
+      .required('Vui lòng nhập số điện thoại')
+      .matches(phoneRegExp, 'Vui lòng nhập đúng định dạng số!')
+      .max(11, 'Số điện thoại không vượt quá 11 số!'),
+    is_valid: yup.string().required('Vui lòng chọn trạng thái tài khoản'),
+  })
+  .required();
 
 const EditProfile = () => {
   const { currentUser } = useSelector((state) => state.auth);
   const initialValues = {
     email: '',
     full_name: '',
+    password: undefined,
     birthday: '',
     gender: 'male',
     phone_number: '',
@@ -65,7 +80,7 @@ const EditProfile = () => {
     watch,
   } = useForm({
     defaultValues: initialValues,
-    // resolver: yupResolver(schema),
+    resolver: yupResolver(schema),
   });
   const [isDirty, setIsDirty] = useState(false);
   const navigate = useNavigate();

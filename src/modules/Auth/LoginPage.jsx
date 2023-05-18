@@ -7,6 +7,7 @@ import { NavLink, Navigate, useNavigate } from 'react-router-dom';
 import './Auth.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { logIn } from './authSlice';
+import { Button, CircularProgress } from '@mui/material';
 
 const schema = yup
   .object({
@@ -37,7 +38,7 @@ const LoginPage = () => {
   const { currentUser } = useSelector((state) => state.auth);
   console.log(currentUser);
   console.log(currentUser?.roles?.[0]?.name);
-
+  console.log(isSubmitting);
   switch (currentUser?.roles?.[0]?.name) {
     case 'customer':
       return <Navigate to="/" />;
@@ -50,7 +51,7 @@ const LoginPage = () => {
   }
 
   const handleLogin = (formValues) => {
-    console.log('Submit: ', formValues);
+    console.log('Submit: ', formValues, isSubmitting);
     dispatch(logIn(formValues));
   };
   return (
@@ -61,7 +62,15 @@ const LoginPage = () => {
         <form className="login-form" onSubmit={handleSubmit(handleLogin)}>
           <InputField name="email" control={control} label="Email" />
           <InputField name="password" control={control} label="Mật khẩu" type="password" />
-          <button type="submit">Đăng nhập</button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting && (
+              <>
+                <CircularProgress size={16} color="primary" />
+                &nbsp;
+              </>
+            )}
+            Đăng nhập
+          </Button>
           <NavLink>Quên mật khẩu?</NavLink>
           <span> · </span>
           <NavLink to="/register">Đăng ký</NavLink>

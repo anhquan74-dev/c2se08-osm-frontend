@@ -39,9 +39,13 @@ const Header = () => {
     e.preventDefault();
     dispatch(logOut());
   };
+
+  const handleClickLogo = () => {
+    currentUser?.roles[0]?.name === 'provider' ? navigate('/provider') : navigate('/');
+  };
   return (
     <div className="header-content container">
-      <div className="header-logo">
+      <div className="header-logo" onClick={handleClickLogo}>
         <img src={Logo} alt="" />
       </div>
       <ul className="header-link">

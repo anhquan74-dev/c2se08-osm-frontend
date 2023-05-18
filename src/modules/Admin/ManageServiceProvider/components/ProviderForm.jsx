@@ -18,7 +18,12 @@ const ProviderForm = ({ initialValues, onSubmit, isEdit }) => {
   let objectValidation = {
     email: yup.string().required('Vui lòng nhập email').email('Vui lòng nhập đúng định dạng!'),
     full_name: yup.string().required('Vui lòng nhập Họ và tên'),
-    birthday: yup.string().required('Vui lòng nhập ngày sinh'),
+    birthday: yup
+      .date()
+      .typeError('Vui lòng chọn đúng ngày sinh')
+      // .max(new Date(Date.now() - 567648000000), 'You must be at least 18 years')
+      .max(new Date(Date.now() - 86400000), 'Ngày sinh không được chọn từ ngày hiện tại trở đi')
+      .required('Vui lòng nhập ngày sinh'),
     gender: yup.string().oneOf(['male', 'female'], 'Vui lòng chọn giới tính').required(),
     phone_number: yup
       .string()

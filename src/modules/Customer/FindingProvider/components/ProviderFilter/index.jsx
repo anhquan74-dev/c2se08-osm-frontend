@@ -21,12 +21,12 @@ const ProviderFilter = ({ onChange, conditions }) => {
   const [starPick, setStarPick] = useState(0);
   const [priceMin, setPriceMin] = useState(0);
   const [priceMax, setPriceMax] = useState(99999999);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [categoryList, setCategoryList] = useState();
   const rateArr = [5, 4, 3, 2, 1];
 
   const dispatch = useDispatch();
-  // const { list, loading } = useSelector((state) => state.category);
+  const { list, loading } = useSelector((state) => state.category);
   const [searchParams] = useSearchParams();
   const categoryId = searchParams.get('categoryId');
 
@@ -39,17 +39,18 @@ const ProviderFilter = ({ onChange, conditions }) => {
   }, []);
 
   useEffect(() => {
-    // if (list.length === 0) dispatch(getCategories());
-    (async () => {
-      const res = await categoryApi.getAll();
-      setLoading(false);
-      setCategoryList(res.data);
-    })();
+    if (list.length === 0) dispatch(getCategories());
+    // (async () => {
+    //   const res = await categoryApi.getAll();
+    //   setLoading(false);
+    //   setCategoryList(res.data);
+    // })();
   }, []);
 
   useEffect(() => {
-    if (categoryId) setCategoryPick(categoryId);
-  }, [categoryList]);
+    if (!categoryId) return;
+    setCategoryPick(categoryId);
+  }, [list]);
 
   useEffect(() => {
     let newConditions;
@@ -187,8 +188,8 @@ const ProviderFilter = ({ onChange, conditions }) => {
                 return <Skeleton width={150} height={45} style={{ margin: '8px 0' }} />;
               })}
           {!loading &&
-            categoryList &&
-            categoryList?.map((item, index) => {
+            list &&
+            list?.map((item, index) => {
               return (
                 <li
                   key={index}

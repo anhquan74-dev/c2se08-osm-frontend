@@ -88,6 +88,7 @@ export const authSlice = createSlice({
     builder.addCase(logOut.fulfilled, (state, action) => {
       state.isLoggedIn = false;
       state.currentUser = null;
+      toast.success('Đăng xuất thành công!');
     });
     builder.addCase(updateWorkingStatus.fulfilled, (state, action) => {
       state.isLoggedIn = true;

@@ -48,6 +48,10 @@
         font-weight: bold;
         color: white;
         cursor: pointer;
+        &:disabled {
+          cursor: no-drop;
+          background-color: #ffdd85;
+        }
       }
       > a {
         text-decoration: none;

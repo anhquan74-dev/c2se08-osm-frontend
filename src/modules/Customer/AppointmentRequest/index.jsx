@@ -31,6 +31,11 @@ const AppointmentRequest = () => {
   const [noteForProvider, setNoteForProvider] = useState();
   const [open, setOpen] = useState(false);
   const [avatarPick, setAvatarPick] = useState();
+  const [isError, setIsError] = useState({
+    packagePick: null,
+    location: null,
+    date: null,
+  });
 
   if (!services) return <Navigate to={`/finding-provider/${providerId}`} />;
 
@@ -61,6 +66,7 @@ const AppointmentRequest = () => {
   const handleChangePackage = (e) => {
     console.log(e.target.value);
     setPackagePick(e.target.value);
+    setIsError({ ...isError, packagePick: null });
   };
 
   const handleClose = () => {
@@ -70,6 +76,7 @@ const AppointmentRequest = () => {
   const handleSetLocation = (location) => {
     console.log(location);
     setLocation(location);
+    setIsError({ ...isError, location: null });
   };
 
   const handleSubmitAppointment = (e) => {
@@ -80,35 +87,42 @@ const AppointmentRequest = () => {
       location: location,
       date,
       attach_photos: attachPhoto,
-      note_for_provider: noteForProvider,
+      note_for_provider: noteForProvider || '',
       type: 'appointment',
       status: 'new',
     };
     console.log(formValues);
+    if (!formValues.package_id) {
+      setIsError({ ...isError, packagePick: 'Vui lòng chọn báo giá' });
+    } else if (!formValues.date) {
+      setIsError({ ...isError, date: 'Vui lòng chọn ngày giờ hẹn thợ' });
+    } else if (!formValues.location) {
+      setIsError({ ...isError, location: 'Vui lòng chọn địa điểm' });
+    } else {
+      const formData = new FormData();
+      formData.append('package_id', formValues?.package_id);
+      formData.append('customer_id', formValues?.customer_id);
+      formData.append('date', formValues?.date);
+      formData.append('type', formValues?.type);
+      formData.append('status', formValues?.status);
+      formData.append('note_for_provider', formValues?.note_for_provider);
+      formData.append('location[address]', formValues?.location?.address);
+      formData.append('location[province_name]', formValues?.location?.province_name);
+      formData.append('location[district_name]', formValues?.location?.district_name);
+      formData.append('location[country_name]', formValues?.location?.country_name);
+      formData.append('location[coords_latitude]', formValues?.location?.coords_latitude);
+      formData.append('location[coords_longitude]', formValues?.location?.coords_longitude);
 
-    const formData = new FormData();
-    formData.append('package_id', formValues?.package_id);
-    formData.append('customer_id', formValues?.customer_id);
-    formData.append('date', formValues?.date);
-    formData.append('type', formValues?.type);
-    formData.append('status', formValues?.status);
-    formData.append('note_for_provider', formValues?.note_for_provider);
-    formData.append('location[address]', formValues?.location?.address);
-    formData.append('location[province_name]', formValues?.location?.province_name);
-    formData.append('location[district_name]', formValues?.location?.district_name);
-    formData.append('location[country_name]', formValues?.location?.country_name);
-    formData.append('location[coords_latitude]', formValues?.location?.coords_latitude);
-    formData.append('location[coords_longitude]', formValues?.location?.coords_longitude);
+      if (formValues?.attach_photos && formValues?.attach_photos instanceof File) {
+        formData.append('attach_photos', formValues?.attach_photos);
+      }
 
-    if (formValues?.attach_photos && formValues?.attach_photos instanceof File) {
-      formData.append('attach_photos', formValues?.attach_photos);
+      (async () => {
+        const res = await appointmentApi.add(formData);
+        toast.success('Tạo lịch hẹn thành công!');
+      })();
+      navigate('/me/appointment');
     }
-
-    (async () => {
-      const res = await appointmentApi.add(formData);
-      toast.success('Tạo lịch hẹn thành công!');
-    })();
-    navigate('/me/appointment');
   };
 
   const handlePreviewAvatar = (e) => {
@@ -146,6 +160,7 @@ const AppointmentRequest = () => {
               );
             })}
           </select>
+          <small>{isError.packagePick}</small>
         </div>
         <div className="form-group">
           <label htmlFor="time">Thời gian</label>
@@ -158,7 +173,10 @@ const AppointmentRequest = () => {
                     backgroundColor: 'white',
                   }}
                   value={date}
-                  onChange={(newValue) => setDate(moment(newValue.$d).format('YYYY-MM-DD HH:mm:ss'))}
+                  onChange={(newValue) => {
+                    setDate(moment(newValue.$d).format('YYYY-MM-DD HH:mm:ss'));
+                    setIsError({ ...isError, date: null });
+                  }}
                 />
               </DemoContainer>
             </LocalizationProvider>
@@ -166,6 +184,7 @@ const AppointmentRequest = () => {
               <AccessTimeFilled />
             </span>
           </div>
+          <small>{isError.date}</small>
         </div>
         <div className="form-group">
           <label htmlFor="address">Địa điểm</label>
@@ -176,6 +195,7 @@ const AppointmentRequest = () => {
             </span>
             <LocationPickDialog onClose={handleClose} open={open} handleSetLocation={handleSetLocation} />
           </div>
+          <small>{isError.location}</small>
         </div>
         <div className="form-group">
           <label htmlFor="images">Hình ảnh</label>

@@ -164,7 +164,7 @@ const AppointmentItem = (props) => {
             </div>
             <div className="right last">
               <div>Ghi chú</div>
-              <div className="note">{appointment?.note_for_provider}</div>
+              <div className="note">{appointment?.note_for_provider ? appointment?.note_for_provider : ''}</div>
             </div>
           </div>
         </div>
