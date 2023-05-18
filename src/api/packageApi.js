@@ -37,6 +37,10 @@ const packageApi = {
       },
     });
   },
+  getMinPriceByProvider(id) {
+    const url = `/packages/min-price/${id}`;
+    return axiosClient.get(url);
+  },
 };
 
 export default packageApi;

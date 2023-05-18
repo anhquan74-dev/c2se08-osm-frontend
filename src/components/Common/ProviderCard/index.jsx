@@ -1,23 +1,51 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './ProviderCard.scss';
 import Rating from '../Rating';
 import { useSelector } from 'react-redux';
 import DefaultAvatar from '../../../assets/images/default-avatar.png';
 import { useNavigate } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
+import packageApi from '../../../api/packageApi';
+import { haversine_distance } from '../../../utils/common';
 
 const ProviderCard = (props) => {
-  const { id, avatar, avg_star, full_name, price, is_favorite, service } = props;
+  const { id, avatar, avg_star, full_name, price, is_favorite, service, location } = props;
   const starArr = [1, 2, 3, 4, 5];
   const navigate = useNavigate();
-
+  const [priceMin, setPriceMin] = useState();
+  const [center, setCenter] = useState();
   // check favorite provider
   const { list } = useSelector((state) => state.category);
+  console.log(location);
+  useEffect(() => {
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        console.log('Geolocation is not supported by this browser.');
+      }
+    }
+
+    function showPosition(position) {
+      setCenter({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      });
+      console.log('Latitude: ' + position.coords.latitude + ' Longitude: ' + position.coords.longitude);
+    }
+    getLocation();
+  }, []);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const res = await packageApi.getMinPriceByProvider(id);
+  //     console.log(res);
+  //   })();
+  // }, []);
 
   const handleOnclickFullname = () => {
     navigate(`/finding-provider/${id}`);
   };
-
   return (
     <div className="provider-card">
       <div className="provider-card__left">
@@ -44,7 +72,19 @@ const ProviderCard = (props) => {
             </>
           )}
         </div>
-        <div className="price">Khoảng cách</div>
+        <div className="price">
+          Khoảng cách{' '}
+          <strong style={{ fontWeight: '800' }}>
+            {haversine_distance(
+              {
+                lat: location?.[0]?.coords_latitude,
+                lng: location?.[0]?.coords_longitude,
+              },
+              center
+            )}{' '}
+            km
+          </strong>
+        </div>
         <div className="services">
           <DisplayServicesOnProviderCard services={service} list={list} />
         </div>

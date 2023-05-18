@@ -10,6 +10,7 @@ import { FormControl } from '@mui/material';
 import { convertDistrictIdToDistrictName, convertProvinceIdToProvinceName } from '../../../../../utils/common';
 import locationApi from '../../../../../api/locationApi';
 import categoryApi from '../../../../../api/categoryApi';
+import { useSearchParams } from 'react-router-dom';
 
 const ProviderFilter = ({ onChange, conditions }) => {
   const [categoryPick, setCategoryPick] = useState(0);
@@ -26,6 +27,8 @@ const ProviderFilter = ({ onChange, conditions }) => {
 
   const dispatch = useDispatch();
   // const { list, loading } = useSelector((state) => state.category);
+  const [searchParams] = useSearchParams();
+  const categoryId = searchParams.get('categoryId');
 
   useEffect(() => {
     const getPublicProvinces = async () => {
@@ -43,6 +46,10 @@ const ProviderFilter = ({ onChange, conditions }) => {
       setCategoryList(res.data);
     })();
   }, []);
+
+  useEffect(() => {
+    if (categoryId) setCategoryPick(categoryId);
+  }, [categoryList]);
 
   useEffect(() => {
     let newConditions;
@@ -169,7 +176,7 @@ const ProviderFilter = ({ onChange, conditions }) => {
       <div className="provider-filter-item">
         <h3>Danh mục</h3>
         <ul>
-          <li className={`pick-item ${categoryPick === 0 ? 'active' : ''}`} onClick={() => setCategoryPick(0)}>
+          <li className={`pick-item ${categoryPick == 0 ? 'active' : ''}`} onClick={() => setCategoryPick(0)}>
             Tất cả
           </li>
 
@@ -179,17 +186,19 @@ const ProviderFilter = ({ onChange, conditions }) => {
               .map(() => {
                 return <Skeleton width={150} height={45} style={{ margin: '8px 0' }} />;
               })}
-          {categoryList?.map((item, index) => {
-            return (
-              <li
-                key={index}
-                className={`pick-item ${categoryPick === item.id ? 'active' : ''}`}
-                onClick={() => setCategoryPick(item.id)}
-              >
-                {item.name}
-              </li>
-            );
-          })}
+          {!loading &&
+            categoryList &&
+            categoryList?.map((item, index) => {
+              return (
+                <li
+                  key={index}
+                  className={`pick-item ${categoryPick == item.id ? 'active' : ''}`}
+                  onClick={() => setCategoryPick(item.id)}
+                >
+                  {item.name}
+                </li>
+              );
+            })}
         </ul>
       </div>
       <div className="provider-filter-item">

@@ -9,13 +9,21 @@ import ProviderSort from '../../components/ProviderSort';
 import { getPackages, getProviders, providerCustomerActions } from '../../providerCustomerSlice';
 import './FindingProviderPage.scss';
 import { PAGE_DEFAULT } from '../../../../../utils/constants';
+import { useSearchParams } from 'react-router-dom';
 
 const FindingProviderPage = () => {
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get('search');
   const [type, setType] = useState('service');
   const [searchMap, setSearchMap] = useState(false);
   const dispatch = useDispatch();
   const { providerList, packageList, conditions, loading } = useSelector((state) => state.providerCustomer);
   const [list, setList] = useState([]);
+  useEffect(() => {
+    if (!search) return;
+    setType('provider');
+    setSearchMap(true);
+  }, search);
   useEffect(() => {
     dispatch(
       providerCustomerActions.setConditions({

@@ -53,7 +53,7 @@ const Home = () => {
               })}
           {!loading &&
             list?.map((item, index) => {
-              return <Category key={index} icon={item.logo} title={item.name} />;
+              return <Category key={index} item={item} />;
             })}
         </div>
       </div>

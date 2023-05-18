@@ -3,6 +3,7 @@ import './SearchBar.scss';
 import { LocationOn, Search } from '@mui/icons-material';
 import { FormControl, InputLabel, OutlinedInput } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme({
   palette: {
@@ -13,10 +14,15 @@ const theme = createTheme({
 });
 
 const SearchBar = () => {
+  const navigate = useNavigate();
+
+  const handleOnClickMap = () => {
+    navigate('/finding-provider?search=map');
+  };
   return (
     <ThemeProvider theme={theme}>
       <div className="search-bar">
-        <span className="search-map-btn">
+        <span className="search-map-btn" onClick={handleOnClickMap}>
           <LocationOn fontSize="medium" /> Bản đồ
         </span>
         <div>

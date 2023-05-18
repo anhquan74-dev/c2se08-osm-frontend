@@ -4,19 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 
 const Category = ({ ...props }) => {
-  const { icon, title } = props;
+  const { item } = props;
   const navigate = useNavigate();
   return (
     <div
       className="category-container"
       onClick={() => {
-        navigate('/finding-provider');
+        navigate(`/finding-provider?categoryId=${item.id}`);
       }}
     >
       <div>
-        <img src={icon?.url} alt="category-icon" />
+        <img src={item.logo?.url} alt="category-icon" />
       </div>
-      <p>{title}</p>
+      <p>{item.name}</p>
     </div>
   );
 };
