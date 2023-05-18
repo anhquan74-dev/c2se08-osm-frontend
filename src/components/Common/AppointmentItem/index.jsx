@@ -182,8 +182,7 @@ const AppointmentProviderItem = (props) => {
         cancel_date,
       });
       console.log(res);
-      setStatusPicker((prev) => '1');
-      setStatusPicker('appointed');
+      setStatusPicker('2');
     })();
   };
 

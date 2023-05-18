@@ -101,13 +101,13 @@ const DisplayServicesOnProviderCard = ({ services, list }) => {
   //     break;
   //   }
   // }
-  if (services.length === 1) {
-    return <strong>{services[0]?.name}</strong>;
+  if (services?.length === 1) {
+    return <strong>{services?.[0]?.name}</strong>;
   }
   return (
     <>
-      <strong>{services[0]?.name || <Skeleton width={166} height={16} />}</strong>
-      <span> và {services.length - 1 || <Skeleton width={19} height={16} />} dịch vụ khác</span>
+      <strong>{services?.[0]?.name || <Skeleton width={166} height={16} />}</strong>
+      <span> và {services?.length - 1 || <Skeleton width={19} height={16} />} dịch vụ khác</span>
     </>
   );
 };
