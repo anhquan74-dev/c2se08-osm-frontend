@@ -89,11 +89,11 @@ const CustomerForm = ({ initialValues, onSubmit, isEdit }) => {
   const handleFormSubmit = async (formValues) => {
     console.log('Submit: ', formValues);
     console.log(location);
-    // try {
-    //   await onSubmit?.(formValues, location);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      await onSubmit?.(formValues, location);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

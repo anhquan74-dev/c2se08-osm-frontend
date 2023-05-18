@@ -1,41 +1,52 @@
-import {
-  Button,
-  CircularProgress,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { Box } from '@mui/system';
-import React, { useState } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import './CategoryForm.scss';
+import { Button, CircularProgress } from '@mui/material';
+import { Box } from '@mui/system';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import 'react-quill/dist/quill.snow.css';
 import { useParams } from 'react-router-dom';
-import categoryApi from '../../../../api/categoryApi';
+import * as yup from 'yup';
 import { InputField } from '../../../../components/Common';
 import InputFileField from '../../../../components/Common/InputFileField';
 import SelectField from '../../../../components/Common/SelectField';
+import './CategoryForm.scss';
 
-const schema = yup.object({}).required();
+const schema = yup
+  .object({
+    name: yup.string().required('Vui lòng nhập tên danh mục'),
+    logo: yup.mixed().test('required', 'Vui lòng chọn ảnh', (file) => {
+      // return file && file.size <-- u can use this if you don't want to allow empty files to be uploaded;
+      if (file) return true;
+      return false;
+    }),
+    is_valid: yup.string().required('Vui lòng chọn trạng thái tài khoản'),
+  })
+  .required();
 
 const CategoryForm = ({ initialValues, onSubmit }) => {
   const {
     control,
     handleSubmit,
     formState: { isSubmitting },
+    watch,
   } = useForm({
     defaultValues: initialValues,
     resolver: yupResolver(schema),
   });
   const { categoryId } = useParams();
+  const [isDirty, setIsDirty] = useState(false);
 
+  useEffect(() => {
+    const subscription = watch((data) => {
+      console.log(data);
+      console.log('initialValues: ', initialValues);
+
+      setIsDirty(JSON.stringify(initialValues) !== JSON.stringify(data));
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [watch]);
   const handleFormSubmit = async (formValues) => {
     console.log('Submit: ', formValues);
 
@@ -63,7 +74,7 @@ const CategoryForm = ({ initialValues, onSubmit }) => {
         />
 
         <Box>
-          <Button mt={3} type="submit" variant="contained" color="primary" disabled={isSubmitting}>
+          <Button mt={3} type="submit" variant="contained" color="primary" disabled={isSubmitting || !isDirty}>
             {isSubmitting && (
               <>
                 <CircularProgress size={16} color="primary" />

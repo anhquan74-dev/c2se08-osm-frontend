@@ -68,6 +68,7 @@ const InputFileField = ({ name, control, label, disabled, ...inputProps }) => {
         ) : (
           <span style={previewStyle}>Preview Image</span>
         )}
+        <small style={{ color: '#d32f2f', fontSize: '12px' }}>{error?.message}</small>
       </div>
     </div>
   );
@@ -77,6 +78,7 @@ const inputFileField = {
   display: 'flex',
   gap: '20px',
   width: '100%',
+  margin: '7px 0',
 };
 const inputFileLeft = {};
 const inputFileRight = {

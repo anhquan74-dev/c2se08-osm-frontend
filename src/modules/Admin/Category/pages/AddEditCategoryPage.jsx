@@ -1,11 +1,11 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { ChevronLeft } from '@mui/icons-material';
+import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
-import { Typography } from '@mui/material';
-import { ChevronLeft } from '@mui/icons-material';
-import CategoryForm from '../components/CategoryForm';
-import categoryApi from '../../../../api/categoryApi';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import categoryApi from '../../../../api/categoryApi';
+import CategoryForm from '../components/CategoryForm';
 
 const AddEditCategoryPage = () => {
   const navigate = useNavigate();
