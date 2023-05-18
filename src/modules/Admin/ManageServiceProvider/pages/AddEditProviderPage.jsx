@@ -38,7 +38,7 @@ const AddEditProviderPage = () => {
     phone_number: '',
     avatar: '',
     introduction: '',
-    is_valid: '',
+    is_valid: 1,
     is_favorite: '',
     is_working: '',
     total_rate: '',

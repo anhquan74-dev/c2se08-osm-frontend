@@ -36,7 +36,7 @@ const AddEditCustomerPage = () => {
     gender: 'male',
     phone_number: '',
     avatar: '',
-    is_valid: '',
+    is_valid: 1,
     ...customer,
   };
 

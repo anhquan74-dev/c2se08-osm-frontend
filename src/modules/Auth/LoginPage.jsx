@@ -13,7 +13,7 @@ const schema = yup
     email: yup.string().email('Email không đúng định dạng').required('Vui lòng nhập email'),
     password: yup
       .string()
-      .min(6, 'Mật khẩu phải có ít nhất 8 kí tự')
+      .min(6, 'Mật khẩu phải có ít nhất 6 kí tự')
       .max(20, 'Mật khẩu không được vượt quá 20 kí tự')
       .required('Vui lòng nhập mật khẩu'),
   })
