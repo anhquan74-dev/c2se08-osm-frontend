@@ -84,7 +84,7 @@ const Appointment = () => {
           (listAppointment?.length === 0 ? (
             <EmptyAppointment status={statusPicker} />
           ) : (
-            listAppointment?.map((item, index) => {
+            listAppointment?.reverse().map((item, index) => {
               return (
                 <AppointmentItem
                   key={index}

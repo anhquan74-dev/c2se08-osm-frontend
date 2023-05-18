@@ -117,7 +117,7 @@ const ManageAppointment = () => {
             (listAppointment?.length === 0 ? (
               <EmptyAppointment status={statusPicker} type="provider" />
             ) : (
-              listAppointment?.map((item, index) => {
+              listAppointment?.reverse()?.map((item, index) => {
                 return (
                   <AppointmentItem
                     key={index}
