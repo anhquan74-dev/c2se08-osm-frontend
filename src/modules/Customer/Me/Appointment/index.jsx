@@ -43,11 +43,11 @@ const Appointment = () => {
     socket?.on('customer_refresh_request_new', async () => {
       const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
       setTotalAppointment(data);
-      if (statusPicker === 'new') {
+      if (statusPicker === 'new-or-offered') {
         const res = await appointmentApi.getByStatus(statusPicker);
         setListAppointment(res.data);
       } else {
-        setStatusPicker('new');
+        setStatusPicker('new-or-offered');
       }
     });
   }, [socket]);
