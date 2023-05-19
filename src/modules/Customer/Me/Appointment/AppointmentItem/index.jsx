@@ -61,6 +61,7 @@ const AppointmentItem = (props) => {
       });
       console.log(res);
       setStatusPicker('appointed');
+      socket?.emit('customer_accept_price');
     })();
   };
 

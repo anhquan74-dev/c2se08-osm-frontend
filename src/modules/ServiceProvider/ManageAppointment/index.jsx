@@ -51,13 +51,17 @@ const ManageAppointment = () => {
     setSocket(io(ENDPOINT));
   }, []);
   useEffect(() => {
-    socket?.on('provider_refresh_request', async () => {
+    socket?.on('provider_refresh_request_new', async () => {
       const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
       setTotalAppointment(data);
-      const res = await appointmentApi.getByStatus(statusPicker);
-      setListAppointment(res.data);
+      if (statusPicker === 'new') {
+        const res = await appointmentApi.getByStatus(statusPicker);
+        setListAppointment(res.data);
+      } else {
+        setStatusPicker('new');
+      }
     });
-  }, [socket, statusPicker]);
+  }, [socket]);
   //khiem
   return (
     <div className="provider-appointment container">

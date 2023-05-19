@@ -40,14 +40,17 @@ const Appointment = () => {
   }, [statusPicker]);
   const { currentUser } = useSelector((state) => state.auth);
   useEffect(() => {
-    socket?.on('customer_refresh_request', async () => {
-      console.log('customer refresh');
+    socket?.on('customer_refresh_request_new', async () => {
       const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
       setTotalAppointment(data);
-      const res = await appointmentApi.getByStatus(statusPicker);
-      setListAppointment(res.data);
+      if (statusPicker === 'new') {
+        const res = await appointmentApi.getByStatus(statusPicker);
+        setListAppointment(res.data);
+      } else {
+        setStatusPicker('new');
+      }
     });
-  }, [socket, statusPicker]);
+  }, [socket]);
   return (
     <div className="me-appointment">
       <div className="appointment-status">
