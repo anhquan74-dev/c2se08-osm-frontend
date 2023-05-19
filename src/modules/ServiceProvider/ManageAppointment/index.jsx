@@ -71,6 +71,16 @@ const ManageAppointment = () => {
         setStatusPicker('canceled');
       }
     });
+    socket?.on('provider_refresh_request_appointed', async () => {
+      const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
+      setTotalAppointment(data);
+      if (statusPicker === 'appointed') {
+        const res = await appointmentApi.getByStatus(statusPicker);
+        setListAppointment(res.data);
+      } else {
+        setStatusPicker('appointed');
+      }
+    });
   }, [socket]);
   //khiem
   return (
