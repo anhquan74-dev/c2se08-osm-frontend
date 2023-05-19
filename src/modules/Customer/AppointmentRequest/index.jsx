@@ -13,8 +13,25 @@ import packageApi from '../../../api/packageApi';
 import LocationPickDialog from '../../../components/Common/LocationPickDialog';
 import './AppointmentRequest.scss';
 import { toast } from 'react-toastify';
+import { io } from 'socket.io-client';
+const ENDPOINT = import.meta.env.VITE_REACT_APP_DOMAIN_NODE_SERVER;
 
 const AppointmentRequest = () => {
+  // khiem
+  const [socket, setSocket] = useState(null);
+  useEffect(() => {
+    setSocket(io(ENDPOINT));
+  }, []);
+  // useEffect(() => {
+  //   socket?.emit('join_with_provider', String(providerId));
+  //   socket?.on('getUsers', (users) => {
+  //     console.log('active user: ', users);
+  //   });
+  //   socket?.on('receivedMessage', (receivedMessage) => {
+  //     console.log(receivedMessage);
+  //   });
+  // }, [socket]);
+  // khiem
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.auth);
@@ -91,7 +108,6 @@ const AppointmentRequest = () => {
       type: 'appointment',
       status: 'new',
     };
-    console.log(formValues);
     if (!formValues.package_id) {
       setIsError({ ...isError, packagePick: 'Vui lòng chọn báo giá' });
     } else if (!formValues.date) {
@@ -119,9 +135,10 @@ const AppointmentRequest = () => {
 
       (async () => {
         const res = await appointmentApi.add(formData);
+        socket?.emit('customer_send_new_request');
         toast.success('Tạo lịch hẹn thành công!');
       })();
-      navigate('/me/appointment');
+      // navigate('/me/appointment');
     }
   };
 

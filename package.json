@@ -36,6 +36,7 @@
     "recharts": "^2.6.0",
     "sass": "^1.60.0",
     "slick-carousel": "^1.8.1",
+    "socket.io-client": "^4.6.1",
     "use-places-autocomplete": "^4.0.0",
     "yup": "^1.0.2"
   },

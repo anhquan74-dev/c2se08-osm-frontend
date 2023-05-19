@@ -7,9 +7,12 @@ import { useNavigate } from 'react-router-dom';
 import appointmentApi from '../../../api/appointmentApi';
 import Skeleton from 'react-loading-skeleton';
 import { useSelector } from 'react-redux';
+import { io } from 'socket.io-client';
+const ENDPOINT = import.meta.env.VITE_REACT_APP_DOMAIN_NODE_SERVER;
 
 const ManageAppointment = () => {
   const [statusPicker, setStatusPicker] = useState('new');
+  const [socket, setSocket] = useState(null);
 
   const navigate = useNavigate();
   const handleClickBreadCrum = (event) => {
@@ -43,7 +46,19 @@ const ManageAppointment = () => {
       })();
     }
   }, [statusPicker]);
-  console.log(listAppointment);
+  //khiem
+  useEffect(() => {
+    setSocket(io(ENDPOINT));
+  }, []);
+  useEffect(() => {
+    socket?.on('provider_refresh_new_request', async () => {
+      const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
+      setTotalAppointment(data);
+      const res = await appointmentApi.getByStatus(statusPicker);
+      setListAppointment(res.data);
+    });
+  }, [socket, statusPicker]);
+  //khiem
   return (
     <div className="provider-appointment container">
       <div className="break-crum">
