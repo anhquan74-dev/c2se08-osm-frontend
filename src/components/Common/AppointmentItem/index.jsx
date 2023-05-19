@@ -190,6 +190,7 @@ const AppointmentProviderItem = (props) => {
       });
       console.log(res);
       setStatusPicker('2');
+      socket?.emit('provider_complete_appointment');
     })();
   };
 

@@ -60,6 +60,15 @@ const Appointment = () => {
         setStatusPicker('canceled');
       }
     });
+    socket?.on('customer_refresh_request_appointed', async () => {
+      if (statusPicker === 'appointed') {
+        const res = await appointmentApi.getByStatus(statusPicker);
+        console.log('🚀 ~ file: index.jsx:66 ~ socket?.on ~ res:', res);
+        setListAppointment(res.data);
+      } else {
+        setStatusPicker('appointed');
+      }
+    });
   }, [socket]);
   return (
     <div className="me-appointment">

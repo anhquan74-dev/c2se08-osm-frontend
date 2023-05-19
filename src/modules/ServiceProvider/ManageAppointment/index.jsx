@@ -81,6 +81,16 @@ const ManageAppointment = () => {
         setStatusPicker('appointed');
       }
     });
+    socket?.on('provider_refresh_request_done', async () => {
+      const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
+      setTotalAppointment(data);
+      if (statusPicker === 'done') {
+        const res = await appointmentApi.getByStatus(statusPicker);
+        setListAppointment(res.data);
+      } else {
+        setStatusPicker('done');
+      }
+    });
   }, [socket]);
   //khiem
   return (

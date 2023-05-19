@@ -79,6 +79,7 @@ const AppointmentItem = (props) => {
       });
       console.log(res);
       setStatusPicker('done');
+      socket?.emit('customer_confirmed_done');
     })();
   };
 
