@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './AppointmentItem.scss';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
@@ -12,13 +12,19 @@ import { isTimeBeforeNow } from '../../../../../utils/common';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import feedbackApi from '../../../../../api/feedbackApi';
 import { toast } from 'react-toastify';
+import { io } from 'socket.io-client';
+const ENDPOINT = import.meta.env.VITE_REACT_APP_DOMAIN_NODE_SERVER;
 
 const AppointmentItem = (props) => {
   const { status, appointment, setStatusPicker } = props;
+  const [socket, setSocket] = useState(null);
   const [openRateDialog, setOpenRateDialog] = useState(false);
   const [star, setStar] = useState();
   const [comment, setComment] = useState();
   const [render, setRender] = useState();
+  useEffect(() => {
+    setSocket(io(ENDPOINT));
+  }, []);
   console.log(status, appointment);
 
   const handleCloseRateDialog = () => {
@@ -88,6 +94,7 @@ const AppointmentItem = (props) => {
         cancel_date,
       });
       toast.success('Hủy lịch hẹn thành công!');
+      socket?.emit('customer_cancel_request');
       console.log(res);
     })();
     setStatusPicker('canceled');

@@ -5,14 +5,19 @@ import AppointmentItem from './AppointmentItem';
 import appointmentApi from '../../../../api/appointmentApi';
 import Skeleton from 'react-loading-skeleton';
 import { useSelector } from 'react-redux';
+import { io } from 'socket.io-client';
+const ENDPOINT = import.meta.env.VITE_REACT_APP_DOMAIN_NODE_SERVER;
 
 const Appointment = () => {
+  const [socket, setSocket] = useState(null);
+  useEffect(() => {
+    setSocket(io(ENDPOINT));
+  }, []);
   const [statusPicker, setStatusPicker] = useState('new-or-offered');
   const [listAppointment, setListAppointment] = useState();
   const [loading, setLoading] = useState(true);
   const [totalAppoinment, setTotalAppointment] = useState();
-  const { currentUser } = useSelector((state) => state.auth);
-  console.log(currentUser);
+
   useEffect(() => {
     (async () => {
       const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
@@ -33,7 +38,16 @@ const Appointment = () => {
       })();
     }
   }, [statusPicker]);
-  console.log(listAppointment);
+  const { currentUser } = useSelector((state) => state.auth);
+  useEffect(() => {
+    socket?.on('customer_refresh_request', async () => {
+      console.log('customer refresh');
+      const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
+      setTotalAppointment(data);
+      const res = await appointmentApi.getByStatus(statusPicker);
+      setListAppointment(res.data);
+    });
+  }, [socket, statusPicker]);
   return (
     <div className="me-appointment">
       <div className="appointment-status">

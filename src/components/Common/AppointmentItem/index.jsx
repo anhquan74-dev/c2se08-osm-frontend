@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './AppointmentItem.scss';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
@@ -10,6 +10,8 @@ import { DoDisturb, Star } from '@mui/icons-material';
 import { isTimeBeforeNow } from '../../../utils/common';
 import appointmentApi from '../../../api/appointmentApi';
 import { toast } from 'react-toastify';
+import { io } from 'socket.io-client';
+const ENDPOINT = import.meta.env.VITE_REACT_APP_DOMAIN_NODE_SERVER;
 
 const AppointmentItem = (props) => {
   const { status, appointment, type, setStatusPicker } = props;
@@ -130,6 +132,10 @@ const AppointmentCustomerItem = (props) => {
 };
 
 const AppointmentProviderItem = (props) => {
+  const [socket, setSocket] = useState(null);
+  useEffect(() => {
+    setSocket(io(ENDPOINT));
+  }, []);
   const { status, appointment, setStatusPicker } = props;
   const [price, setPrice] = useState(0);
   const [openRateDialog, setOpenRateDialog] = useState(false);
@@ -166,6 +172,7 @@ const AppointmentProviderItem = (props) => {
       });
       console.log(res);
       setStatusPicker('offered');
+      socket?.emit('provider_send_price');
     })();
   };
 
@@ -199,7 +206,7 @@ const AppointmentProviderItem = (props) => {
         cancel_date,
       });
       toast.success('Hủy lịch hẹn thành công!');
-      console.log(res);
+      socket?.emit('provider_cancel_request');
     })();
     setStatusPicker('canceled');
   };

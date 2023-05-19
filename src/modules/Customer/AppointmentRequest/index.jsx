@@ -138,7 +138,7 @@ const AppointmentRequest = () => {
         socket?.emit('customer_send_new_request');
         toast.success('Tạo lịch hẹn thành công!');
       })();
-      // navigate('/me/appointment');
+      navigate('/me/appointment');
     }
   };
 

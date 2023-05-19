@@ -51,7 +51,7 @@ const ManageAppointment = () => {
     setSocket(io(ENDPOINT));
   }, []);
   useEffect(() => {
-    socket?.on('provider_refresh_new_request', async () => {
+    socket?.on('provider_refresh_request', async () => {
       const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
       setTotalAppointment(data);
       const res = await appointmentApi.getByStatus(statusPicker);
