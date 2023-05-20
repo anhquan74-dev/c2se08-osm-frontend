@@ -30,23 +30,32 @@
 
 .provider-card__right {
   align-items: flex-start;
-  flex-grow: 1;
+  justify-content: flex-start;
+
+  // flex-grow: 1;
 
   // gap: 12px;
   p {
+    height: 48px;
     color: #0075ff;
     font-weight: 800;
+    font-size: 15px;
     cursor: pointer;
     &:hover {
       text-decoration: underline;
     }
   }
 
-  .price {
+  .price,
+  .distance {
     font-size: 12px;
     span {
       font-weight: 800;
     }
+  }
+
+  .distance {
+    margin-bottom: 10px;
   }
   .services {
     font-size: 12px;
