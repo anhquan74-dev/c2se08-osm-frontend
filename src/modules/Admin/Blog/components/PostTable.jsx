@@ -15,6 +15,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import React, { useState } from 'react';
+import { formatBirthDay } from '../../../../utils/common';
 
 export default function PostTable({ postList, onEdit, onRemove }) {
   const [open, setOpen] = useState(false);
@@ -44,15 +45,15 @@ export default function PostTable({ postList, onEdit, onRemove }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {postList.map((post) => (
+            {postList?.map((post) => (
               <TableRow key={post.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell component="th" scope="row">
                   {post.id}
                 </TableCell>
                 <TableCell align="left">{post.title}</TableCell>
-                <TableCell align="left">{post.category_id}</TableCell>
-                <TableCell align="left">{post.date}</TableCell>
-                <TableCell align="left">{post.valid_flag}</TableCell>
+                <TableCell align="left">{post.category.name}</TableCell>
+                <TableCell align="left">{formatBirthDay(post.date)}</TableCell>
+                <TableCell align="left">{post.is_valid ? <>Đã đăng bài</> : <>Chưa đăng bài</>}</TableCell>
                 <TableCell align="left">
                   <Button
                     sx={{ mr: '8px' }}
