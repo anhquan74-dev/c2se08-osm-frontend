@@ -74,6 +74,7 @@ const AddEditCustomerPage = () => {
     }
 
     if (isEdit) {
+      formData.append('id', user.id);
       await customerApi.update(formData);
       toast.success('Cập nhật thành công!');
     } else {

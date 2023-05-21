@@ -10,15 +10,24 @@ import {
   OutlinedInput,
   Select,
 } from '@mui/material';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import categoryApi from '../../../../api/categoryApi';
 
-const ProviderFilters = ({ filter, onChange, onSearchChange }) => {
+const ProviderFilters = ({ conditions, onChange }) => {
   const searchRef = useRef();
   const typingTimeoutRef = useRef(null);
+  const [categories, setCategories] = useState();
+
+  useEffect(() => {
+    (async () => {
+      const res = await categoryApi.getAll();
+      setCategories(res.data);
+    })();
+  }, []);
 
   const handleSearchChange = (e) => {
     const { value } = e.target;
-    if (!onSearchChange) return;
+    if (!onChange) return;
 
     // debounce
     if (typingTimeoutRef.current) {
@@ -26,17 +35,43 @@ const ProviderFilters = ({ filter, onChange, onSearchChange }) => {
     }
 
     typingTimeoutRef.current = setTimeout(() => {
-      // const newFilter = {
-      //   ...filter,
-      //   name: e.target.value,
-      // };
-      onSearchChange(value);
+      const newConditions = {
+        ...conditions,
+        filter: {
+          ...conditions.filter,
+          title: value,
+        },
+        page: 1,
+      };
+      onChange(newConditions);
     }, 500);
   };
 
-  const handleSortChange = () => {};
+  const handleCategoryChange = (e) => {
+    const { value } = e.target;
+    const newConditions = {
+      ...conditions,
+      filter: {
+        ...conditions.filter,
+        category_id: value,
+      },
+      page: 1,
+    };
+    onChange(newConditions);
+  };
 
-  const handleClearFilter = () => {};
+  const handleClearFilter = () => {
+    const newConditions = {
+      ...conditions,
+      filter: {},
+      sort: [],
+      page: 1,
+    };
+    onChange(newConditions);
+    if (searchRef.current) {
+      searchRef.current.value = '';
+    }
+  };
 
   return (
     <Box>
@@ -55,11 +90,23 @@ const ProviderFilters = ({ filter, onChange, onSearchChange }) => {
         </Grid>
         <Grid item xs={12} md={6} lg={3}>
           <FormControl fullWidth sx={{ m: 1 }} size="small">
-            <InputLabel id="filterByCity">Lọc theo danh mục</InputLabel>
-            <Select labelId="filterByCity" id="filterByCity" label="Lọc theo thành phố" onChange={handleSortChange}>
+            <InputLabel id="filterByCategory">Lọc theo danh mục</InputLabel>
+            <Select
+              labelId="filterByCategory"
+              id="filterByCategory"
+              label="Lọc theo thành phố"
+              onChange={handleCategoryChange}
+            >
               <MenuItem value="">
                 <em>Tất cả</em>
               </MenuItem>
+              {categories?.map((category) => {
+                return (
+                  <MenuItem key={category.id} value={category.id}>
+                    <em>{category.name}</em>
+                  </MenuItem>
+                );
+              })}
             </Select>
           </FormControl>
         </Grid>

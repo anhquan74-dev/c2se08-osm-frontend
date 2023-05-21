@@ -9,10 +9,10 @@ import packageApi from '../../../api/packageApi';
 import { haversine_distance } from '../../../utils/common';
 
 const ProviderCard = (props) => {
-  const { id, avatar, avg_star, full_name, price, is_favorite, service, location } = props;
+  const { id, avatar, avg_star, full_name, price, is_favorite, service, location, min_price } = props;
   const starArr = [1, 2, 3, 4, 5];
   const navigate = useNavigate();
-  const [priceMin, setPriceMin] = useState();
+  // const [priceMin, setPriceMin] = useState();
   const [center, setCenter] = useState();
   // check favorite provider
   const { list } = useSelector((state) => state.category);
@@ -64,15 +64,15 @@ const ProviderCard = (props) => {
       <div className="provider-card__right">
         <p onClick={handleOnclickFullname}>{full_name}</p>
         <div className="price">
-          {price === 'negotiate' ? (
-            <span>Giá thương lượng</span>
-          ) : (
+          {min_price ? (
             <>
-              Giá từ <span>{price}</span>
+              Giá từ <span>{min_price.toString()?.slice(0, -3)}K</span>
             </>
+          ) : (
+            <span>Giá thương lượng</span>
           )}
         </div>
-        <div className="price">
+        <div className="distance">
           Khoảng cách{' '}
           <strong style={{ fontWeight: '800' }}>
             {haversine_distance(
