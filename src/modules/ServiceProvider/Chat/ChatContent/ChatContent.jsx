@@ -1,73 +1,26 @@
-import React, { createRef, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import Avatar from '../ChatList/Avatar';
 import './ChatContent.css';
 import ChatItem from './ChatItem';
-import Avatar from '../ChatList/Avatar';
-// import { AddCircleOutlineIcon } from '@mui/icons-material';
-import { AddAPhoto } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
-// import DefaultAvatar from '../../../assets/images/default-avatar.png';
-import DefaultAvatar from '../../../../assets/images/default-avatar.png';
-import messageApi from '../../../../api/messageApi.js';
 import { useDispatch } from 'react-redux';
+import messageApi from '../../../../api/messageApi.js';
 import { getListMessagesProviderCustomer } from '../chatSlice';
-
-const chatItms = [
-  {
-    key: 1,
-    image:
-      'https://plus.unsplash.com/premium_photo-1667760701840-6d2e8ab46af0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60',
-    type: '',
-    msg: 'Hi Tim, How are you?',
-  },
-  {
-    key: 2,
-    image:
-      'https://plus.unsplash.com/premium_photo-1667760701840-6d2e8ab46af0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60',
-    type: 'other',
-    msg: 'I am fine.',
-  },
-  {
-    key: 3,
-    image:
-      'https://plus.unsplash.com/premium_photo-1667760701840-6d2e8ab46af0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60',
-    type: 'other',
-    msg: 'What about you?',
-  },
-  {
-    key: 4,
-    image:
-      'https://plus.unsplash.com/premium_photo-1667760701840-6d2e8ab46af0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60',
-    type: 'other',
-    msg: 'What about you?',
-  },
-  {
-    key: 4,
-    image:
-      'https://plus.unsplash.com/premium_photo-1667760701840-6d2e8ab46af0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60',
-    type: 'other',
-    msg: 'What about you?',
-  },
-  {
-    key: 5,
-    image:
-      'https://plus.unsplash.com/premium_photo-1667760701840-6d2e8ab46af0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60',
-    type: 'other',
-    msg: 'What about you?',
-  },
-];
+import { io } from 'socket.io-client';
+const ENDPOINT = import.meta.env.VITE_REACT_APP_DOMAIN_NODE_SERVER;
 
 export default function ChatContent(props) {
+  const [socket, setSocket] = useState(null);
+  useEffect(() => {
+    setSocket(io(ENDPOINT));
+  }, []);
+
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
   const { listMessagesProviderCustomer } = props;
   const { currentCustomer } = useSelector((state) => state.chat);
-  const providerAvatarURL = currentUser?.avatar.url;
-  const [chat, setChat] = useState(null);
   const [msg, setMsg] = useState('');
-
   const messagesEndRef = useRef(null);
-  // const messagesEndRef1 = React.createRef();
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -79,18 +32,27 @@ export default function ChatContent(props) {
     setMsg(e.target.value);
   };
   const handleSubmitMessage = async () => {
-    const dataSend = {
-      provider_id: currentUser.id,
-      customer_id: currentCustomer.id,
-      sender: 'provider',
-      content: msg,
-    };
-    const res = await messageApi.create(dataSend);
-    console.log('🚀 ~ file: ChatContent.jsx:99 ~ handleSubmitMessage ~ res:', res);
-    setMsg('');
-    dispatch(getListMessagesProviderCustomer({ providerId: currentUser.id, customerId: currentCustomer.id }));
-    scrollToBottom();
+    if (msg) {
+      const dataSend = {
+        provider_id: currentUser.id,
+        customer_id: currentCustomer.id,
+        sender: 'provider',
+        content: msg,
+      };
+      const res = await messageApi.create(dataSend);
+      setMsg('');
+      dispatch(getListMessagesProviderCustomer({ providerId: currentUser.id, customerId: currentCustomer.id }));
+      scrollToBottom();
+      socket?.emit('provider_send_message');
+    } else {
+      return;
+    }
   };
+  useEffect(() => {
+    socket?.on('provider_refresh_messages', () => {
+      dispatch(getListMessagesProviderCustomer({ providerId: currentUser.id, customerId: currentCustomer.id }));
+    });
+  }, [socket]);
   return (
     <div className="main__chatcontent">
       <div className="content__header">
@@ -128,7 +90,13 @@ export default function ChatContent(props) {
       </div>
       <div className="content__footer">
         <div className="sendNewMessage">
-          <input type="text" placeholder="Nhập tin nhẵn mới ..." onChange={onStateChange} value={msg} />
+          <input
+            type="text"
+            placeholder="Nhập tin nhẵn mới ..."
+            onChange={onStateChange}
+            value={msg}
+            onKeyPress={(event) => (event.key === 'Enter' ? handleSubmitMessage() : null)}
+          />
           <button className="btnSendMsg" id="sendMsgBtn" onClick={handleSubmitMessage}>
             Gửi
           </button>
@@ -137,5 +105,3 @@ export default function ChatContent(props) {
     </div>
   );
 }
-
-// how to scroll screen to top in reactJS ?
