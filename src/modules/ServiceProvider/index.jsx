@@ -7,6 +7,7 @@ import ManageService from './ManageService';
 import ServiceDetail from './ManageService/ServiceDetail';
 import EditProfile from './EditProfile';
 import Home from './Home';
+import Chat from './Chat';
 
 const ServiceProvider = () => {
   return (
@@ -18,6 +19,7 @@ const ServiceProvider = () => {
       <Route path="services/*" element={<ManageService />} />
       <Route path="services/:service_id" element={<ServiceDetail />} />
       <Route path="packages/*" element={<ManagePackage />} />
+      <Route path="chat/*" element={<Chat />} />
       {/* <Route path="packages/:package_id" element={<AddEditPackagePage />} />
       <Route path="packages/add" element={<AddEditPackagePage />} /> */}
     </Routes>

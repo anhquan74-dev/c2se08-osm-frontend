@@ -81,7 +81,6 @@ const ManageService = () => {
   };
 
   const handleRemoveService = () => {
-    alert(serviceChoose);
     (async () => {
       const res = await serviceApi.delete(serviceChoose);
       toast.success('Dịch vụ đã được xóa!');
@@ -93,7 +92,6 @@ const ManageService = () => {
   };
 
   const handleAddService = async () => {
-    alert(service);
     setService(selectCategory?.[0]?.id);
     let data = {
       category_id: service,
