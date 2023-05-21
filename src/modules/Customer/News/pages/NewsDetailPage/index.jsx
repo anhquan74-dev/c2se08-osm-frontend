@@ -32,7 +32,7 @@ const NewsDetailPage = () => {
 
   useEffect(() => {
     (async () => {
-      const res = await postApi.getByCategory(post?.category_id);
+      const res = await postApi.getByCategory(post.category_id);
       setPostsCategory(res.data);
     })();
   }, [post]);

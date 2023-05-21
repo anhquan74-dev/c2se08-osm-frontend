@@ -5,7 +5,7 @@ import Rating from '../Rating';
 import './ServiceCard.scss';
 
 const ServiceCard = (props) => {
-  const { name, description, is_negotiable, avg_star, price, service, provider } = props;
+  const { name, description, is_negotiable, avg_star, price, service, provider, rating } = props;
   const starArr = [1, 2, 3, 4, 5];
   starArr.length = 5;
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const ServiceCard = (props) => {
         {name?.length < 31 ? name : <>{name?.slice(0, 30)}...</>}
       </h3>
       <h4>{provider?.full_name}</h4>
-      {avg_star ? <Rating starNumber={avg_star} size="small" /> : <span className="no-rating">Chưa có đánh giá</span>}
+      {rating ? <Rating starNumber={rating} size="small" /> : <span className="no-rating">Chưa có đánh giá</span>}
       <div>
         {is_negotiable ? (
           <span>Giá thương lượng </span>

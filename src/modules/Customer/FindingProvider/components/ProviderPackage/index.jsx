@@ -24,7 +24,6 @@ const ProviderPackage = () => {
       setPackages(res?.data);
     })();
   };
-  console.log(packages);
 
   return (
     <div className="provider-package-wrapper">
@@ -55,8 +54,9 @@ const ProviderPackage = () => {
                   {item?.package?.is_negotiable ? <span>Giá thương lượng </span> : <span>{item?.package?.price}</span>}
                 </div>
                 <div className="rating">
+                  {/* <Rating starNumber={avgStar(item?.feedbacks)} size="small" /> */}
                   {item?.feedbacks.length !== 0 ? (
-                    <Rating starNumber={avgStar(item?.feedbacks)} size="small" />
+                    <Rating starNumber={item?.package?.rating} size="small" />
                   ) : (
                     <span>Chưa có đánh giá</span>
                   )}
