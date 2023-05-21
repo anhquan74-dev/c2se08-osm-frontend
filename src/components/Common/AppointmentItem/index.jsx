@@ -11,6 +11,7 @@ import { isTimeBeforeNow } from '../../../utils/common';
 import appointmentApi from '../../../api/appointmentApi';
 import { toast } from 'react-toastify';
 import { io } from 'socket.io-client';
+import moment from 'moment';
 const ENDPOINT = import.meta.env.VITE_REACT_APP_DOMAIN_NODE_SERVER;
 
 const AppointmentItem = (props) => {
@@ -223,7 +224,7 @@ const AppointmentProviderItem = (props) => {
           <div className="name">{appointment?.package?.name}</div>
           <div className="from-now" style={{ color: 'rgb(255, 190, 23)' }}>
             {/* <span>Đã nhận 6 phút trước</span> */}
-            <span>{appointment?.created_at}</span>
+            <span>{moment(appointment?.created_at).locale('vi').fromNow()}</span>
           </div>
         </div>
       </div>
