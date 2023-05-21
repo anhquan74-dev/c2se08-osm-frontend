@@ -6,6 +6,7 @@ import FindingProvider from './FindingProvider';
 import Home from './Home';
 import Me from './Me';
 import News from './News';
+import ElasticSearch from './ElasticSearch';
 
 const Customer = () => {
   const url = useResolvedPath('').pathname;
@@ -18,6 +19,7 @@ const Customer = () => {
       <Route path="blog/*" element={<News />} />
       <Route path="me/*" element={<Me />} />
       <Route path="appointment-request-form/*" element={<AppointmentRequest />} />
+      <Route path="elastic-search/*" element={<ElasticSearch />} />
     </Routes>
   );
 };
