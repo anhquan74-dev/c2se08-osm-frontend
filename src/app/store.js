@@ -7,6 +7,7 @@ import providerCustomerReducer from '../modules/Customer/FindingProvider/provide
 import dashboardReducer from '../modules/Admin/Dashboard/dashboardSlice';
 import authReducer from '../modules/Auth/authSlice';
 import manageServiceReducer from '../modules/ServiceProvider/ManageService/manageServiceSlice';
+import chatReducer from '../modules/ServiceProvider/Chat/chatSlice';
 
 export const store = configureStore({
   reducer: {
@@ -18,5 +19,6 @@ export const store = configureStore({
     dashboard: dashboardReducer,
     auth: authReducer,
     manageService: manageServiceReducer,
+    chat: chatReducer,
   },
 });

@@ -1,11 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
-import { AdminLayout, MainLayout, ProviderLayout } from './components/Layouts';
+import { AdminLayout, MainLayout, ProviderLayout, ProviderLayoutForChat } from './components/Layouts';
 import Admin from './modules/Admin';
 import { LoginPage, RegisterPage } from './modules/Auth';
 import Customer from './modules/Customer';
 import ServiceProvider from './modules/ServiceProvider';
 import RoleAuthRoute from './components/RoleAuthRoute';
 import { NotFound } from './components/Common';
+import Chat from './modules/ServiceProvider/Chat';
 
 function App() {
   return (
@@ -39,6 +40,16 @@ function App() {
             <ProviderLayout>
               <ServiceProvider />
             </ProviderLayout>
+          </RoleAuthRoute>
+        }
+      />
+      <Route
+        path="/provider-chat"
+        element={
+          <RoleAuthRoute role="provider">
+            <ProviderLayoutForChat>
+              <Chat />
+            </ProviderLayoutForChat>
           </RoleAuthRoute>
         }
       />

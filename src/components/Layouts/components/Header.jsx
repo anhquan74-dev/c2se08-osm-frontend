@@ -71,6 +71,11 @@ const Header = () => {
                 Dịch vụ
               </NavLink>
             </li>
+            <li>
+              <NavLink to="/provider-chat" label="Hỗ trợ khách hàng">
+                Hỗ trợ khách hàng
+              </NavLink>
+            </li>
           </>
         )}
 
