@@ -222,7 +222,8 @@ const AppointmentProviderItem = (props) => {
           <div className="category">{appointment?.service?.name}</div>
           <div className="name">{appointment?.package?.name}</div>
           <div className="from-now" style={{ color: 'rgb(255, 190, 23)' }}>
-            <span>Đã nhận 6 phút trước</span>
+            {/* <span>Đã nhận 6 phút trước</span> */}
+            <span>{appointment?.created_at}</span>
           </div>
         </div>
       </div>

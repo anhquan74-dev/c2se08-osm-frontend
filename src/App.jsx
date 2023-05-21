@@ -7,11 +7,13 @@ import ServiceProvider from './modules/ServiceProvider';
 import RoleAuthRoute from './components/RoleAuthRoute';
 import { NotFound } from './components/Common';
 import Chat from './modules/ServiceProvider/Chat';
+import Test from './modules/Test';
 
 function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/test" element={<Test />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route
         path="/*"

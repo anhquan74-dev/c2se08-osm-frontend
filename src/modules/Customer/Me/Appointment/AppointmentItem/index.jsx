@@ -13,6 +13,9 @@ import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import feedbackApi from '../../../../../api/feedbackApi';
 import { toast } from 'react-toastify';
 import { io } from 'socket.io-client';
+import moment from 'moment';
+import 'moment/locale/vi.js';
+moment.locale();
 const ENDPOINT = import.meta.env.VITE_REACT_APP_DOMAIN_NODE_SERVER;
 
 const AppointmentItem = (props) => {
@@ -101,6 +104,10 @@ const AppointmentItem = (props) => {
     })();
     setStatusPicker('canceled');
   };
+  // moment.locale('fr');
+  let a = moment(appointment?.created_at).fromNow(); // 23 phút trước
+  // moment.locale('fr');
+  // var m = moment(1316116057189).fromNow();
   return (
     <div className="appointment-item">
       <div className="btn-chat">
@@ -111,7 +118,8 @@ const AppointmentItem = (props) => {
           <div className="category">{appointment?.service?.name}</div>
           <div className="name">{appointment?.package?.name}</div>
           <div className="from-now" style={{ color: 'rgb(255, 190, 23)' }}>
-            <span>Đã gửi 6 phút trước</span>
+            {/* <span>Đã gửi 6 phút trước</span> */}
+            <span>{a} f</span>
           </div>
         </div>
       </div>
