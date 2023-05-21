@@ -36,13 +36,15 @@ const ManageAppointment = () => {
   useEffect(() => {
     if (statusPicker === '2') {
       setStatusPicker('appointed');
+    } else if (statusPicker === 'done-feedback') {
+      setStatusPicker('done');
     } else {
       (async () => {
         setLoading(true);
         const res = await appointmentApi.getByStatus(statusPicker);
         setLoading(false);
         console.log(res);
-        setListAppointment(res.data);
+        setListAppointment(res.data?.reverse());
       })();
     }
   }, [statusPicker]);
@@ -56,7 +58,7 @@ const ManageAppointment = () => {
       setTotalAppointment(data);
       if (statusPicker === 'new') {
         const res = await appointmentApi.getByStatus(statusPicker);
-        setListAppointment(res.data);
+        setListAppointment(res.data?.reverse());
       } else {
         setStatusPicker('new');
       }
@@ -66,7 +68,7 @@ const ManageAppointment = () => {
       setTotalAppointment(data);
       if (statusPicker === 'canceled') {
         const res = await appointmentApi.getByStatus(statusPicker);
-        setListAppointment(res.data);
+        setListAppointment(res.data?.reverse());
       } else {
         setStatusPicker('canceled');
       }
@@ -76,7 +78,7 @@ const ManageAppointment = () => {
       setTotalAppointment(data);
       if (statusPicker === 'appointed') {
         const res = await appointmentApi.getByStatus(statusPicker);
-        setListAppointment(res.data);
+        setListAppointment(res.data?.reverse());
       } else {
         setStatusPicker('appointed');
       }
@@ -86,10 +88,15 @@ const ManageAppointment = () => {
       setTotalAppointment(data);
       if (statusPicker === 'done') {
         const res = await appointmentApi.getByStatus(statusPicker);
-        setListAppointment(res.data);
+        setListAppointment(res.data?.reverse());
       } else {
         setStatusPicker('done');
       }
+    });
+    socket?.on('provider_feedback_refresh_request_done', async () => {
+      const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
+      setTotalAppointment(data);
+      setStatusPicker('done-feedback');
     });
   }, [socket]);
   //khiem
@@ -166,7 +173,7 @@ const ManageAppointment = () => {
             (listAppointment?.length === 0 ? (
               <EmptyAppointment status={statusPicker} type="provider" />
             ) : (
-              listAppointment?.reverse()?.map((item, index) => {
+              listAppointment?.map((item, index) => {
                 return (
                   <AppointmentItem
                     key={index}

@@ -5,7 +5,7 @@ import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import ImageIcon from '@mui/icons-material/Image';
 import Rating from '../Rating';
-import { TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 import { DoDisturb, Star } from '@mui/icons-material';
 import { isTimeBeforeNow } from '../../../utils/common';
 import appointmentApi from '../../../api/appointmentApi';
@@ -139,17 +139,13 @@ const AppointmentProviderItem = (props) => {
   }, []);
   const { status, appointment, setStatusPicker } = props;
   const [price, setPrice] = useState(0);
-  const [openRateDialog, setOpenRateDialog] = useState(false);
   const [star, setStar] = useState();
+  const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
+
+  const handleCloseRemoveDialog = () => {
+    setOpenRemoveDialog(false);
+  };
   console.log(status, appointment);
-
-  const handleCloseRateDialog = () => {
-    setOpenRateDialog(false);
-  };
-
-  const handleRating = () => {
-    setOpenRateDialog(false);
-  };
 
   // xu ly gui bao gia
   const handleSendPrice = () => {
@@ -329,14 +325,15 @@ const AppointmentProviderItem = (props) => {
               <input
                 type="number"
                 min={0}
-                max={999999999}
+                max={99999999}
                 placeholder="Nhập giá"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
               />
               VND
             </div>
-            <button className="btn-price" onClick={handleSendPrice}>
+            <small className="error-price">{price > 99999999 && <>Nhập số quá lớn!</>}</small>
+            <button className="btn-price" onClick={handleSendPrice} disabled={price <= 0 || price > 99999999}>
               Gửi báo giá
             </button>
             <div className="note">
@@ -366,13 +363,35 @@ const AppointmentProviderItem = (props) => {
         </div> */}
       </div>
       {(appointment?.status === 'new' || appointment?.status === 'offered') && (
-        <div className="cancel-appointment" onClick={handleCancelAppointment}>
+        <div className="cancel-appointment" onClick={() => setOpenRemoveDialog(true)}>
           <div>
             <DoDisturb />
             <p>Hủy lịch hẹn</p>
           </div>
         </div>
       )}
+      <Dialog
+        open={openRemoveDialog}
+        onClose={handleCloseRemoveDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Hủy lịch hẹn</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Bạn có chắc chắn muốn hủy lịch hẹn này! <br />
+            Hành động này không thể khôi phục
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseRemoveDialog} variant="outlined" color="info">
+            Đóng
+          </Button>
+          <Button onClick={handleCancelAppointment} color="success" variant="contained" autoFocus>
+            Hủy lịch
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

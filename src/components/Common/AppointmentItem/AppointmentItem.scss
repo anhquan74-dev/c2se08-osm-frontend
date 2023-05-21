@@ -186,6 +186,7 @@
       }
       div {
         input {
+          width: 200px;
           font-size: 14px;
           border-radius: 8px;
           padding: 12px 14px;
@@ -195,7 +196,13 @@
           margin: 8px 12px 0 0;
         }
       }
+      .error-price {
+        display: block;
+        color: #ff1717;
+        font-size: 12px;
+      }
     }
+
     .btn-price {
       margin-top: 20px;
       cursor: pointer;
@@ -208,6 +215,10 @@
       outline: none;
       border: none;
       padding: 12px 20px;
+      &:disabled {
+        cursor: no-drop;
+        background-color: #007bff5e;
+      }
     }
 
     .note {

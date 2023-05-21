@@ -28,13 +28,15 @@ const Appointment = () => {
   useEffect(() => {
     if (statusPicker === '1') {
       setStatusPicker('done');
+    } else if (statusPicker === 'appointed-socket') {
+      setStatusPicker('appointed');
     } else {
       (async () => {
         setLoading(true);
         const res = await appointmentApi.getByStatus(statusPicker);
         setLoading(false);
         console.log(res);
-        setListAppointment(res.data);
+        setListAppointment(res.data?.reverse());
       })();
     }
   }, [statusPicker]);
@@ -45,7 +47,7 @@ const Appointment = () => {
       setTotalAppointment(data);
       if (statusPicker === 'new-or-offered') {
         const res = await appointmentApi.getByStatus(statusPicker);
-        setListAppointment(res.data);
+        setListAppointment(res.data?.reverse());
       } else {
         setStatusPicker('new-or-offered');
       }
@@ -55,21 +57,16 @@ const Appointment = () => {
       setTotalAppointment(data);
       if (statusPicker === 'canceled') {
         const res = await appointmentApi.getByStatus(statusPicker);
-        setListAppointment(res.data);
+        setListAppointment(res.data?.reverse());
       } else {
         setStatusPicker('canceled');
       }
     });
     socket?.on('customer_refresh_request_appointed', async () => {
-      if (statusPicker === 'appointed') {
-        const res = await appointmentApi.getByStatus(statusPicker);
-        console.log('🚀 ~ file: index.jsx:66 ~ socket?.on ~ res:', res);
-        setListAppointment(res.data);
-      } else {
-        setStatusPicker('appointed');
-      }
+      setStatusPicker('appointed-socket');
     });
   }, [socket]);
+
   return (
     <div className="me-appointment">
       <div className="appointment-status">
@@ -120,7 +117,7 @@ const Appointment = () => {
           (listAppointment?.length === 0 ? (
             <EmptyAppointment status={statusPicker} />
           ) : (
-            listAppointment?.reverse().map((item, index) => {
+            listAppointment?.map((item, index) => {
               return (
                 <AppointmentItem
                   key={index}

@@ -25,6 +25,10 @@ const AppointmentItem = (props) => {
   const [star, setStar] = useState();
   const [comment, setComment] = useState();
   const [render, setRender] = useState();
+  const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
+  const handleCloseRemoveDialog = () => {
+    setOpenRemoveDialog(false);
+  };
   useEffect(() => {
     setSocket(io(ENDPOINT));
   }, []);
@@ -42,12 +46,13 @@ const AppointmentItem = (props) => {
         comment,
         star,
       });
+      setOpenRateDialog(false);
+      setComment('');
+      setStar(0);
+      setStatusPicker('1');
+      socket?.emit('customer_feedback_done');
       console.log(res);
     })();
-    setOpenRateDialog(false);
-    setComment('');
-    setStar(0);
-    setStatusPicker('1');
   };
 
   // xu ly chap nhan bao gia
@@ -234,13 +239,35 @@ const AppointmentItem = (props) => {
         </div>
       </div>
       {(appointment?.status === 'new' || appointment?.status === 'offered') && (
-        <div className="cancel-appointment" onClick={handleCancelAppointment}>
+        <div className="cancel-appointment" onClick={() => setOpenRemoveDialog(true)}>
           <div>
             <DoDisturbIcon />
             <p>Hủy lịch hẹn</p>
           </div>
         </div>
       )}
+      <Dialog
+        open={openRemoveDialog}
+        onClose={handleCloseRemoveDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Hủy lịch hẹn</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Bạn có chắc chắn muốn hủy lịch hẹn này! <br />
+            Hành động này không thể khôi phục
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseRemoveDialog} variant="outlined" color="info">
+            Đóng
+          </Button>
+          <Button onClick={handleCancelAppointment} color="success" variant="contained" autoFocus>
+            Hủy lịch
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Dialog
         open={openRateDialog}

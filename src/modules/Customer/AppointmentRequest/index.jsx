@@ -108,10 +108,13 @@ const AppointmentRequest = () => {
       type: 'appointment',
       status: 'new',
     };
+    console.log(formValues);
     if (!formValues.package_id) {
       setIsError({ ...isError, packagePick: 'Vui lòng chọn báo giá' });
     } else if (!formValues.date) {
       setIsError({ ...isError, date: 'Vui lòng chọn ngày giờ hẹn thợ' });
+    } else if (moment(formValues.date).isBefore(new Date())) {
+      setIsError({ ...isError, date: 'Chọn ngày giờ sau thời gian hiện tại' });
     } else if (!formValues.location) {
       setIsError({ ...isError, location: 'Vui lòng chọn địa điểm' });
     } else {
@@ -154,7 +157,9 @@ const AppointmentRequest = () => {
       <form className="request-form" onSubmit={handleSubmitAppointment}>
         <h3>Chi tiết công việc</h3>
         <div className="form-group">
-          <label htmlFor="service">Dịch vụ</label>
+          <label htmlFor="service">
+            Dịch vụ <small>(*)</small>
+          </label>
           <select name="service" id="" value={servicePick} onChange={handleChangeService}>
             {services?.map((service, index) => {
               return (
@@ -166,7 +171,9 @@ const AppointmentRequest = () => {
           </select>
         </div>
         <div className="form-group">
-          <label htmlFor="quotation">Mục báo giá</label>
+          <label htmlFor="quotation">
+            Mục báo giá <small>(*)</small>
+          </label>
           <select name="quotation" id="" value={packagePick} onChange={handleChangePackage}>
             <option value="">Tất cả báo giá</option>
             {packages?.map((item, index) => {
@@ -180,7 +187,9 @@ const AppointmentRequest = () => {
           <small>{isError.packagePick}</small>
         </div>
         <div className="form-group">
-          <label htmlFor="time">Thời gian</label>
+          <label htmlFor="time">
+            Thời gian <small>(*)</small>
+          </label>
           <div className="time-flex">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={['DateTimePicker']}>
@@ -204,7 +213,9 @@ const AppointmentRequest = () => {
           <small>{isError.date}</small>
         </div>
         <div className="form-group">
-          <label htmlFor="address">Địa điểm</label>
+          <label htmlFor="address">
+            Địa điểm <small>(*)</small>
+          </label>
           <div className="address-flex">
             <input type="text" onClick={() => setOpen(true)} value={location?.address || ''} />
             <span className="request-form-icon">
