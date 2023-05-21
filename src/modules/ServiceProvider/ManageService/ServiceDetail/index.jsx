@@ -1,17 +1,11 @@
+import { NavigateNext } from '@mui/icons-material';
+import { Box, Breadcrumbs, CircularProgress, Link, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import './ServiceDetail.scss';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import PackageItem from '../../ManagePackage/components/PackageItem';
-import { Breadcrumbs, Stack, Typography, Link, Box, CircularProgress } from '@mui/material';
-import { NavigateNext } from '@mui/icons-material';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  getAllPackageByProviderCategory,
-  getAllPackagesByServiceId,
-  getCurrentService,
-  setCurrentCategoryId,
-  setCurrentServiceId,
-} from '../manageServiceSlice';
+import { getAllPackagesByServiceId, setCurrentServiceId } from '../manageServiceSlice';
+import './ServiceDetail.scss';
 
 const ServiceDetail = () => {
   const { service_id } = useParams();
@@ -27,24 +21,8 @@ const ServiceDetail = () => {
   useEffect(() => {
     dispatch(getAllPackagesByServiceId(service_id));
   }, [service_id]);
-  // useEffect(() => {
-  //   const loadData = async () => {
-  //     serviceList.map((item) => {
-  //       if (item.dataCategory[0].id == service_id) {
-  //         setCurrentCategory(item.dataCategory[0]);
-  //       }
-  //     });
-  //     dispatch(
-  //       getAllPackageByProviderCategory({
-  //         provider_id: currentUserId,
-  //         category_id: service_id,
-  //       })
-  //     );
-  //   };
-  //   loadData();
-  //   dispatch(setCurrentCategoryId(service_id));
-  //   dispatch(getCurrentService({ currentUserId, service_id }));
-  // }, []);
+  console.log(packages);
+
   const handleClickBreadCrum = (event) => {
     event.preventDefault();
     console.log(event.target.href.slice(21));
@@ -75,31 +53,42 @@ const ServiceDetail = () => {
           <CircularProgress />
         </Box>
       )}
-      {!loadingPackages && packages && (
-        <>
-          <div className="packages-content">
-            {packages.length > 0 ? (
-              packages.map((item, index) => {
+      {!loadingPackages &&
+        (packages ? (
+          <>
+            <div className="packages-content">
+              {packages?.map((item, index) => {
                 return (
                   <PackageItem key={index} packageInfo={item} provider_id={currentUserId} category_id={service_id} />
                 );
-              })
-            ) : (
-              <p>Chưa có báo giá nào, hãy thêm mới một báo giá!</p>
-            )}
-          </div>
-          <div className="add-package">
-            <button
-              onClick={() => {
-                dispatch(setCurrentServiceId(packages[0].service_id));
-              }}
-            >
-              <NavLink to="/provider/packages/add">Thêm báo giá</NavLink>
-              {/* <NavLink to="/provider/services/id">Thêm báo giá</NavLink> */}
-            </button>
-          </div>
-        </>
-      )}
+              })}
+            </div>
+            <div className="add-package">
+              <button
+                onClick={() => {
+                  dispatch(setCurrentServiceId(packages[0].service_id));
+                }}
+              >
+                <NavLink to={`/provider/packages/add?serviceId=${service_id}`}>Thêm báo giá</NavLink>
+                {/* <NavLink to="/provider/services/id">Thêm báo giá</NavLink> */}
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <p>Chưa có báo giá nào, hãy thêm mới một báo giá!</p>
+            <div className="add-package">
+              <button
+                onClick={() => {
+                  dispatch(setCurrentServiceId(packages[0].service_id));
+                }}
+              >
+                <NavLink to={`/provider/packages/add?serviceId=${service_id}`}>Thêm báo giá</NavLink>
+                {/* <NavLink to="/provider/services/id">Thêm báo giá</NavLink> */}
+              </button>
+            </div>
+          </>
+        ))}
     </div>
   );
 };

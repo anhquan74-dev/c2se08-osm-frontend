@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import './AddEditPackagePage.scss';
 import packageApi from '../../../../../api/packageApi';
 import { useSelector } from 'react-redux';
@@ -9,10 +9,11 @@ import { NavigateNext } from '@mui/icons-material';
 
 const AddEditPackagePage = () => {
   const { package_id } = useParams();
+  const [searchParams] = useSearchParams();
+  const serviceId = searchParams.get('serviceId');
   const navigate = useNavigate();
   const isEdit = Boolean(package_id);
   const service_id = useSelector((state) => state.manageService.currentServiceId);
-  const category_id = useSelector((state) => state.manageService.currentCategoryId);
   const [providerPackage, setProviderPackage] = useState({
     name: null,
     description: '',
@@ -36,7 +37,8 @@ const AddEditPackagePage = () => {
   const { name, description, price, is_negotiable } = providerPackage;
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    let formValue = { ...providerPackage, service_id: service_id };
+    console.log(serviceId);
+    let formValue = { ...providerPackage, service_id: serviceId };
     if (is_negotiable) {
       formValue = { ...formValue, price: 0, is_negotiable: 1 };
       if (isEdit) {
@@ -46,7 +48,7 @@ const AddEditPackagePage = () => {
         await packageApi.create(formValue);
         toast.success('Thêm mới thành công!');
       }
-      navigate('/provider/services/' + category_id);
+      navigate('/provider/services/' + serviceId);
     } else {
       formValue = { ...formValue, is_negotiable: 0 };
       if (isEdit) {
@@ -56,7 +58,7 @@ const AddEditPackagePage = () => {
         toast.success('Thêm mới thành công!');
         await packageApi.create(formValue);
       }
-      navigate('/provider/services/' + category_id);
+      navigate('/provider/services/' + serviceId);
     }
   };
 

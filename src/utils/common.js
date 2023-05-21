@@ -86,7 +86,7 @@ export const avgStar = (feedbacks) => {
   for (let i = 0; i < feedbackLength; i++) {
     sumStar = sumStar + feedbacks[i].star;
   }
-  return sumStar / feedbackLength;
+  return Math.round(sumStar / feedbackLength);
 };
 
 export const haversine_distance = (providerCoords, center) => {

@@ -140,7 +140,7 @@ const PackageItem = (props) => {
       >
         <ul className="profile-popover">
           <li>
-            <NavLink to={`/provider/packages/${packageInfo?.package?.id}`}>Chỉnh sửa</NavLink>
+            <NavLink to={`/provider/packages/${packageInfo?.package?.id}?serviceId=${service_id}`}>Chỉnh sửa</NavLink>
           </li>
           <li>
             <NavLink to="" onClick={handleRemoveClick}>
@@ -172,7 +172,11 @@ const PackageItem = (props) => {
               <span></span>
               <div className="star">
                 <Star sx={{ color: '#ffbe17' }} />
-                <span>{avgStar(packageInfo?.feedbacks)}/5</span>
+                {packageInfo?.feedbacks.length === 0 ? (
+                  <span>Chưa có đánh giá</span>
+                ) : (
+                  <span>{avgStar(packageInfo?.feedbacks)}/5</span>
+                )}
               </div>
             </div>
             <hr />

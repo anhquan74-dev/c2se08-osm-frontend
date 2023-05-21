@@ -224,7 +224,7 @@ const AppointmentProviderItem = (props) => {
           <div className="name">{appointment?.package?.name}</div>
           <div className="from-now" style={{ color: 'rgb(255, 190, 23)' }}>
             {/* <span>Đã nhận 6 phút trước</span> */}
-            <span>{moment(appointment?.created_at).locale('vi').fromNow()}</span>
+            <span>Đã nhận {moment(appointment?.created_at).locale('vi').fromNow()}</span>
           </div>
         </div>
       </div>
