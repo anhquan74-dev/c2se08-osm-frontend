@@ -67,15 +67,6 @@ const PostListPage = () => {
           onChange={handlePageChange}
         />
       </Box>
-      {/* <Box sx={{ my: '16px', display: 'flex', justifyContent: 'center' }}>
-        <Pagination color="primary" count={10} page={1} onChange={handlePageChange} />
-      </Box> */}
-      {/* <Pagination
-        count={Math.ceil(pagination?.total_rows / pagination?.limit)}
-        page={pagination?.page}
-        onChange={handlePageChange}
-      /> */}
-      {/* // totalRows // limit // totalPages = Math.ceil(totalRows / limit) */}
     </Box>
   );
 };

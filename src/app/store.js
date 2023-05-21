@@ -8,6 +8,7 @@ import dashboardReducer from '../modules/Admin/Dashboard/dashboardSlice';
 import authReducer from '../modules/Auth/authSlice';
 import manageServiceReducer from '../modules/ServiceProvider/ManageService/manageServiceSlice';
 import blogReducer from '../modules/Admin/Blog/blogSlice';
+import newReducer from '../modules/Customer/News/newSlice';
 
 export const store = configureStore({
   reducer: {
@@ -20,5 +21,6 @@ export const store = configureStore({
     dashboard: dashboardReducer,
     auth: authReducer,
     manageService: manageServiceReducer,
+    new: newReducer,
   },
 });

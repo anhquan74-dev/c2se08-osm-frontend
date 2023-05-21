@@ -107,3 +107,8 @@ export const haversine_distance = (providerCoords, center) => {
     );
   return (d * 1.609344).toFixed(1);
 };
+
+export const getText = (html) => {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  return doc.body.textContent;
+};

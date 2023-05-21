@@ -9,6 +9,10 @@ const postApi = {
     const url = `/posts/${id}`;
     return axiosClient.get(url);
   },
+  getByCategory(categoryId) {
+    const url = `/posts-by-category/${categoryId}`;
+    return axiosClient.get(url);
+  },
   add(data) {
     const url = '/posts';
     return axiosClient.post(url, data, {

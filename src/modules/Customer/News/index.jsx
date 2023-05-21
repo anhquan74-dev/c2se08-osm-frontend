@@ -7,7 +7,7 @@ const News = () => {
   return (
     <Routes>
       <Route path="" element={<NewsListPage />} />
-      <Route path=":id" element={<NewsDetailPage />} />
+      <Route path=":postId" element={<NewsDetailPage />} />
     </Routes>
   );
 };
