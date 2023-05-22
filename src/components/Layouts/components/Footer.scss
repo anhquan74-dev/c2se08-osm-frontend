@@ -58,6 +58,17 @@
   margin-bottom: 8px;
 }
 
+.footer-col.logo {
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    img {
+      width: 200px;
+    }
+  }
+}
+
 // .wrap-footer .footer .footer-info .footer-col .content.cta {
 //   display: flex;
 // }

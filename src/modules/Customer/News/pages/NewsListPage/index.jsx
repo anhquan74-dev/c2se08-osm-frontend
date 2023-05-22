@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getNews, newActions } from '../../newSlice';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import categoryApi from '../../../../../api/categoryApi';
+import Skeleton from 'react-loading-skeleton';
 
 const NewsListPage = () => {
   const listNews = [{}, {}, {}, {}, {}, {}, {}, {}];
@@ -120,17 +121,30 @@ const NewsListPage = () => {
       ) : (
         <>
           <div className="news-list-grid">
-            {list?.data?.map((item, index) => {
-              return <NewsItem key={index} news={item} />;
-            })}
+            {loading &&
+              Array(3)
+                .fill(0)
+                .map(() => {
+                  return <NewsItem.Loading />;
+                })}
+            {!loading && (
+              <>
+                {list?.data?.map((item, index) => {
+                  return <NewsItem key={index} news={item} />;
+                })}
+              </>
+            )}
           </div>
           <div className="pagination">
-            <Pagination
-              color="primary"
-              count={Math.ceil(list?.total / list?.per_page)}
-              page={conditions.page}
-              onChange={handlePageChange}
-            />
+            {loading && <Skeleton width={100} height={30} />}
+            {!loading && (
+              <Pagination
+                color="primary"
+                count={Math.ceil(list?.total / list?.per_page)}
+                page={conditions.page}
+                onChange={handlePageChange}
+              />
+            )}
           </div>
         </>
       )}

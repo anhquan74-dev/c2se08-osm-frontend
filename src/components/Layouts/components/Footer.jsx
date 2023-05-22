@@ -1,20 +1,16 @@
 import React from 'react';
 import './Footer.scss';
 import { NavLink } from 'react-router-dom';
+import Logo from '../../../assets/images/logo.png';
 
 const Footer = () => {
   return (
     <div className="footer container">
-      <div className="footer-col copyright">
+      <div className="footer-col copyright logo">
         <div>
           <NavLink to="/">Online Service Market System</NavLink>
+          <img src={Logo} alt="" />
         </div>
-        {/* <div className="copyright">Số ĐKKD 0316265764 do Sở KHĐT Tp. HCM cấp ngày 12/05/2020</div>
-        <div className=" d-none d-lg-block">
-          <a href="http://online.gov.vn/Home/AppDetails/1293" target="_blank" rel="noopener noreferrer">
-            <img src="https://oddjob.vn/assets/images/logoCCDV.svg"  />
-          </a>
-        </div> */}
       </div>
       <div className="footer-col address">
         <div className="title">

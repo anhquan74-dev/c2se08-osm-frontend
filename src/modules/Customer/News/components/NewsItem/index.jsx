@@ -5,6 +5,7 @@ import { formatBirthDay, getText } from '../../../../../utils/common';
 import moment from 'moment';
 import PostImage from '../../../../../assets/images/post-default.jpg';
 import { NavLink, useNavigate } from 'react-router-dom';
+import Skeleton from 'react-loading-skeleton';
 
 const NewsItem = ({ news }) => {
   const { id, title, content, image, category, date } = news;
@@ -32,5 +33,31 @@ const NewsItem = ({ news }) => {
     </div>
   );
 };
+
+const Loading = () => {
+  return (
+    <div className="news-item">
+      <div className="wrapper">
+        <div className="image">
+          <Skeleton width={375} height={215} />
+        </div>
+        <div className="content">
+          <p className="category">
+            <Skeleton width={120} height={24} />
+          </p>
+          <Skeleton width={340} height={50} />
+
+          <p className="desc">
+            <Skeleton width={340} height={80} />
+          </p>
+          <div className="time">
+            <Skeleton width={77} height={22} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+NewsItem.Loading = Loading;
 
 export default NewsItem;
