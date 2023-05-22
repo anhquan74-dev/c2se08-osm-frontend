@@ -22,12 +22,16 @@ const NewsItem = ({ news, highlight, id }) => {
             {title.length <= 42 ? <>{title.slice(0, 42)}</> : <>{title.slice(0, 42)}...</>}
           </NavLink>
           {highlight?.content ? (
-            <p
-              className="desc"
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(highlight?.content?.[0]),
-              }}
-            ></p>
+            <div>
+              ...
+              <span
+                className="desc"
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(highlight?.content?.[0]),
+                }}
+              ></span>
+              ...
+            </div>
           ) : (
             <p className="desc">{content.length <= 200 ? <>{content}</> : <>{content.slice(0, 200)}...</>}</p>
           )}

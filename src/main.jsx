@@ -12,6 +12,7 @@ import { store } from './app/store';
 import './index.scss';
 import axiosSetupInterceptors from './api/axiosSetupInterceptors';
 import { SkeletonTheme } from 'react-loading-skeleton';
+import ScrollToTop from 'react-scroll-to-top';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
@@ -31,6 +32,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         pauseOnHover
         theme="colored"
       />
+      <ScrollToTop smooth style={{ backgroundColor: '#ffbe17' }} />
     </BrowserRouter>
   </Provider>
   // </SkeletonTheme>
