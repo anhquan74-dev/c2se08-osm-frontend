@@ -7,12 +7,8 @@ import PostImage from '../../../../../assets/images/post-default.jpg';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 const NewsItem = ({ news }) => {
-  const navigate = useNavigate();
   const { id, title, content, image, category, date } = news;
 
-  const handleClickTitle = () => {
-    navigate();
-  };
   return (
     <div className="news-item">
       <div className="wrapper">
@@ -21,7 +17,7 @@ const NewsItem = ({ news }) => {
         </div>
         <div className="content">
           <p className="category">{category?.name}</p>
-          <NavLink to={`/blog/${id}`} className="title" onClick={handleClickTitle}>
+          <NavLink to={`/blog/${id}`} className="title">
             {title.length <= 43 ? <>{title.slice(0, 43)}</> : <>{title.slice(0, 43)}...</>}
           </NavLink>
           <p className="desc">

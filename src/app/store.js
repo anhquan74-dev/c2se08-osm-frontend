@@ -10,7 +10,7 @@ import manageServiceReducer from '../modules/ServiceProvider/ManageService/manag
 import chatReducer from '../modules/ServiceProvider/Chat/chatSlice';
 import blogReducer from '../modules/Admin/Blog/blogSlice';
 import newReducer from '../modules/Customer/News/newSlice';
-
+import elasticSearchReducer from '../modules/Customer/ElasticSearch/elasticSearchSlice';
 
 export const store = configureStore({
   reducer: {
@@ -25,5 +25,6 @@ export const store = configureStore({
     manageService: manageServiceReducer,
     chat: chatReducer,
     new: newReducer,
+    elastic: elasticSearchReducer,
   },
 });
