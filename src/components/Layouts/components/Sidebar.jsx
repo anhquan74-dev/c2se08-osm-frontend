@@ -7,32 +7,32 @@ import './Sidebar.scss';
 const sideBarArr = [
   {
     to: '/admin/dashboard',
-    title: 'Dashboard',
+    title: 'Bảng thống kê',
     icon: <Dashboard />,
   },
   {
     to: '/admin/customer',
-    title: 'Customer',
+    title: 'Khách hàng',
     icon: <Person />,
   },
   {
     to: '/admin/provider',
-    title: 'Provider',
+    title: 'Thợ',
     icon: <PersonOutline />,
   },
   {
     to: '/admin/category',
-    title: 'Category',
+    title: 'Danh mục',
     icon: <Category />,
   },
   {
     to: '/admin/post',
-    title: 'Post',
+    title: 'Bài đăng',
     icon: <Notes />,
   },
   {
     to: '/admin/comment-analysis',
-    title: 'Comment Analysis',
+    title: 'Phân tích bình luận',
     icon: <Comment />,
   },
 ];

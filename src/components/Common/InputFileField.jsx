@@ -14,6 +14,7 @@ const InputFileField = ({ name, control, label, disabled, ...inputProps }) => {
   const [avatarPick, setAvatarPick] = useState();
   const handlePreviewAvatar = (e) => {
     const file = e.target.files[0];
+    // if (file) {
     onChange(file);
     console.log('file: ', file, 'value: ', value);
 
@@ -23,6 +24,7 @@ const InputFileField = ({ name, control, label, disabled, ...inputProps }) => {
     // };
     // console.log(newFile);
     setAvatarPick(URL.createObjectURL(file));
+    // }
   };
 
   useEffect(() => {

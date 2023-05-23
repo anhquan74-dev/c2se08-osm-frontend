@@ -12,6 +12,7 @@ import appointmentApi from '../../../api/appointmentApi';
 import { toast } from 'react-toastify';
 import { io } from 'socket.io-client';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 const ENDPOINT = import.meta.env.VITE_REACT_APP_DOMAIN_NODE_SERVER;
 
 const AppointmentItem = (props) => {
@@ -25,112 +26,112 @@ const AppointmentItem = (props) => {
   return <>{RenderAppointment}</>;
 };
 
-const AppointmentCustomerItem = (props) => {
-  const { status, appointment } = props;
+// const AppointmentCustomerItem = (props) => {
+//   const { status, appointment } = props;
 
-  return (
-    <div className="appointment-item">
-      <div className="btn-chat">
-        <img src="https://oddjob.vn/assets/images/black-chat-icon.svg" className="chat-icon" /> CHAT{' '}
-      </div>
-      <div className="header">
-        <div className="wrapper">
-          <div className="category">Dọn dẹp vệ sinh</div>
-          <div className="name">lau nhà cửa</div>
-          <div className="from-now" style={{ color: 'rgb(255, 190, 23)' }}>
-            <span>Đã nhận 6 phút trước</span>
-          </div>
-        </div>
-      </div>
-      <div className="body">
-        <div className="group">
-          <div className="left">
-            <div>
-              <img
-                src="https://s3-ap-southeast-1.amazonaws.com/files.oddjob.vn/small/6403f1202e39f1cb520d9967"
-                alt="avatar"
-                className="avatar"
-              />
-            </div>
-          </div>
-          <div className="right">
-            <div>Khách hàng</div>
-            <div>Trần Anh Quân</div>
-          </div>
-        </div>
-        <div className="group">
-          <div className="left">
-            <div>
-              <LocationOnIcon />
-            </div>
-          </div>
-          <div className="right">
-            <div>Địa điểm</div>
-            <div>654 Trưng Nữ Vương, Hoà Cường Bắc, Hải Châu, Đà Nẵng 550000 ベトナム</div>
-          </div>
-        </div>
-        <div className="group-3">
-          <div className="group-2">
-            <div className="group">
-              <div className="left">
-                <div>
-                  <WorkHistoryIcon />
-                </div>
-              </div>
-              <div className="right">
-                <div>Thời gian làm việc</div>
-                <div>24 tháng 4, 2023 ❘ 20:13</div>
-              </div>
-            </div>
-            <div className="group">
-              <div className="left">
-                <div>
-                  <ImageIcon />
-                </div>
-              </div>
-              <div className="right last">
-                <div>Ảnh đính kèm</div>
-                <div className="image">
-                  <img
-                    src="https://s3-ap-southeast-1.amazonaws.com/files.oddjob.vn/small/6418825673e43877165303e3"
-                    alt=""
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="group">
-            <div className="left">
-              <div>
-                <BorderColorIcon />
-              </div>
-            </div>
-            <div className="right last">
-              <div>Ghi chú</div>
-              <div className="note">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Non adipisci deserunt blanditiis aliquam.
-                Aliquid maiores dicta quis! Laudantium, culpa quo ipsam neque earum error. Aliquam voluptatibus sapiente
-                aliquid veritatis amet?
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="footer">
-        <div className="rating">
-          <span>Đánh giá của bạn</span>
-          <span>
-            <Rating starNumber={4} />
-          </span>
-        </div>
-        <div className="price">
-          <span>Báo giá</span>
-          <span>200.000 VNĐ</span>
-        </div>
-      </div>
-    </div>
-  );
-};
+//   return (
+//     <div className="appointment-item">
+//       <div className="btn-chat">
+//         <img src="https://oddjob.vn/assets/images/black-chat-icon.svg" className="chat-icon" /> CHAT{' '}
+//       </div>
+//       <div className="header">
+//         <div className="wrapper">
+//           <div className="category">Dọn dẹp vệ sinh</div>
+//           <div className="name">lau nhà cửa</div>
+//           <div className="from-now" style={{ color: 'rgb(255, 190, 23)' }}>
+//             <span>Đã nhận 6 phút trước</span>
+//           </div>
+//         </div>
+//       </div>
+//       <div className="body">
+//         <div className="group">
+//           <div className="left">
+//             <div>
+//               <img
+//                 src="https://s3-ap-southeast-1.amazonaws.com/files.oddjob.vn/small/6403f1202e39f1cb520d9967"
+//                 alt="avatar"
+//                 className="avatar"
+//               />
+//             </div>
+//           </div>
+//           <div className="right">
+//             <div>Khách hàng</div>
+//             <div>Trần Anh Quân</div>
+//           </div>
+//         </div>
+//         <div className="group">
+//           <div className="left">
+//             <div>
+//               <LocationOnIcon />
+//             </div>
+//           </div>
+//           <div className="right">
+//             <div>Địa điểm</div>
+//             <div>654 Trưng Nữ Vương, Hoà Cường Bắc, Hải Châu, Đà Nẵng 550000 ベトナム</div>
+//           </div>
+//         </div>
+//         <div className="group-3">
+//           <div className="group-2">
+//             <div className="group">
+//               <div className="left">
+//                 <div>
+//                   <WorkHistoryIcon />
+//                 </div>
+//               </div>
+//               <div className="right">
+//                 <div>Thời gian làm việc</div>
+//                 <div>24 tháng 4, 2023 ❘ 20:13</div>
+//               </div>
+//             </div>
+//             <div className="group">
+//               <div className="left">
+//                 <div>
+//                   <ImageIcon />
+//                 </div>
+//               </div>
+//               <div className="right last">
+//                 <div>Ảnh đính kèm</div>
+//                 <div className="image">
+//                   <img
+//                     src="https://s3-ap-southeast-1.amazonaws.com/files.oddjob.vn/small/6418825673e43877165303e3"
+//                     alt=""
+//                   />
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//           <div className="group">
+//             <div className="left">
+//               <div>
+//                 <BorderColorIcon />
+//               </div>
+//             </div>
+//             <div className="right last">
+//               <div>Ghi chú</div>
+//               <div className="note">
+//                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Non adipisci deserunt blanditiis aliquam.
+//                 Aliquid maiores dicta quis! Laudantium, culpa quo ipsam neque earum error. Aliquam voluptatibus sapiente
+//                 aliquid veritatis amet?
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//       <div className="footer">
+//         <div className="rating">
+//           <span>Đánh giá của bạn</span>
+//           <span>
+//             <Rating starNumber={4} />
+//           </span>
+//         </div>
+//         <div className="price">
+//           <span>Báo giá</span>
+//           <span>200.000 VNĐ</span>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
 const AppointmentProviderItem = (props) => {
   const [socket, setSocket] = useState(null);
@@ -141,6 +142,7 @@ const AppointmentProviderItem = (props) => {
   const [price, setPrice] = useState(0);
   const [star, setStar] = useState();
   const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
+  const navigate = useNavigate();
 
   const handleCloseRemoveDialog = () => {
     setOpenRemoveDialog(false);
@@ -211,8 +213,8 @@ const AppointmentProviderItem = (props) => {
 
   return (
     <div className="appointment-item appointment-pro-item">
-      <div className="btn-chat">
-        <img src="https://oddjob.vn/assets/images/black-chat-icon.svg" className="chat-icon" /> CHAT{' '}
+      <div className="btn-chat" onClick={() => navigate('/provider-chat')}>
+        <img src="https://oddjob.vn/assets/images/black-chat-icon.svg" className="chat-icon" /> CHAT
       </div>
       <div className="header">
         <div className="wrapper">
@@ -228,12 +230,16 @@ const AppointmentProviderItem = (props) => {
         <div className="group">
           <div className="left">
             <div>
-              <img src={appointment?.provider?.avatar?.url} alt="avatar" className="avatar" />
+              {appointment?.provider?.avatar?.url && (
+                <img src={appointment?.customer?.avatar?.url} alt="avatar" className="avatar" />
+              )}
             </div>
           </div>
           <div className="right">
-            <div>Khách hàng</div>
-            <div>{appointment?.provider?.full_name}</div>
+            <div>Khách hàng </div>
+            <div>
+              {appointment?.customer?.full_name} - SĐT: 0{appointment?.customer?.phone_number}
+            </div>
           </div>
         </div>
         <div className="group">
@@ -269,7 +275,7 @@ const AppointmentProviderItem = (props) => {
               <div className="right ">
                 <div>Ảnh đính kèm</div>
                 <div className="image">
-                  <img src={appointment?.attach_photo?.url} alt="" />
+                  {appointment?.attach_photo?.url && <img src={appointment?.attach_photo?.url} alt="" />}
                 </div>
               </div>
             </div>

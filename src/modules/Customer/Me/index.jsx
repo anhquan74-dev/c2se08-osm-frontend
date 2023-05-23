@@ -6,9 +6,12 @@ import Favorite from './Favorite';
 import { SearchBar } from '../../../components/Common';
 import './Me.scss';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const Me = () => {
   const url = useResolvedPath('').pathname;
+  const { currentUser } = useSelector((state) => state.auth);
+
   console.log(url);
   const [tabPicker, setTabPicker] = useState();
 
@@ -19,9 +22,11 @@ const Me = () => {
         <div className="profile-tab-wrap">
           <div className="profile-tab-content">
             <div className="profile-info">
-              <img src="https://lh3.googleusercontent.com/a/AGNmyxbPNpE4pGT68pfoJVUum2R2QRwenWcQ1aYUTqk4=s96-c" alt />
+              <div className="profile-image">
+                <img src={currentUser?.avatar?.url} alt />
+              </div>
               <div className="profile-name">
-                <div className="name">TRAN ANH QUAN</div>
+                <div className="name">{currentUser?.full_name}</div>
                 <div className="edit-link">
                   <NavLink to="/me" onClick={() => setTabPicker(3)}>
                     Chỉnh sửa tài khoản &gt;

@@ -56,9 +56,13 @@ const ProviderList = () => {
             return <ProviderCard.Loading key={index} />;
           })}
       {!loading &&
-        providerList?.data?.map((item, index) => {
-          return <ProviderCard key={index} {...item} />;
-        })}
+        (providerList?.data?.length !== 0 ? (
+          providerList?.data?.map((item, index) => {
+            return <ProviderCard key={index} {...item} />;
+          })
+        ) : (
+          <i>Không có kết quả tìm kiếm</i>
+        ))}
     </>
   );
 };
@@ -75,11 +79,15 @@ const ServiceList = () => {
             return <ServiceCard.Loading key={index} />;
           })}
       {!loading &&
-        packageList.data?.map((item, index) => {
-          /* if (index < 12) {
+        (packageList?.data?.length !== 0 ? (
+          packageList.data?.map((item, index) => {
+            /* if (index < 12) {
           } */
-          return <ServiceCard key={index} {...item} />;
-        })}
+            return <ServiceCard key={index} {...item} />;
+          })
+        ) : (
+          <i>Không có kết quả tìm kiếm</i>
+        ))}
     </>
   );
 };

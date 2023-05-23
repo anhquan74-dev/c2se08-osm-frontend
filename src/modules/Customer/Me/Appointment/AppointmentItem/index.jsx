@@ -139,7 +139,9 @@ const AppointmentItem = (props) => {
         <div className="group">
           <div className="left">
             <div>
-              <img src={appointment?.provider?.avatar?.url} alt="avatar" className="avatar" />
+              {appointment?.provider?.avatar?.url && (
+                <img src={appointment?.provider?.avatar?.url} alt="avatar" className="avatar" />
+              )}
             </div>
           </div>
           <div className="right">
@@ -180,7 +182,7 @@ const AppointmentItem = (props) => {
               <div className="right last">
                 <div>Ảnh đính kèm</div>
                 <div className="image">
-                  <img src={appointment?.attach_photo?.url} alt="" />
+                  {appointment?.attach_photo?.url && <img src={appointment?.attach_photo?.url} alt="" />}
                 </div>
               </div>
             </div>

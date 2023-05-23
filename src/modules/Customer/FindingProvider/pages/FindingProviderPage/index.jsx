@@ -10,6 +10,7 @@ import { getPackages, getProviders, providerCustomerActions } from '../../provid
 import './FindingProviderPage.scss';
 import { PAGE_DEFAULT } from '../../../../../utils/constants';
 import { useSearchParams } from 'react-router-dom';
+import { Box, Pagination } from '@mui/material';
 
 const FindingProviderPage = () => {
   const [searchParams] = useSearchParams();
@@ -34,7 +35,7 @@ const FindingProviderPage = () => {
           },
         ],
         page: PAGE_DEFAULT,
-        limit: 30,
+        limit: 12,
       })
     );
   }, []);
@@ -51,6 +52,14 @@ const FindingProviderPage = () => {
     }
   }, [type, conditions]);
 
+  const handlePageChange = (e, page) => {
+    dispatch(
+      providerCustomerActions.setConditions({
+        ...conditions,
+        page: page,
+      })
+    );
+  };
   return (
     <div className="finding-provider container">
       <div className="provider-sort">
@@ -90,6 +99,26 @@ const FindingProviderPage = () => {
           </button>
         </div>
         <div className="list-show">{searchMap ? <ProvidersOnMap /> : <ProviderServiceList type={type} />}</div>
+        {!searchMap && type === 'provider' && (
+          <Box sx={{ my: '16px', display: 'flex', justifyContent: 'center' }}>
+            <Pagination
+              color="primary"
+              count={Math.ceil(providerList?.total / providerList?.per_page)}
+              page={conditions.page}
+              onChange={handlePageChange}
+            />
+          </Box>
+        )}
+        {!searchMap && type === 'service' && (
+          <Box sx={{ my: '16px', display: 'flex', justifyContent: 'center' }}>
+            <Pagination
+              color="primary"
+              count={Math.ceil(packageList?.total / packageList?.per_page)}
+              page={conditions.page}
+              onChange={handlePageChange}
+            />
+          </Box>
+        )}
       </div>
     </div>
   );

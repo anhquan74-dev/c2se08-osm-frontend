@@ -58,12 +58,14 @@ const PostForm = ({ initialValues, onSubmit, isEdit }) => {
 
   const handlePreviewAvatar = (e) => {
     const file = e.target.files[0];
+    // if (file) {
     setPost({
       ...post,
       image: file,
     });
     console.log('file: ', file, 'value: ', avatarPick);
     setAvatarPick(URL.createObjectURL(file));
+    // }
   };
 
   return (

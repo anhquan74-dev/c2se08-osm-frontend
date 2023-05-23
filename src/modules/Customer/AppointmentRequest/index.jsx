@@ -147,9 +147,11 @@ const AppointmentRequest = () => {
 
   const handlePreviewAvatar = (e) => {
     const file = e.target.files[0];
+    // if (file) {
     setAttachPhoto(file);
     console.log('file: ', file, 'value: ', avatarPick);
     setAvatarPick(URL.createObjectURL(file));
+    // }
   };
 
   return (

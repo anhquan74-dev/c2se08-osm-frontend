@@ -238,7 +238,6 @@ const Map = ({ onClose, handleSetLocation }) => {
 // }
 
 function Search({ panTo }) {
-  console.log(panTo);
   const {
     ready,
     value,
