@@ -1,4 +1,5 @@
-import { Chat, LocationOn, Search } from '@mui/icons-material';
+import { LocationOn, Search } from '@mui/icons-material';
+import ChatIcon from '@mui/icons-material/Chat';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Breadcrumbs, FormControl, InputLabel, Link, OutlinedInput, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -14,6 +15,7 @@ import Skeleton from 'react-loading-skeleton';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProviderById } from '../../providerCustomerSlice';
 import feedbackApi from '../../../../../api/feedbackApi';
+import Chat from '../../../Chat/Chat';
 
 const ProviderDetailPage = () => {
   const starArr = [1, 2, 3, 4, 5];
@@ -32,6 +34,8 @@ const ProviderDetailPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { provider, loading, services } = useSelector((state) => state.providerCustomer);
+  const [openChat, setOpenChat] = useState(false);
+
   useEffect(() => {
     if (!providerId) return;
     console.log('vaof ddaay');
@@ -59,6 +63,13 @@ const ProviderDetailPage = () => {
     setOpen(false);
   };
 
+  const handleShowChat = () => {
+    setOpenChat(true);
+  };
+
+  const handleCloseChat = () => {
+    setOpenChat(false);
+  };
   return (
     <div className="provider-detail-wrapper container">
       <div className="search-bar">
@@ -157,8 +168,8 @@ const ProviderDetailPage = () => {
               {!loading && provider?.full_name}
               {loading && <Skeleton width={250} height={30} />}
             </span>
-            <span>
-              <Chat fontSize="small" />
+            <span onClick={handleShowChat}>
+              <ChatIcon fontSize="small" />
               Chat
             </span>
           </div>
@@ -185,6 +196,7 @@ const ProviderDetailPage = () => {
           </div>
         </div>
       </div>
+      {openChat && <Chat currentProvider={provider} openChat={openChat} handleCloseChat={handleCloseChat} />}
     </div>
   );
 };

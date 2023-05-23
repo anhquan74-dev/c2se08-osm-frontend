@@ -5,25 +5,31 @@ import ChatItem from './ChatItem';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import messageApi from '../../../../api/messageApi.js';
-import { getListMessagesProviderCustomer } from '../chatSlice';
+import { getListCustomerChatWithProvider, getListMessagesProviderCustomer } from '../chatSlice';
 import { io } from 'socket.io-client';
 const ENDPOINT = import.meta.env.VITE_REACT_APP_DOMAIN_NODE_SERVER;
 
 export default function ChatContent(props) {
-  const [socket, setSocket] = useState(null);
-  useEffect(() => {
-    setSocket(io(ENDPOINT));
-  }, []);
-
+  const { listMessagesProviderCustomer } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
+  const [socket, setSocket] = useState(null);
+
   const { currentUser } = useSelector((state) => state.auth);
-  const { listMessagesProviderCustomer } = props;
+  // const { listMessagesProviderCustomer } = props;
   const { currentCustomer } = useSelector((state) => state.chat);
   const [msg, setMsg] = useState('');
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    setSocket(io(ENDPOINT));
+  }, []);
+  useEffect(() => {
+    dispatch(getListCustomerChatWithProvider(currentUser.id));
+  }, []);
+
   useEffect(() => {
     setMsg('');
     scrollToBottom();
@@ -43,6 +49,7 @@ export default function ChatContent(props) {
       setMsg('');
       dispatch(getListMessagesProviderCustomer({ providerId: currentUser.id, customerId: currentCustomer.id }));
       scrollToBottom();
+      console.log('gửi');
       socket?.emit('provider_send_message');
     } else {
       return;

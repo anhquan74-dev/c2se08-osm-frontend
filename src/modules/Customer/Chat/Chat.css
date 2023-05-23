@@ -18,8 +18,17 @@
   border-radius: 8px;
   height: 50%;
   width: 25%;
-  border: 2px solid #ffbe17;
+  /* border: 2px solid #ffbe17; */
+  right: 100px;
+  bottom: 10px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  z-index: 9999;
 }
+
+/* .container-chat.disable { */
+  /* display: none; */
+  /* visibility: hidden; */
+/* } */
 
 @media (min-width: 320px) and (max-width: 480px) {
   .outerContainer {

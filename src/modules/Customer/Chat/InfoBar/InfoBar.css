@@ -3,30 +3,33 @@
   align-items: center;
   justify-content: space-between;
   background: #ffbe17;
-  border-radius: 4px 4px 0 0;
-  height: 60px;
+  border-radius: 10px 10px 0 0;
+  /* height: 60px; */
   width: 100%;
+  font-size: 14px;
+  padding: 12px 20px;
 }
 
 .leftInnerContainer {
-  flex: 0.5;
+  flex: 0.7;
   display: flex;
   align-items: center;
-  margin-left: 5%;
   color: white;
-  margin-top: 15px;
-  margin-bottom: 15px;
+
 }
 
 .rightInnerContainer {
   display: flex;
-  flex: 0.5;
+  flex: 0.3;
   justify-content: flex-end;
-  margin-right: 5%;
+
 }
-.rightInnerContainer:hover {
+.rightInnerContainer  svg{
   cursor: pointer;
 }
+/* .rightInnerContainer:hover {
+  cursor: pointer;
+} */
 .onlineIcon {
   margin-right: 5%;
 }

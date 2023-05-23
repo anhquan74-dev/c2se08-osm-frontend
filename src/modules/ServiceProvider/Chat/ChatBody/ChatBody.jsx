@@ -10,14 +10,10 @@ export default function ChatBody() {
   const { currentUser } = useSelector((state) => state.auth);
   const { listCustomerChatWithCurrentProvider, listMessagesProviderCustomer } = useSelector((state) => state.chat);
 
-  useEffect(() => {
-    dispatch(getListCustomerChatWithProvider(currentUser.id));
-  }, []);
-
   return (
     <div className="main__chatbody">
       <ChatList listCustomer={listCustomerChatWithCurrentProvider} />
-      <ChatContent listMessagesProviderCustomer={listMessagesProviderCustomer} />
+      <ChatContent />
     </div>
   );
 }

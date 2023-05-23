@@ -3,12 +3,13 @@ import closeIcon from '../../../../assets/images/closeIcon.png';
 import onlineIcon from '../../../../assets/images/onlineIcon.png';
 import DefaultAvatar from '../../../../assets/images/default-avatar.png';
 import './InfoBar.css';
+import { Close } from '@mui/icons-material';
 export default function InfoBar(props) {
-  const { providerInfo, setIsShow } = props;
-  const handleClose = () => {
-    setIsShow(false);
-    console.log('da dong');
-  };
+  const { providerInfo, handleCloseChat } = props;
+  // const handleClose = () => {
+  //   setIsShow(false);
+  //   console.log('da dong');
+  // };
   return (
     <div className="infoBar">
       <div className="leftInnerContainer">
@@ -19,9 +20,10 @@ export default function InfoBar(props) {
         />
 
         <h3>{providerInfo?.full_name}</h3>
+        {/* <Icon color="white" /> */}
       </div>
-      <div className="rightInnerContainer" onClick={handleClose}>
-        <img src={closeIcon} alt="close icon" />
+      <div className="rightInnerContainer">
+        <Close sx={{ color: 'white' }} onClick={handleCloseChat} />
       </div>
     </div>
   );

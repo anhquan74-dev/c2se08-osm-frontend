@@ -7,7 +7,7 @@ export default function Messages(props) {
   const { messages, currentProvider } = props;
   return (
     <ScrollToBottom className="messages">
-      {messages.map((message, i) => (
+      {messages?.map((message, i) => (
         <div key={i}>
           <Message message={message} currentProvider={currentProvider} />
         </div>

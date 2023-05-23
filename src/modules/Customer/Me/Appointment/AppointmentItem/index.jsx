@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { io } from 'socket.io-client';
 import moment from 'moment';
 import 'moment/dist/locale/vi';
+import Chat from '../../../Chat/Chat';
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_DOMAIN_NODE_SERVER;
 
@@ -26,6 +27,8 @@ const AppointmentItem = (props) => {
   const [comment, setComment] = useState();
   const [render, setRender] = useState();
   const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
+  const [openChat, setOpenChat] = useState(false);
+
   const handleCloseRemoveDialog = () => {
     setOpenRemoveDialog(false);
   };
@@ -110,10 +113,17 @@ const AppointmentItem = (props) => {
     setStatusPicker('canceled');
   };
 
+  const handleShowChat = () => {
+    setOpenChat(true);
+  };
+
+  const handleCloseChat = () => {
+    setOpenChat(false);
+  };
   return (
     <div className="appointment-item">
-      <div className="btn-chat">
-        <img src="https://oddjob.vn/assets/images/black-chat-icon.svg" className="chat-icon" /> CHAT{' '}
+      <div className="btn-chat" onClick={handleShowChat}>
+        <img src="https://oddjob.vn/assets/images/black-chat-icon.svg" className="chat-icon" /> CHAT
       </div>
       <div className="header">
         <div className="wrapper">
@@ -315,6 +325,9 @@ const AppointmentItem = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
+      {openChat && (
+        <Chat currentProvider={appointment?.provider} openChat={openChat} handleCloseChat={handleCloseChat} />
+      )}
     </div>
   );
 };
