@@ -42,6 +42,19 @@
   margin-top: 30px;
   overflow: auto;
   max-height: calc(100vh - calc(100vh / 2));
+  .list-customer-chat {
+    position: relative;
+    .new-message {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #000;
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
 }
 
 .chatlist__item {
@@ -81,8 +94,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-
-  margin-right: 20px;
+  margin-right: 14px;
   position: relative;
 }
 .avatar-chat-list img {

@@ -26,7 +26,7 @@ export default function Input(props) {
         setMessages(resMessages.data);
         setMessage('');
       }
-      socket?.emit('customer_send_message');
+      socket?.emit('customer_send_message', { customerId, message });
     }
   };
   return (

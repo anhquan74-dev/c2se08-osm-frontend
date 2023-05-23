@@ -5,15 +5,15 @@ export const getListCustomerChatWithProvider = createAsyncThunk(
   'chat/getListCustomerChatWithProvider',
   async (provider_id) => {
     const resListCustomer = await messageApi.getListCustomerChatByProvider(provider_id);
-    const resMessagesWithFirstCustomer = await messageApi.getListMessagesProviderCustomer(
-      provider_id,
-      resListCustomer.data[0].id
-    );
-    const data = {
-      resListCustomer: resListCustomer.data,
-      resMessagesWithFirstCustomer: resMessagesWithFirstCustomer.data,
-    };
-    return data;
+    // const resMessagesWithFirstCustomer = await messageApi.getListMessagesProviderCustomer(
+    //   provider_id,
+    //   resListCustomer.data[0].id
+    // );
+    // const data = {
+    //   resListCustomer: resListCustomer.data,
+    //   resMessagesWithFirstCustomer: resMessagesWithFirstCustomer.data,
+    // };
+    return resListCustomer.data;
   }
 );
 export const getListMessagesProviderCustomer = createAsyncThunk(
@@ -28,7 +28,8 @@ const initialState = {
   loading: false,
   listCustomerChatWithCurrentProvider: [],
   listMessagesProviderCustomer: [],
-  currentCustomer: {},
+  currentCustomer: '',
+  customerSendMessage: '',
 };
 export const chatSlice = createSlice({
   name: 'chat',
@@ -36,6 +37,9 @@ export const chatSlice = createSlice({
   reducers: {
     setCurrentCustomer: (state, action) => {
       state.currentCustomer = action.payload;
+    },
+    setCustomerSendMessage: (state, action) => {
+      state.customerSendMessage = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -45,9 +49,9 @@ export const chatSlice = createSlice({
 
     builder.addCase(getListCustomerChatWithProvider.fulfilled, (state, action) => {
       state.loading = false;
-      state.listCustomerChatWithCurrentProvider = action.payload.resListCustomer;
-      state.listMessagesProviderCustomer = action.payload.resMessagesWithFirstCustomer;
-      state.currentCustomer = action.payload.resListCustomer[0];
+      state.listCustomerChatWithCurrentProvider = action.payload;
+      // state.listMessagesProviderCustomer = action.payload.resMessagesWithFirstCustomer;
+      // state.currentCustomer = action.payload.resListCustomer[0];
     });
 
     builder.addCase(getListCustomerChatWithProvider.rejected, (state, action) => {

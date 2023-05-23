@@ -70,6 +70,7 @@
   border-radius: 10px 10px 0 10px;
   max-width: 50%;
   min-width: 215px;
+  margin-right: 14px;
 }
 .chat__item__content .chat__meta {
   justify-content: space-between;
@@ -146,4 +147,12 @@
   align-items: center;
   background-color: #ffbe17;
   color: #fff;
+}
+
+.no-chat-choose {
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

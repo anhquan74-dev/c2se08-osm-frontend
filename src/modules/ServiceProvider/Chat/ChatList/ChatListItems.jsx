@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Avatar from './Avatar';
 import DefaultAvatar from '../../../../assets/images/default-avatar.png';
 export default function ChatListItems(props) {
-  const { animationDelay, active } = props;
+  const { animationDelay, active, message } = props;
 
   return (
     <div
@@ -13,7 +13,8 @@ export default function ChatListItems(props) {
 
       <div className="userMeta">
         <p>{props.name}</p>
-        <p style={{ fontWeight: '300' }}>Đang hoạt động</p>
+        {!message && <p style={{ fontWeight: '300' }}>Đang hoạt động</p>}
+        {message && <p>{message}</p>}
       </div>
     </div>
   );

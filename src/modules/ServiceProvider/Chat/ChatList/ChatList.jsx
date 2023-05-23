@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ChatListItems from './ChatListItems';
 import { Search } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { getListMessagesProviderCustomer, setCurrentCustomer } from '../chatSlice';
+import { chatActions, getListMessagesProviderCustomer, setCurrentCustomer } from '../chatSlice';
 const allChatUsers = [
   {
     image:
@@ -54,21 +54,20 @@ const allChatUsers = [
   },
 ];
 export default function ChatList(props) {
-  const [allChats, setAllChats] = useState([]);
-  const { currentCustomer } = useSelector((state) => state.chat);
+  // const [allChats, setAllChats] = useState([]);
+  const { listCustomer } = props;
+  const { currentCustomer, customerSendMessage, listMessagesProviderCustomer } = useSelector((state) => state.chat);
   const { currentUser } = useSelector((state) => state.auth);
   const [searchInput, setSeatchInput] = useState('');
   const dispatch = useDispatch();
-  const listCustomer = props.listCustomer;
   const [filteredList, setFilteredList] = new useState(listCustomer);
   useEffect(() => {
     setFilteredList(listCustomer);
   }, [listCustomer]);
-  useEffect(() => {
-    setAllChats(allChatUsers);
-  }, []);
+
   const handleChangeCurrentCustomer = async (item) => {
     dispatch(setCurrentCustomer(item));
+    dispatch(chatActions.setCustomerSendMessage(''));
   };
   const handleChangeInputSearch = (e) => {
     const query = event.target.value;
@@ -99,8 +98,22 @@ export default function ChatList(props) {
         {filteredList &&
           filteredList.length > 0 &&
           filteredList.map((item, index) => {
+            if (customerSendMessage?.customerId === item.id) {
+              return (
+                <div className="list-customer-chat" onClick={() => handleChangeCurrentCustomer(item)}>
+                  <ChatListItems
+                    name={item.full_name}
+                    key={item.id}
+                    animationDelay={index + 1}
+                    image={item.avatar?.url}
+                    message={customerSendMessage?.message}
+                  />
+                  <p className="new-message"></p>
+                </div>
+              );
+            }
             return (
-              <div onClick={() => handleChangeCurrentCustomer(item)}>
+              <div className="list-customer-chat" onClick={() => handleChangeCurrentCustomer(item)}>
                 <ChatListItems
                   name={item.full_name}
                   key={item.id}

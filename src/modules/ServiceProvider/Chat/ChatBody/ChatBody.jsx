@@ -8,8 +8,13 @@ import { getListCustomerChatWithProvider, setCurrentCustomer } from '../chatSlic
 export default function ChatBody() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
-  const { listCustomerChatWithCurrentProvider, listMessagesProviderCustomer } = useSelector((state) => state.chat);
+  const { listCustomerChatWithCurrentProvider, listMessagesProviderCustomer, currentCustomer } = useSelector(
+    (state) => state.chat
+  );
 
+  useEffect(() => {
+    dispatch(getListCustomerChatWithProvider(currentUser?.id));
+  }, []);
   return (
     <div className="main__chatbody">
       <ChatList listCustomer={listCustomerChatWithCurrentProvider} />
