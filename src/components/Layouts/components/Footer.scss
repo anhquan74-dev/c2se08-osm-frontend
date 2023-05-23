@@ -52,6 +52,11 @@
   font-size: 14px;
   padding-bottom: 10px;
   padding-top: 10px;
+  .facebook {
+    margin: 4px 0;
+    display: flex;
+    gap: 12px;
+  }
 }
 
 .footer .footer-col .content p {
