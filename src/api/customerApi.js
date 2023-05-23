@@ -25,10 +25,10 @@ const customerApi = {
       },
     });
   },
-  // remove(id) {
-  //   const url = `/hard-delete-customer/${id}`;
-  //   return axiosClient.delete(url);
-  // },
+  remove(id) {
+    const url = `/hard-delete-customer/${id}`;
+    return axiosClient.post(url);
+  },
 };
 
 export default customerApi;

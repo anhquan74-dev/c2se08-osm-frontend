@@ -7,6 +7,7 @@ import ProviderForm from '../components/ProviderForm';
 import providerApi from '../../../../api/providerApi';
 import { toast } from 'react-toastify';
 import locationApi from '../../../../api/locationApi';
+import moment from 'moment';
 
 const AddEditProviderPage = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const AddEditProviderPage = () => {
     const formData = new FormData();
     formData.append('phone_number', user.phone_number);
     formData.append('gender', user.gender);
-    formData.append('birthday', user.birthday);
+    formData.append('birthday', moment(user.birthday).format('YYYY-MM-DD HH:mm:ss'));
     formData.append('full_name', user.full_name);
     formData.append('email', user.email);
     formData.append('password', user.password);
@@ -96,7 +97,7 @@ const AddEditProviderPage = () => {
       await providerApi.update(formData);
       toast.success('Cập nhật thành công!');
     } else {
-      await providerApi.add(formValues);
+      await providerApi.add(formData);
       toast.success('Tạo mới thành công!');
     }
 

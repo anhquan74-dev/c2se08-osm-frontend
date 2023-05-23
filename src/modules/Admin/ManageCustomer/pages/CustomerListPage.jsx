@@ -6,6 +6,8 @@ import { Link, useNavigate, useResolvedPath } from 'react-router-dom';
 import CustomerFilters from '../components/CustomerFilters';
 import CustomerTable from '../components/CustomerTable';
 import { customerActions, getCustomers, postDeleteCustomer } from '../customerSlice';
+import customerApi from '../../../../api/customerApi';
+import { LIMIT_DEFAULT } from '../../../../utils/constants';
 
 const CustomerListPage = () => {
   const url = useResolvedPath('').pathname;
@@ -31,11 +33,21 @@ const CustomerListPage = () => {
   };
 
   const handleRemoveCustomer = (customer) => {
-    const newCustomer = {
-      ...customer,
-      is_valid: 0,
-    };
-    dispatch(postDeleteCustomer(newCustomer));
+    // const newCustomer = {
+    //   ...customer,
+    //   is_valid: 0,
+    // };
+    // dispatch(postDeleteCustomer(newCustomer));
+    (async () => {
+      const res = await customerApi.remove(customer?.id);
+      console.log(res);
+    })();
+    dispatch(
+      customerActions.setConditions({
+        page: 1,
+        limit: LIMIT_DEFAULT,
+      })
+    );
   };
 
   const handleEditCustomer = (customer) => {

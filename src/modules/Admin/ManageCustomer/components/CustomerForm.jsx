@@ -104,7 +104,7 @@ const CustomerForm = ({ initialValues, onSubmit, isEdit }) => {
   return (
     <Box maxWidth={800}>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
-        <InputField name="email" control={control} label="Email" />
+        <InputField name="email" control={control} label="Email" disabled={isEdit} />
         <InputField name="password" control={control} label="Mật khẩu" disabled={isEdit} type="password" />
         <InputField name="full_name" control={control} label="Họ và tên" />
         <DatePickerField name="birthday" control={control} label="Ngày sinh" />

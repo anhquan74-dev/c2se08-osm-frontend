@@ -6,6 +6,8 @@ import { ChevronLeft } from '@mui/icons-material';
 import CustomerForm from '../components/CustomerForm';
 import customerApi from '../../../../api/customerApi';
 import locationApi from '../../../../api/locationApi';
+import moment from 'moment';
+import { toast } from 'react-toastify';
 
 const AddEditCustomerPage = () => {
   const navigate = useNavigate();
@@ -54,9 +56,10 @@ const AddEditCustomerPage = () => {
     //     formData.append(key, value);
     //   }
     // }
+    console.log(moment(user.birthday).format('YYYY-MM-DD HH:mm:ss'));
     formData.append('phone_number', user.phone_number);
     formData.append('gender', user.gender);
-    formData.append('birthday', user.birthday);
+    formData.append('birthday', moment(user.birthday).format('YYYY-MM-DD HH:mm:ss'));
     formData.append('full_name', user.full_name);
     formData.append('email', user.email);
     formData.append('password', user.password);

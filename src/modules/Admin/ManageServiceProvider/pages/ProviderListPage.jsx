@@ -6,6 +6,8 @@ import { Link, useNavigate, useResolvedPath } from 'react-router-dom';
 import ProviderFilters from '../components/ProviderFilters';
 import ProviderTable from '../components/ProviderTable';
 import { getProviders, postDeleteProvider, providerActions } from '../providerSlice';
+import providerApi from '../../../../api/providerApi';
+import { LIMIT_DEFAULT } from '../../../../utils/constants';
 
 const ProviderListPage = () => {
   const url = useResolvedPath('').pathname;
@@ -33,11 +35,22 @@ const ProviderListPage = () => {
   };
 
   const handleRemoveProvider = (provider) => {
-    const newProvider = {
-      ...provider,
-      is_valid: 0,
-    };
-    dispatch(postDeleteProvider(newProvider));
+    // const newProvider = {
+    //   ...provider,
+    //   is_valid: 0,
+    // };
+    // dispatch(postDeleteProvider(newProvider));
+
+    (async () => {
+      const res = await providerApi.remove(provider?.id);
+      console.log(res);
+    })();
+    dispatch(
+      providerActions.setConditions({
+        page: 1,
+        limit: LIMIT_DEFAULT,
+      })
+    );
   };
 
   const handleEditProvider = (provider) => {
