@@ -94,14 +94,22 @@ const AddEditProviderPage = () => {
 
     if (isEdit) {
       formData.append('id', user.id);
-      await providerApi.update(formData);
-      toast.success('Cập nhật thành công!');
+      const res = await providerApi.update(formData);
+      if (res.statusCode == 200) {
+        toast.success('Cập nhật thành công!');
+        navigate('/admin/provider');
+      } else {
+        toast.error('Cập nhật thất bại, có lỗi từ hệ thống!');
+      }
     } else {
-      await providerApi.add(formData);
-      toast.success('Tạo mới thành công!');
+      const res = await providerApi.add(formData);
+      if (res.email) {
+        toast.error('Email này đã tồn tại trong hệ thống!');
+      } else {
+        toast.success('Tạo mới thành công!');
+        navigate('/admin/provider');
+      }
     }
-
-    navigate('/admin/provider');
   };
 
   return (
