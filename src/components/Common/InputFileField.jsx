@@ -43,6 +43,7 @@ const InputFileField = ({ name, control, label, disabled, ...inputProps }) => {
             name="upload-photo"
             type="file"
             // value={value}
+            accept="image/*"
             onChange={handlePreviewAvatar}
             onBlur={onBlur}
             inputRef={ref}

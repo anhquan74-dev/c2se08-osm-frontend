@@ -16,6 +16,7 @@ import { io } from 'socket.io-client';
 import moment from 'moment';
 import 'moment/dist/locale/vi';
 import Chat from '../../../Chat/Chat';
+import LightBox from '../../../../../components/Common/LightBox/LightBox';
 
 const ENDPOINT = import.meta.env.VITE_REACT_APP_DOMAIN_NODE_SERVER;
 
@@ -28,7 +29,10 @@ const AppointmentItem = (props) => {
   const [render, setRender] = useState();
   const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
   const [openChat, setOpenChat] = useState(false);
-
+  const [isOpen, setIsOpen] = useState(false);
+  const handleSetOpen = () => {
+    setIsOpen(!isOpen);
+  };
   const handleCloseRemoveDialog = () => {
     setOpenRemoveDialog(false);
   };
@@ -181,9 +185,10 @@ const AppointmentItem = (props) => {
               </div>
               <div className="right last">
                 <div>Ảnh đính kèm</div>
-                <div className="image">
+                <div className="image" onClick={handleSetOpen}>
                   {appointment?.attach_photo?.url && <img src={appointment?.attach_photo?.url} alt="" />}
                 </div>
+                <LightBox src={appointment?.attach_photo?.url} isOpen={isOpen} handleSetOpen={handleSetOpen} />
               </div>
             </div>
           </div>

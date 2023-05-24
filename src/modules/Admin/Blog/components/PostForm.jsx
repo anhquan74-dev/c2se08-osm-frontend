@@ -118,6 +118,7 @@ const PostForm = ({ initialValues, onSubmit, isEdit }) => {
                       id="upload-photo"
                       name="upload-photo"
                       type="file"
+                      accept="image/*"
                       onChange={handlePreviewAvatar}
                     />
                     <Fab color="default" size="small" component="span" aria-label="add" variant="extended">

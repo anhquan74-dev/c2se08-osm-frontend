@@ -13,6 +13,8 @@ import { toast } from 'react-toastify';
 import { io } from 'socket.io-client';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
+import ImgsViewer from 'react-images-viewer';
+import LightBox from '../LightBox/LightBox';
 const ENDPOINT = import.meta.env.VITE_REACT_APP_DOMAIN_NODE_SERVER;
 
 const AppointmentItem = (props) => {
@@ -135,6 +137,7 @@ const AppointmentItem = (props) => {
 
 const AppointmentProviderItem = (props) => {
   const [socket, setSocket] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     setSocket(io(ENDPOINT));
   }, []);
@@ -148,7 +151,9 @@ const AppointmentProviderItem = (props) => {
     setOpenRemoveDialog(false);
   };
   console.log(status, appointment);
-
+  const handleSetOpen = () => {
+    setIsOpen(!isOpen);
+  };
   // xu ly gui bao gia
   const handleSendPrice = () => {
     const { id, complete_date, cancel_date, job_status } = appointment;
@@ -274,9 +279,10 @@ const AppointmentProviderItem = (props) => {
               </div>
               <div className="right ">
                 <div>Ảnh đính kèm</div>
-                <div className="image">
+                <div className="image" onClick={handleSetOpen}>
                   {appointment?.attach_photo?.url && <img src={appointment?.attach_photo?.url} alt="" />}
                 </div>
+                <LightBox src={appointment?.attach_photo?.url} isOpen={isOpen} handleSetOpen={handleSetOpen} />
               </div>
             </div>
           </div>
