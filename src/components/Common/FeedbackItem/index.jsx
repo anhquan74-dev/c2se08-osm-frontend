@@ -4,6 +4,8 @@ import { ThumbUpOffAlt } from '@mui/icons-material';
 import DefaultAvatar from '../../../assets/images/default-avatar.png';
 import Rating from '../Rating';
 import moment from 'moment';
+import PositiveFeedback from '../../../assets/images/pos_feedback.png';
+import NegativeFeedback from '../../../assets/images/neg_feedback.png';
 
 const FeedbackItem = (props) => {
   const { feedbackInfo } = props;
@@ -30,6 +32,13 @@ const FeedbackItem = (props) => {
         </div> */}
       </div>
       <div className="content">{feedbackInfo?.feedback.comment}. </div>
+      <div className="comment-analysis">
+        {parseFloat(feedbackInfo?.feedback?.rating) > 0 ? (
+          <img src={PositiveFeedback} alt="pos-feedback" />
+        ) : (
+          <img src={NegativeFeedback} alt="neg-feedback" />
+        )}
+      </div>
       <div className="date">{moment(feedbackInfo?.feedback.created_at).format('DD/MM/YYYY')}</div>
     </div>
   );

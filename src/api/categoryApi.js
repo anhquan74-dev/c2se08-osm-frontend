@@ -29,6 +29,10 @@ const categoryApi = {
       },
     });
   },
+  remove(id) {
+    const url = `/hard-delete-category/${id}`;
+    return axiosClient.post(url);
+  },
   getCategoriesForProvider(provider_id) {
     const url = `/categories-by-provider/${provider_id}`;
     return axiosClient.get(url);

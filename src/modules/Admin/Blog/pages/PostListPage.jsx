@@ -8,6 +8,8 @@ import { postList } from '../postList';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCustomers } from '../../ManageCustomer/customerSlice';
 import { blogActions, getBlogs } from '../blogSlice';
+import postApi from '../../../../api/postApi';
+import { LIMIT_DEFAULT } from '../../../../utils/constants';
 
 const PostListPage = () => {
   const url = useResolvedPath('').pathname;
@@ -33,6 +35,16 @@ const PostListPage = () => {
   };
 
   const handleRemovePost = (post) => {
+    (async () => {
+      const res = await postApi.remove(post.id);
+      console.log(res);
+    })();
+    dispatch(
+      blogActions.setConditions({
+        page: 1,
+        limit: LIMIT_DEFAULT,
+      })
+    );
     console.log(post);
   };
 

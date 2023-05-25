@@ -62,7 +62,7 @@ const CategoryForm = ({ initialValues, onSubmit }) => {
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <InputField name="name" control={control} label="Tên danh mục" />
         <InputFileField name="logo" control={control} label="Logo" />
-        <InputField name="view_priority" control={control} label="Ưu tiên hiển thị" />
+        <InputField name="view_priority" control={control} label="Ưu tiên hiển thị" type={'number'} />
         <SelectField
           name="is_valid"
           control={control}

@@ -29,10 +29,10 @@ const postApi = {
       },
     });
   },
-  // remove(id) {
-  //   const url = `/hard-delete-post/${id}`;
-  //   return axiosClient.delete(url);
-  // },
+  remove(id) {
+    const url = `/hard-delete-post/${id}`;
+    return axiosClient.post(url);
+  },
 };
 
 export default postApi;

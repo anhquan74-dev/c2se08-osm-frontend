@@ -6,6 +6,8 @@ import { Link, useNavigate, useResolvedPath } from 'react-router-dom';
 import { categoryActions, getCategoriesPagination } from '../categorySlice';
 import CategoryFilters from '../components/CategoryFilters';
 import CategoryTable from '../components/CategoryTable';
+import categoryApi from '../../../../api/categoryApi';
+import { LIMIT_DEFAULT } from '../../../../utils/constants';
 
 const CategoryListPage = () => {
   const url = useResolvedPath('').pathname;
@@ -31,11 +33,20 @@ const CategoryListPage = () => {
   };
 
   const handleRemoveCategory = (category) => {
-    const newCategory = {
-      ...category,
-      is_valid: 0,
-    };
-    // dispatch(postDeleteCategory(newCategory));
+    // const newCategory = {
+    //   ...category,
+    //   is_valid: 0,
+    // };
+    (async () => {
+      const res = await categoryApi.remove(category?.id);
+      console.log(res);
+    })();
+    dispatch(
+      categoryActions.setConditions({
+        page: 1,
+        limit: LIMIT_DEFAULT,
+      })
+    );
   };
 
   const handleEditCategory = (category) => {
