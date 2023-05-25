@@ -62,11 +62,6 @@ const Header = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/provider/information" label="Chỉnh sửa thông tin hiển thị">
-                Chỉnh sửa thông tin hiển thị
-              </NavLink>
-            </li>
-            <li>
               <NavLink to="/provider/services" label="Dịch vụ">
                 Dịch vụ
               </NavLink>
@@ -74,6 +69,11 @@ const Header = () => {
             <li>
               <NavLink to="/provider-chat" label="Hỗ trợ khách hàng">
                 Hỗ trợ khách hàng
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/provider/comment-analysis" label="Khách hàng phản hồi">
+                Khách hàng phản hồi
               </NavLink>
             </li>
           </>
