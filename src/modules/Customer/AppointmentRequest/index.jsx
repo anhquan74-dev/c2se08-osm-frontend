@@ -147,11 +147,14 @@ const AppointmentRequest = () => {
 
   const handlePreviewAvatar = (e) => {
     const file = e.target.files[0];
-    // if (file) {
-    setAttachPhoto(file);
-    console.log('file: ', file, 'value: ', avatarPick);
-    setAvatarPick(URL.createObjectURL(file));
-    // }
+    if (file.type.slice(0, 5) != 'image') {
+      toast.error('Vui lòng chọn định dạng file ảnh!');
+    } else {
+      setAttachPhoto(file);
+      console.log('file: ', file, 'value: ', avatarPick);
+      setAvatarPick(URL.createObjectURL(file));
+      // }
+    }
   };
 
   return (
@@ -238,8 +241,8 @@ const AppointmentRequest = () => {
                   id="upload-photo"
                   name="upload-photo"
                   type="file"
-                  accept="image/*"
                   onChange={handlePreviewAvatar}
+                  inputProps={{ accept: 'image/*' }}
                 />
                 <Fab color="default" size="small" component="span" aria-label="add" variant="extended">
                   <AddAPhoto /> Tải ảnh lên

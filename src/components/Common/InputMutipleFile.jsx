@@ -2,6 +2,7 @@ import { AddAPhoto } from '@mui/icons-material';
 import { Fab, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 const InputFileField = ({ name, control, label, disabled, avatar, handleSetAvatar, ...inputProps }) => {
   const {
@@ -13,7 +14,21 @@ const InputFileField = ({ name, control, label, disabled, avatar, handleSetAvata
   });
   const handlePickFiles = (e) => {
     const files = e.target.files;
-    onChange(files);
+    console.log(files);
+    let count = 0;
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].type.slice(0, 5) != 'image') {
+        toast.error('Vui lòng chọn định dạng file ảnh!');
+        count++;
+        break;
+      }
+    }
+    if (count > 0) {
+      onChange(files);
+    }
+    // if (files.type.slice(0, 5) != 'image') {
+    //   toast.error('Vui lòng chọn định dạng file ảnh!');
+    // }
   };
   return (
     <div>
@@ -22,7 +37,7 @@ const InputFileField = ({ name, control, label, disabled, avatar, handleSetAvata
         id="upload-photo"
         name="upload-photo"
         type="file"
-        inputProps={{ ...inputProps, multiple: true }}
+        inputProps={{ ...inputProps, multiple: true, accept: 'image/*' }}
         // value={value}
         onChange={handlePickFiles}
         onBlur={onBlur}

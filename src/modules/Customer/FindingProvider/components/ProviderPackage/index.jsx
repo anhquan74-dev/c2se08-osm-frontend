@@ -63,7 +63,8 @@ const ProviderPackage = () => {
                 </div>
                 <div className="desc">{item?.package?.description}</div>
                 <NavLink
-                  className="quotation-btn"
+                  // className="quotation-btn"
+                  className={`quotation-btn ${provider?.is_working ? '' : 'disabled'}`}
                   to={`/appointment-request-form?providerId=${provider?.id}&serviceId=${serviceId}&packageId=${item?.package?.id}`}
                 >
                   Lấy báo giá

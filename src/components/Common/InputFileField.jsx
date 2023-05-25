@@ -2,6 +2,7 @@ import { AddAPhoto } from '@mui/icons-material';
 import { Fab, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useController } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 const InputFileField = ({ name, control, label, disabled, ...inputProps }) => {
   const {
@@ -14,17 +15,20 @@ const InputFileField = ({ name, control, label, disabled, ...inputProps }) => {
   const [avatarPick, setAvatarPick] = useState();
   const handlePreviewAvatar = (e) => {
     const file = e.target.files[0];
-    // if (file) {
-    onChange(file);
-    console.log('file: ', file, 'value: ', value);
-
-    // const newFile = {
-    //   ...file,
-    //   preview: URL.createObjectURL(file),
-    // };
-    // console.log(newFile);
-    setAvatarPick(URL.createObjectURL(file));
-    // }
+    console.log(file);
+    if (file.type.slice(0, 5) != 'image') {
+      toast.error('Vui lòng chọn định dạng file ảnh!');
+    } else {
+      onChange(file);
+      console.log('file: ', file, 'value: ', value);
+      // const newFile = {
+      //   ...file,
+      //   preview: URL.createObjectURL(file),
+      // };
+      // console.log(newFile);
+      setAvatarPick(URL.createObjectURL(file));
+      // }
+    }
   };
 
   useEffect(() => {
@@ -49,7 +53,7 @@ const InputFileField = ({ name, control, label, disabled, ...inputProps }) => {
             inputRef={ref}
             error={invalid}
             helperText={error?.message}
-            inputProps={inputProps}
+            inputProps={{ ...inputProps, accept: 'image/*' }}
           />
 
           <Fab color="default" size="small" component="span" aria-label="add" variant="extended">

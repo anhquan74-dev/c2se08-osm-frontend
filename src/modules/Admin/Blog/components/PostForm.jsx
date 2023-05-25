@@ -6,6 +6,7 @@ import 'react-quill/dist/quill.snow.css';
 import './PostForm.scss';
 import categoryApi from '../../../../api/categoryApi';
 import { AddAPhoto } from '@mui/icons-material';
+import { toast } from 'react-toastify';
 
 const PostForm = ({ initialValues, onSubmit, isEdit }) => {
   const [post, setPost] = useState(initialValues);
@@ -58,14 +59,17 @@ const PostForm = ({ initialValues, onSubmit, isEdit }) => {
 
   const handlePreviewAvatar = (e) => {
     const file = e.target.files[0];
-    // if (file) {
-    setPost({
-      ...post,
-      image: file,
-    });
-    console.log('file: ', file, 'value: ', avatarPick);
-    setAvatarPick(URL.createObjectURL(file));
-    // }
+    if (file.type.slice(0, 5) != 'image') {
+      toast.error('Vui lòng chọn định dạng file ảnh!');
+    } else {
+      setPost({
+        ...post,
+        image: file,
+      });
+      console.log('file: ', file, 'value: ', avatarPick);
+      setAvatarPick(URL.createObjectURL(file));
+      // }
+    }
   };
 
   return (
@@ -118,7 +122,7 @@ const PostForm = ({ initialValues, onSubmit, isEdit }) => {
                       id="upload-photo"
                       name="upload-photo"
                       type="file"
-                      accept="image/*"
+                      inputProps={{ accept: 'image/*' }}
                       onChange={handlePreviewAvatar}
                     />
                     <Fab color="default" size="small" component="span" aria-label="add" variant="extended">

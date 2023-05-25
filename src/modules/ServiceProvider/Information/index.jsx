@@ -102,10 +102,10 @@ const Information = () => {
           <div className="rate-avatar">
             <div className="avatar">
               <img src={currentUser?.avatar?.url} alt="" />
-              <label htmlFor="file-avatar">
+              {/* <label htmlFor="file-avatar">
                 <CameraAltIcon />
                 <input type="file" id="file-avatar" />
-              </label>
+              </label> */}
             </div>
             <div className="rate">
               <Rating starNumber={currentUser?.avg_star} size="large" />

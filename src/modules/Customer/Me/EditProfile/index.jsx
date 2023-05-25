@@ -9,6 +9,7 @@ import customerApi from '../../../../api/customerApi';
 import { useNavigate } from 'react-router-dom';
 import { getMe } from '../../../Auth/authSlice';
 import { CircularProgress } from '@mui/material';
+import { toast } from 'react-toastify';
 
 const EditProfile = () => {
   const [open, setOpen] = useState(false);
@@ -82,7 +83,9 @@ const EditProfile = () => {
 
   const handlePreviewAvatar = (e) => {
     const file = e.target.files[0];
-    if (file) {
+    if (file.type.slice(0, 5) != 'image') {
+      toast.error('Vui lòng chọn định dạng file ảnh!');
+    } else {
       setAvatar(file);
       console.log('file: ', file, 'value: ', avatarPick);
       setAvatarPick(URL.createObjectURL(file));
@@ -97,7 +100,7 @@ const EditProfile = () => {
           {avatar && <img src={avatarPick || avatar.url} alt="" />}
           <label htmlFor="file-avatar">
             <CameraAltIcon />
-            <input type="file" id="file-avatar" onChange={handlePreviewAvatar} />
+            <input type="file" accept="image/*" id="file-avatar" onChange={handlePreviewAvatar} />
           </label>
           {avatar !== currentUser?.avatar && (
             <Close

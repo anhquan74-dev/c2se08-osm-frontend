@@ -173,6 +173,9 @@ const ProviderDetailPage = () => {
             <span>
               {!loading && provider?.full_name}
               {loading && <Skeleton width={250} height={30} />}
+              {!loading && !provider?.is_working && (
+                <strong className="no-working">(Thợ hiện chưa sẵn sàng làm việc)</strong>
+              )}
             </span>
             <span onClick={handleShowChat}>
               <ChatIcon fontSize="small" />
