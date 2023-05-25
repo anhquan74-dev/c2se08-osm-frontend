@@ -41,7 +41,7 @@ const ManageAppointment = () => {
     } else {
       (async () => {
         setLoading(true);
-        const res = await appointmentApi.getByStatus(statusPicker);
+        const res = await appointmentApi.getByStatusProvider(statusPicker, currentUser?.id);
         setLoading(false);
         console.log(res);
         setListAppointment(res.data?.reverse());
@@ -57,7 +57,7 @@ const ManageAppointment = () => {
       const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
       setTotalAppointment(data);
       if (statusPicker === 'new') {
-        const res = await appointmentApi.getByStatus(statusPicker);
+        const res = await appointmentApi.getByStatusProvider(statusPicker, currentUser?.id);
         setListAppointment(res.data?.reverse());
       } else {
         setStatusPicker('new');
@@ -67,7 +67,7 @@ const ManageAppointment = () => {
       const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
       setTotalAppointment(data);
       if (statusPicker === 'canceled') {
-        const res = await appointmentApi.getByStatus(statusPicker);
+        const res = await appointmentApi.getByStatusProvider(statusPicker, currentUser?.id);
         setListAppointment(res.data?.reverse());
       } else {
         setStatusPicker('canceled');
@@ -77,7 +77,7 @@ const ManageAppointment = () => {
       const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
       setTotalAppointment(data);
       if (statusPicker === 'appointed') {
-        const res = await appointmentApi.getByStatus(statusPicker);
+        const res = await appointmentApi.getByStatusProvider(statusPicker, currentUser?.id);
         setListAppointment(res.data?.reverse());
       } else {
         setStatusPicker('appointed');
@@ -87,7 +87,7 @@ const ManageAppointment = () => {
       const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
       setTotalAppointment(data);
       if (statusPicker === 'done') {
-        const res = await appointmentApi.getByStatus(statusPicker);
+        const res = await appointmentApi.getByStatusProvider(statusPicker, currentUser?.id);
         setListAppointment(res.data?.reverse());
       } else {
         setStatusPicker('done');

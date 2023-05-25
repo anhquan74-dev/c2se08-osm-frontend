@@ -46,13 +46,14 @@ const ProviderCard = (props) => {
   const handleOnclickFullname = () => {
     navigate(`/finding-provider/${id}`);
   };
+  console.log(avg_star);
   return (
     <div className="provider-card">
       <div className="provider-card__left">
         <div className="avatar">
           <img src={avatar?.url ? avatar.url : DefaultAvatar} alt="avatar" />
         </div>
-        {avg_star ? <Rating starNumber={avg_star} size="small" /> : <span>Chưa có đánh giá</span>}
+        {avg_star ? <Rating starNumber={Math.round(avg_star)} size="small" /> : <span>Chưa có đánh giá</span>}
         <div>
           {/* {is_favorite ? ( */}
           <img src="https://oddjob.vn/assets/images/empty_heart.svg" className="favorite-btn" />

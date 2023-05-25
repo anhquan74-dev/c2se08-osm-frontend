@@ -29,7 +29,7 @@ const FeedbackDialog = (props) => {
           <div className="title">
             <h3>Đánh giá</h3>
             <p>{provider?.full_name}</p>
-            <Rating starNumber={star} />
+            {star ? <Rating starNumber={star} /> : <small>Chưa có đánh giá</small>}
           </div>
           <p onClick={onClose}>Đóng</p>
         </div>

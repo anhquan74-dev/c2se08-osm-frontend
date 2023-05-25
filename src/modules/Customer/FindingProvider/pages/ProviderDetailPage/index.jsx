@@ -113,7 +113,13 @@ const ProviderDetailPage = () => {
               {!loading && <img src={provider?.avatar?.url} alt="avatar" />}
             </div>
             {loading && <Skeleton width={140} height={24} />}
-            {!loading && <Rating starNumber={provider?.avg_star} size="large" />}
+
+            {!loading &&
+              (provider?.avg_star ? (
+                <Rating starNumber={Math.round(provider?.avg_star)} size="large" />
+              ) : (
+                <small>Chưa có đánh giá</small>
+              ))}
             {loading && <Skeleton width={80} height={30} />}
             {!loading && <div onClick={handleOpenFeedbackDialog}>{totalFeedback} phản hồi</div>}
             <FeedbackDialog

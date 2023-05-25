@@ -235,7 +235,7 @@ const AppointmentProviderItem = (props) => {
         <div className="group">
           <div className="left">
             <div>
-              {appointment?.provider?.avatar?.url && (
+              {appointment?.customer?.avatar?.url && (
                 <img src={appointment?.customer?.avatar?.url} alt="avatar" className="avatar" />
               )}
             </div>

@@ -1,8 +1,14 @@
 import axiosClient from './axiosClient';
 
 const appointmentApi = {
-  getByStatus(status) {
-    const url = `/appointments-customer/${status}`;
+  getByStatusCustomer(status, userId) {
+    console.log(userId);
+    const url = `/appointments-customer?status=${status}&userId=${userId}`;
+    return axiosClient.get(url);
+  },
+  getByStatusProvider(status, userId) {
+    console.log(userId);
+    const url = `/appointments-provider?status=${status}&userId=${userId}`;
     return axiosClient.get(url);
   },
   getTotalByUser(userId) {

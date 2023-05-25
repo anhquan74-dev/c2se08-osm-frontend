@@ -56,7 +56,7 @@ const ProviderPackage = () => {
                 <div className="rating">
                   {/* <Rating starNumber={avgStar(item?.feedbacks)} size="small" /> */}
                   {item?.feedbacks.length !== 0 ? (
-                    <Rating starNumber={item?.package?.rating} size="small" />
+                    <Rating starNumber={item?.package?.avg_star} size="small" />
                   ) : (
                     <span>Chưa có đánh giá</span>
                   )}

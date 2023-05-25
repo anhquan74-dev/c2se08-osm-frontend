@@ -17,6 +17,8 @@ const Appointment = () => {
   const [listAppointment, setListAppointment] = useState();
   const [loading, setLoading] = useState(true);
   const [totalAppoinment, setTotalAppointment] = useState();
+  // const { currentUser } = useSelector((state) => state.auth);
+  const { currentUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
     (async () => {
@@ -33,20 +35,19 @@ const Appointment = () => {
     } else {
       (async () => {
         setLoading(true);
-        const res = await appointmentApi.getByStatus(statusPicker);
+        const res = await appointmentApi.getByStatusCustomer(statusPicker, currentUser?.id);
         setLoading(false);
         console.log(res);
         setListAppointment(res.data?.reverse());
       })();
     }
   }, [statusPicker]);
-  const { currentUser } = useSelector((state) => state.auth);
   useEffect(() => {
     socket?.on('customer_refresh_request_new', async () => {
       const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
       setTotalAppointment(data);
       if (statusPicker === 'new-or-offered') {
-        const res = await appointmentApi.getByStatus(statusPicker);
+        const res = await appointmentApi.getByStatusCustomer(statusPicker, currentUser?.id);
         setListAppointment(res.data?.reverse());
       } else {
         setStatusPicker('new-or-offered');
@@ -56,7 +57,7 @@ const Appointment = () => {
       const data = (await appointmentApi.getTotalByUser(currentUser?.id))?.data;
       setTotalAppointment(data);
       if (statusPicker === 'canceled') {
-        const res = await appointmentApi.getByStatus(statusPicker);
+        const res = await appointmentApi.getByStatusCustomer(statusPicker, currentUser?.id);
         setListAppointment(res.data?.reverse());
       } else {
         setStatusPicker('canceled');
