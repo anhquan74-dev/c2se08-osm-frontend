@@ -78,14 +78,24 @@ const AddEditCustomerPage = () => {
 
     if (isEdit) {
       formData.append('id', user.id);
-      await customerApi.update(formData);
-      toast.success('Cập nhật thành công!');
+      const res = await customerApi.update(formData);
+      if (res.statusCode == 200) {
+        toast.success('Cập nhật thành công!');
+        navigate('/admin/customer');
+      } else {
+        toast.error('Có lỗi từ hệ thống!');
+      }
     } else {
-      await customerApi.add(formData);
-      toast.success('Tạo mới thành công!');
+      const res = await customerApi.add(formData);
+      if (res.statusCode == 201) {
+        toast.success('Tạo mới thành công!');
+        navigate('/admin/customer');
+      } else {
+        if (res.email) {
+          toast.error('Email này đã tồn tại trong hệ thống!');
+        }
+      }
     }
-
-    navigate('/admin/customer');
   };
 
   return (
