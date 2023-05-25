@@ -98,7 +98,9 @@ const FindingProviderPage = () => {
             Nhà cung cấp dịch vụ
           </button>
         </div>
-        <div className="list-show">{searchMap ? <ProvidersOnMap /> : <ProviderServiceList type={type} />}</div>
+        <div className={`list-show ${searchMap ? 'search-map-api' : ''}`}>
+          {searchMap ? <ProvidersOnMap /> : <ProviderServiceList type={type} />}
+        </div>
         {!searchMap && type === 'provider' && (
           <Box sx={{ my: '16px', display: 'flex', justifyContent: 'center' }}>
             <Pagination

@@ -91,11 +91,11 @@ const Header = () => {
                 Tìm thợ
               </NavLink>
             </li>
-            <li>
+            {/* <li>
               <NavLink to="/about" label="Về OSM System">
                 Về OSM System
               </NavLink>
-            </li>
+            </li> */}
             <li>
               <NavLink to="/blog" label="Blog">
                 Blog

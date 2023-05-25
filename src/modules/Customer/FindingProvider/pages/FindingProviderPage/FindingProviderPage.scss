@@ -88,8 +88,10 @@
   }
 
   .list-show {
-    // height: 100%;
     width: 100%;
     margin: 30px 0;
+    &.search-map-api {
+      height: 100%;
+    }
   }
 }
