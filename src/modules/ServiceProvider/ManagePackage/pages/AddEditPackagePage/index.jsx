@@ -11,6 +11,7 @@ const AddEditPackagePage = () => {
   const { package_id } = useParams();
   const [searchParams] = useSearchParams();
   const serviceId = searchParams.get('serviceId');
+  const serviceName = searchParams.get('serviceName');
   const navigate = useNavigate();
   const isEdit = Boolean(package_id);
   const service_id = useSelector((state) => state.manageService.currentServiceId);
@@ -20,6 +21,7 @@ const AddEditPackagePage = () => {
     price: '',
     is_negotiable: true,
   });
+  console.log(serviceName);
 
   // call API
   useEffect(() => {
@@ -88,6 +90,15 @@ const AddEditPackagePage = () => {
           </Link>
           <Link underline="hover" key="1" color="inherit" href="/provider/services" onClick={handleClickBreadCrum}>
             Dịch vụ
+          </Link>
+          <Link
+            underline="hover"
+            key="1"
+            color="inherit"
+            href={`/provider/services/${serviceId}`}
+            onClick={handleClickBreadCrum}
+          >
+            {serviceName}
           </Link>
           <Typography key="3" color="text.primary">
             {isEdit ? <>Sửa</> : <>Thêm</>} báo giá

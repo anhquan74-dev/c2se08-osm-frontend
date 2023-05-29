@@ -27,6 +27,7 @@ import {
   getAllPackagesByServiceId,
 } from '../../../ManageService/manageServiceSlice';
 import { avgStar } from '../../../../../utils/common.js';
+import serviceApi from '../../../../../api/serviceApi';
 
 const PackageItem = (props) => {
   // const navigate = useNavigate();
@@ -40,6 +41,7 @@ const PackageItem = (props) => {
   const [providerReply, setProviderReply] = useState('');
   const [loading, setLoading] = useState(true);
   const { currentUser } = useSelector((state) => state.auth);
+  const [currentService, setCurrentService] = useState();
 
   const handleClickSetting = (event) => {
     setAnchorEl(event.currentTarget);
@@ -56,6 +58,13 @@ const PackageItem = (props) => {
   };
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
+
+  useEffect(() => {
+    (async () => {
+      const res = await serviceApi.get(service_id);
+      setCurrentService(res?.data);
+    })();
+  }, [service_id]);
 
   const handleClickPackageItem = () => {
     setOpenDetailDialog(true);
@@ -140,7 +149,11 @@ const PackageItem = (props) => {
       >
         <ul className="profile-popover">
           <li>
-            <NavLink to={`/provider/packages/${packageInfo?.package?.id}?serviceId=${service_id}`}>Chỉnh sửa</NavLink>
+            <NavLink
+              to={`/provider/packages/${packageInfo?.package?.id}?serviceId=${service_id}&serviceName=${currentService?.name}`}
+            >
+              Chỉnh sửa
+            </NavLink>
           </li>
           <li>
             <NavLink to="" onClick={handleRemoveClick}>

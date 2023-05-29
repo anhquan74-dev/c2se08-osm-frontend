@@ -6,6 +6,7 @@ import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import PackageItem from '../../ManagePackage/components/PackageItem';
 import { getAllPackagesByServiceId, setCurrentServiceId } from '../manageServiceSlice';
 import './ServiceDetail.scss';
+import serviceApi from '../../../../api/serviceApi';
 
 const ServiceDetail = () => {
   const { service_id } = useParams();
@@ -17,9 +18,14 @@ const ServiceDetail = () => {
   const { packages } = useSelector((state) => state.manageService);
   const loadingPackages = useSelector((state) => state.manageService.loadingPackages);
   const currentServiceId = useSelector((state) => state.manageService.currentServiceId);
+  const [currentService, setCurrentService] = useState();
 
   useEffect(() => {
     dispatch(getAllPackagesByServiceId(service_id));
+    (async () => {
+      const res = await serviceApi.get(service_id);
+      setCurrentService(res?.data);
+    })();
   }, [service_id]);
   console.log(packages);
 
@@ -40,7 +46,7 @@ const ServiceDetail = () => {
               Dịch vụ
             </Link>
             <Typography key="3" color="text.primary">
-              Báo giá
+              {currentService?.name}
             </Typography>
           </Breadcrumbs>
         </Stack>
@@ -69,7 +75,9 @@ const ServiceDetail = () => {
                   dispatch(setCurrentServiceId(packages[0].service_id));
                 }}
               >
-                <NavLink to={`/provider/packages/add?serviceId=${service_id}`}>Thêm báo giá</NavLink>
+                <NavLink to={`/provider/packages/add?serviceId=${service_id}&serviceName=${currentService?.name}`}>
+                  Thêm báo giá
+                </NavLink>
                 {/* <NavLink to="/provider/services/id">Thêm báo giá</NavLink> */}
               </button>
             </div>
@@ -83,7 +91,9 @@ const ServiceDetail = () => {
                   dispatch(setCurrentServiceId(packages[0].service_id));
                 }}
               >
-                <NavLink to={`/provider/packages/add?serviceId=${service_id}`}>Thêm báo giá</NavLink>
+                <NavLink to={`/provider/packages/add?serviceId=${service_id}&serviceName=${currentService?.name}`}>
+                  Thêm báo giá
+                </NavLink>
                 {/* <NavLink to="/provider/services/id">Thêm báo giá</NavLink> */}
               </button>
             </div>

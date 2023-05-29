@@ -30,11 +30,11 @@ const sideBarArr = [
     title: 'Bài đăng',
     icon: <Notes />,
   },
-  {
-    to: '/admin/comment-analysis',
-    title: 'Phân tích bình luận',
-    icon: <Comment />,
-  },
+  // {
+  //   to: '/admin/comment-analysis',
+  //   title: 'Phân tích bình luận',
+  //   icon: <Comment />,
+  // },
 ];
 
 const Sidebar = () => {

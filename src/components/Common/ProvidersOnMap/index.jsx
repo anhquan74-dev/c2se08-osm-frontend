@@ -5,6 +5,7 @@ import Rating from '../Rating';
 import { NavLink } from 'react-router-dom';
 import CustomMarker from '../../../assets/images/man.png';
 import { useSelector } from 'react-redux';
+import { haversine_distance } from '../../../utils/common';
 
 const markers = [
   {
@@ -131,8 +132,29 @@ const Map = () => {
                         <Rating starNumber={provider?.avg_star} />
                       </span>
                       <span>
-                        Giá từ <span style={{ fontWeight: 800 }}>{provider?.price} vnđ</span>
+                        {/* Giá từ <span style={{ fontWeight: 800 }}>{provider?.price} vnđ</span> */}
+                        {provider?.min_price ? (
+                          <>
+                            Giá từ{' '}
+                            <spann style={{ fontWeight: 800 }}>{provider?.min_price.toString()?.slice(0, -3)}K</spann>
+                          </>
+                        ) : (
+                          <span style={{ fontWeight: 800 }}>Giá thương lượng</span>
+                        )}
                       </span>
+                    </div>
+                    <div className="distance">
+                      Khoảng cách{' '}
+                      <strong style={{ fontWeight: '800' }}>
+                        {haversine_distance(
+                          {
+                            lat: provider?.location?.[0]?.coords_latitude,
+                            lng: provider?.location?.[0]?.coords_longitude,
+                          },
+                          center
+                        )}{' '}
+                        km
+                      </strong>
                     </div>
                     <NavLink className="marker-view-detail event-tracking" to={`/finding-provider/${provider?.id}`}>
                       Xem Chi Tiết

@@ -13,7 +13,7 @@ const initialState = {
   list: [],
   conditions: {
     from: 0,
-    size: 3,
+    size: 6,
   },
 };
 export const elasticSearchSlice = createSlice({

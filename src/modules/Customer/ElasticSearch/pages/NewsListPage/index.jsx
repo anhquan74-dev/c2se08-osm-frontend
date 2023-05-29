@@ -43,7 +43,7 @@ const NewsListPage = () => {
     typingTimeoutRef.current = setTimeout(() => {
       let newConditions;
       if (value == '') {
-        newConditions = { from: 0, size: 3 };
+        newConditions = { from: 0, size: 6 };
       } else {
         newConditions = {
           ...conditions,
