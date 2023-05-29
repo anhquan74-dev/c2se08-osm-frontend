@@ -1,0 +1,13 @@
+.empty-appointment {
+  padding: 50px 280px;
+  text-align: center;
+  .empty-tab {
+    color: #9c9c9c;
+    margin-top: 20px;
+    p {
+      &:first-child {
+        margin-bottom: 16px;
+      }
+    }
+  }
+}

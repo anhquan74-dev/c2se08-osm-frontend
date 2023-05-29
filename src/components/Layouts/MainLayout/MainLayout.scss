@@ -1,0 +1,12 @@
+.main-header {
+  height: 80px;
+  &.pro-header {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  }
+}
+
+.main-footer {
+  background: #ffbe17;
+  min-height: 349px;
+  margin-top: 70px;
+}

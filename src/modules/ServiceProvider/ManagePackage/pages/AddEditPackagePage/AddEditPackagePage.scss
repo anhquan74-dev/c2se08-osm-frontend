@@ -1,0 +1,65 @@
+.add-edit-package {
+  h2 {
+    margin: 20px 0 16px 0;
+    font-size: 28px;
+    font-weight: 700;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    input[type='text'] {
+      width: 400px;
+      padding: 10px 30px 10px 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background-color: #dfdfdf7a;
+      font-size: 14px;
+      border: 1px solid #dfdfdf7a;
+      &:disabled {
+        background-color: white;
+      }
+    }
+    textarea {
+      width: 400px;
+      padding: 10px 30px 10px 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background-color: #dfdfdf7a;
+      font-size: 14px;
+    }
+    .form-group {
+      label {
+        display: block;
+      }
+    }
+    .form-group1 {
+      label {
+        padding: 0 8px;
+      }
+    }
+
+    button {
+      display: block;
+      width: 250px;
+      margin-top: 20px;
+      cursor: pointer;
+      text-transform: uppercase;
+      border-radius: 8px;
+      font-weight: 700;
+      color: #fff;
+      background-color: #007bff;
+      outline: none;
+      border: none;
+      a {
+        display: block;
+        text-decoration: none;
+        padding: 16px 20px;
+        color: white;
+      }
+    }
+  }
+}

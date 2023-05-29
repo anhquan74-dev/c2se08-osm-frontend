@@ -1,0 +1,20 @@
+.provider-sort-main {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  > div {
+    width: 48%;
+
+    &:nth-child(2) {
+      display: flex;
+      align-items: center;
+      >h4 {
+        width: 30%;
+      }
+    }
+  }
+}
+.list-show {
+  
+}

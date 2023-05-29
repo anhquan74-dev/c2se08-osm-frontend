@@ -1,0 +1,114 @@
+.footer {
+  color: #000;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 38px;
+
+  a {
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+    &:hover {
+      font-weight: 600;
+    }
+  }
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.copyright {
+  flex-basis: 36%;
+  margin-right: 30px;
+}
+
+.address {
+  flex-basis: 36%;
+  margin-right: 30px;
+  padding-top: 15px;
+}
+
+.contact {
+  flex-basis: 19%;
+  margin-right: 10px;
+  padding-top: 15px;
+}
+
+.info {
+  flex-basis: 17%;
+  padding-top: 15px;
+}
+
+.copyright {
+  padding-bottom: 25px;
+  padding-top: 30px;
+}
+
+.footer .footer-col .title .text {
+  font-weight: 800;
+  vertical-align: bottom;
+}
+
+.footer .footer-col .content {
+  font-size: 14px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  .facebook {
+    margin: 4px 0;
+    display: flex;
+    gap: 12px;
+  }
+}
+
+.footer .footer-col .content p {
+  margin-bottom: 8px;
+}
+
+.footer-col.logo {
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    img {
+      width: 200px;
+    }
+  }
+}
+
+// .wrap-footer .footer .footer-info .footer-col .content.cta {
+//   display: flex;
+// }
+// .wrap-footer .footer .footer-info .footer-col .content {
+//   font-size: 14px;
+//   padding-bottom: 10px;
+//   padding-top: 10px;
+// }
+
+// .wrap-footer .footer .footer-info .footer-col .content {
+//   font-size: 14px;
+//   padding-bottom: 10px;
+//   padding-top: 10px;
+// }
+
+// .wrap-footer .footer .footer-info .footer-col .content.cta {
+//   display: flex;
+// }
+// .wrap-footer .footer .footer-info .footer-col .content {
+//   font-size: 14px;
+//   padding-bottom: 10px;
+//   padding-top: 10px;
+// }
+
+// .wrap-footer .footer .footer-info .footer-col .content {
+//   font-size: 14px;
+//   padding-bottom: 10px;
+//   padding-top: 10px;
+// }
+
+// .wrap-footer .footer .footer-info .footer-col .content a {
+//   color: #000;
+//   text-decoration: none;
+//   background-color: transparent;
+//   &:hover {
+//     font-weight: 700;
+//   }
+// }

@@ -1,0 +1,52 @@
+.news-list-page {
+  .news-list-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    padding: 0 20px;
+  }
+
+  .break-crum {
+    margin: 30px 0 20px 0;
+  }
+  .search-text {
+    margin: 16px 0;
+  }
+  > h3 {
+    font-style: italic;
+    text-align: center;
+    font-size: 24px;
+  }
+  .search {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row-reverse;
+    input {
+      width: 30%;
+      display: block;
+      position: relative;
+      padding: 8px 14px;
+      border: 1px solid #d2d2d2;
+      box-sizing: border-box;
+      border-radius: 8px;
+      outline: none;
+      &::after {
+        content: '';
+        background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAxNSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIuODU1MjMgOC4zMjQ0QzMuNjA1OSA5LjA3NTA3IDQuNTE3NDMgOS40NTA0IDUuNTg5ODEgOS40NTA0QzYuNjYyMiA5LjQ1MDQgNy41NzM3MyA5LjA3NTA3IDguMzI0NCA4LjMyNDRDOS4wNzUwNyA3LjU3MzczIDkuNDUwNCA2LjY2MjIgOS40NTA0IDUuNTg5ODFDOS40NTA0IDQuNTE3NDMgOS4wNzUwNyAzLjYwNTkgOC4zMjQ0IDIuODU1MjNDNy41NzM3MyAyLjEwNDU2IDYuNjYyMiAxLjcyOTIyIDUuNTg5ODEgMS43MjkyMkM0LjUxNzQzIDEuNzI5MjIgMy42MDU5IDIuMTA0NTYgMi44NTUyMyAyLjg1NTIzQzIuMTA0NTYgMy42MDU5IDEuNzI5MjIgNC41MTc0MyAxLjcyOTIyIDUuNTg5ODFDMS43MjkyMiA2LjY2MjIgMi4xMDQ1NiA3LjU3MzczIDIuODU1MjMgOC4zMjQ0Wk0xMC43MzczIDkuNDUwNEwxNSAxMy43MTMxTDEzLjcxMzEgMTVMOS40NTA0IDEwLjczNzNWMTAuMDUzNkw5LjIwOTExIDkuODEyMzNDOC4xOTAzNSAxMC42OTcxIDYuOTgzOTEgMTEuMTM5NCA1LjU4OTgxIDExLjEzOTRDNC4wMzQ4NSAxMS4xMzk0IDIuNzA3NzcgMTAuNjAzMiAxLjYwODU4IDkuNTMwODNDMC41MzYxOTMgOC40NTg0NCAwIDcuMTQ0NzcgMCA1LjU4OTgxQzAgNC4wMzQ4NSAwLjUzNjE5MyAyLjcyMTE4IDEuNjA4NTggMS42NDg3OUMyLjcwNzc3IDAuNTQ5NTk4IDQuMDM0ODUgMCA1LjU4OTgxIDBDNy4xNDQ3NyAwIDguNDU4NDQgMC41NDk1OTggOS41MzA4MyAxLjY0ODc5QzEwLjYwMzIgMi43MjExOCAxMS4xMzk0IDQuMDM0ODUgMTEuMTM5NCA1LjU4OTgxQzExLjEzOTQgNi45ODM5MSAxMC42OTcxIDguMTkwMzUgOS44MTIzMyA5LjIwOTExTDEwLjA1MzYgOS40NTA0SDEwLjczNzNaIiBmaWxsPSJibGFjayIvPgo8L3N2Zz4K)
+          no-repeat left center;
+        color: #000;
+        position: absolute;
+        top: 2px;
+        width: 22px;
+        bottom: 1px;
+        right: 1px;
+      }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin: 40px;
+  }
+}

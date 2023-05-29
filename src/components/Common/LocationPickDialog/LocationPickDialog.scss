@@ -1,0 +1,49 @@
+.map-pick {
+  font-size: 14px;
+  padding: 20px;
+  width: 900px;
+  .search {
+    > div > input {
+      border: 1px solid #ced4da;
+      border-radius: 10px;
+      font-size: 14px;
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      width: 100%;
+      outline: none;
+    }
+  }
+
+  .address-group {
+    .form-group {
+      display: flex;
+      align-items: center;
+      margin: 8px 0;
+      label {
+        width: 20%;
+      }
+      input {
+        flex-grow: 1;
+        border: 1px solid #ced4da;
+        border-radius: 10px;
+        font-size: 14px;
+        padding: 6px 10px;
+        width: 100%;
+        outline: none;
+        background-color: #ecebeb;
+      }
+    }
+  }
+  > button {
+    cursor: pointer;
+    text-transform: uppercase;
+    border-radius: 8px;
+    font-weight: 700;
+    color: #fff;
+    background-color: #007bff;
+    padding: 14px 14px;
+    outline: none;
+    border: none;
+    width: 100%;
+  }
+}

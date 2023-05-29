@@ -1,0 +1,135 @@
+.login-page {
+  background: #f0f2f5;
+  min-height: 100vh;
+  width: 100vw;
+  max-height: 2000px;
+  .login-logo {
+    // width: 50%;
+    margin: 0 auto;
+    text-align: center;
+    font-weight: 800;
+    font-size: 30px;
+    padding: 30px 0;
+  }
+  .login-content {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+    margin: auto;
+    padding: 0 0 14px 0;
+    width: 396px;
+    background-color: #fff;
+    border: 1px solid #dddfe2;
+    text-align: center;
+    .login-header {
+      padding: 24px 0 16px 0;
+      text-align: center;
+      font-size: 18px;
+      line-height: 22px;
+    }
+    .login-form {
+      > div {
+        width: 364px;
+        margin: 16px 0;
+        input {
+          // padding: 12px 4px !important;
+        }
+      }
+      > button {
+        background-color: var(--primary);
+        // background-color: #1877f2;
+        border: none;
+        border-radius: 6px;
+        font-size: 20px;
+        line-height: 48px;
+        padding: 0 16px;
+        width: 364px;
+        display: block;
+        margin: 12px auto;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        &:disabled {
+          cursor: no-drop;
+          background-color: #ffdd85;
+        }
+      }
+      > a {
+        text-decoration: none;
+        color: #1877f2;
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.register-page {
+  background: #f0f2f5;
+  min-height: 100vh;
+  width: 100vw;
+  max-height: 2000px;
+  .register-logo {
+    // width: 50%;
+    margin: 0 auto;
+    text-align: center;
+    font-weight: 800;
+    font-size: 30px;
+    padding: 30px 0;
+  }
+  .register-content {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+    margin: auto;
+    padding: 0 0 14px 0;
+    width: 462px;
+    background-color: #fff;
+    border: 1px solid #dddfe2;
+    text-align: center;
+    .register-header {
+      padding: 12px 0 6px 0;
+      font-size: 22px;
+      text-align: center;
+      font-weight: 700;
+    }
+    .register-slogan {
+      font-size: 13px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 16px;
+    }
+    .register-form {
+      padding: 0 16px;
+      padding-top: 12px;
+      text-align: left;
+      > div {
+        margin: 12px auto;
+        input {
+          // padding: 12px 4px !important;
+        }
+      }
+      > button {
+        background-color: var(--primary);
+        // background-color: #1877f2;
+        width: 100%;
+        border: none;
+        border-radius: 6px;
+        font-size: 20px;
+        line-height: 48px;
+        padding: 0 16px;
+        display: block;
+        margin: 12px auto;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+      }
+      > a {
+        width: max-content;
+        text-decoration: none;
+        color: #1877f2;
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0 auto;
+        display: block;
+      }
+    }
+  }
+}

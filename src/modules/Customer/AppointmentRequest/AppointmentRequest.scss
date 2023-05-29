@@ -1,0 +1,101 @@
+.appointment-request {
+  .request-form {
+    background: #fffbee;
+    border: 1px solid #ffbe17;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    margin: 10px auto;
+    max-width: 770px;
+    padding: 30px;
+
+    > h3 {
+      font-weight: 700;
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+
+    .form-group {
+      margin-bottom: 30px;
+
+      label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+
+      select {
+        background-color: #fff;
+        background-position: bottom 22px right 14px;
+        background-repeat: no-repeat;
+        border: 1px solid #ececec;
+        border-radius: 8px;
+        height: 60px;
+        outline: 0;
+        width: 100%;
+        padding: 10px 35px 10px 10px;
+      }
+
+      .time-flex,
+      .address-flex {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        > div,
+        > input {
+          flex-grow: 1;
+        }
+
+        > input {
+          padding: 20px 16px;
+          height: 60px;
+          border-radius: 8px;
+          border: 1px solid #ececec;
+          outline: 0;
+        }
+
+        > span {
+        }
+      }
+
+      textarea {
+        padding: 20px 16px;
+        width: 100%;
+        border-radius: 8px;
+        border: 1px solid #ececec;
+        outline: 0;
+        resize: none;
+      }
+    }
+
+    .request-form-icon {
+      width: 40px;
+      height: 40px;
+      padding: 2px;
+      background-color: var(--primary);
+      border-radius: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    > button {
+      background: #0075ff;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1.25rem;
+      font-weight: 700;
+      height: 67px;
+      width: 100%;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto;
+      max-width: 414px;
+      border: none;
+    }
+  }
+  small {
+    color: #ff1717;
+  }
+}

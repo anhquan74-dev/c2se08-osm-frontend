@@ -1,0 +1,44 @@
+.manage-service {
+  padding: 0 0 40px 0;
+  > h3 {
+    margin: 20px 0 16px 0;
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  .service-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    .service-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding: 10px 14px;
+      background: var(--primary);
+      border-radius: 10px;
+      &.add-service {
+        background: white;
+        border: 2px dashed #ccc;
+        display: flex;
+        /* justify-content: center; */
+        align-items: center;
+        height: 68px;
+      }
+      .item-left {
+      }
+      .item-right {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 4px;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 0, 0.363);
+      }
+    }
+  }
+}
+.disable {
+  display: none !important;
+}
